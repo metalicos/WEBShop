@@ -20,11 +20,13 @@ public class DBManager {
     }
 
     public static Connection getConnection() throws SQLException {
-        String url = Const.getProperty(Const.URL);
-        String user = Const.getProperty(Const.USER);
-        String password = Const.getProperty(Const.PASS);
+        String url = Const.getProperty("db.url");
+        String user = Const.getProperty("db.user");
+        String password = Const.getProperty("db.password");
         return DriverManager.getConnection(url,user,password);
     }
+
+
 
 
 }

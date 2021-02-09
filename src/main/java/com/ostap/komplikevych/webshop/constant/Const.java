@@ -9,11 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Const {
-    public static final String DB_PROPERTIES = "application.properties";
-    public static final String URL = "db.url";
-    public static final String USER = "db.user";
-    public static final String PASS = "db.password";
-
+    private static final String DB_PROPERTIES = "application.properties";
     public static final Logger logger = LogManager.getLogger(Const.class.getName());
 
     public static String getProperty(String key) {
