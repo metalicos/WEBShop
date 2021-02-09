@@ -1,0 +1,25 @@
+[DEBUG] 2021-02-06 01:42:41.080 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:44:13.099 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:45:06.913 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:45:19.235 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:45:19.235 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:46:19.758 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:46:19.758 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:46:59.216 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:46:59.216 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:47:55.304 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:47:55.304 Main:10 - Program starts 
+[ERROR] 2021-02-06 01:47:55.392 DBManager:34 - No suitable driver found for "jdbc:mysql://localhost:3306/webshop" 
+[ERROR] 2021-02-06 01:47:55.392 DBManager:34 - No suitable driver found for "jdbc:mysql://localhost:3306/webshop" 
+[DEBUG] 2021-02-06 01:48:39.066 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:48:39.066 Main:10 - Program starts 
+[DEBUG] 2021-02-06 01:49:37.736 Main:10 - Program starts 
+[ERROR] 2021-02-06 01:49:37.826 DBManager:34 - No suitable driver found for "jdbc:mysql://localhost:3306/webshop" 
+[DEBUG] 2021-02-06 01:50:05.663 Main:10 - Program starts 
+[ERROR] 2021-02-06 01:50:05.759 DBManager:34 - No suitable driver found for "jdbc:mysql://localhost:3306/webshop" 
+[DEBUG] 2021-02-06 01:58:22.599 Main:10 - Program starts 
+[ERROR] 2021-02-06 01:58:22.604 DBManager:22 - com.mysql.jdbc 
+[ERROR] 2021-02-06 01:58:22.685 DBManager:39 - No suitable driver found for "jdbc:mysql://localhost:3306/webshop?serverTimezone = UTC" 
+[DEBUG] 2021-02-06 02:15:49.092 Main:10 - Program starts 
+[DEBUG] 2021-02-06 02:17:19.202 Main:10 - Program starts 
+[DEBUG] 2021-02-06 02:18:46.524 Main:10 - Program starts 
