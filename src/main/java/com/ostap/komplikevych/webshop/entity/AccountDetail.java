@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class AccountDetail extends AbstractEntity {
 
     private String phone;
-    private long zipCode;
+    private int zipCode;
     private LocalDateTime lastUpdate;
     private String surnameUa;
     private String firstNameUa;
@@ -25,7 +25,7 @@ public class AccountDetail extends AbstractEntity {
     private String buildingEn;
     private String flatEn;
     private BufferedImage accountPhoto;
-    private long accountId;
+    private int accountId;
 
     public String getPhone() {
         return phone;
@@ -35,11 +35,11 @@ public class AccountDetail extends AbstractEntity {
         this.phone = phone;
     }
 
-    public long getZipCode() {
+    public int getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(long zipCode) {
+    public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
 
@@ -187,11 +187,11 @@ public class AccountDetail extends AbstractEntity {
         this.accountPhoto = accountPhoto;
     }
 
-    public long getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(long accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 

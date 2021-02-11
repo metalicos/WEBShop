@@ -7,8 +7,8 @@ public class Account extends AbstractEntity {
     private String email;
     private String password;
     private LocalDateTime createTime;
-    private long roleId;
-    private long shoppingCartId;
+    private int roleId;
+    private int shoppingCartId;
 
     public String getEmail() {
         return email;
@@ -34,19 +34,19 @@ public class Account extends AbstractEntity {
         this.createTime = createTime;
     }
 
-    public long getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(long roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
-    public long getShoppingCartId() {
+    public int getShoppingCartId() {
         return shoppingCartId;
     }
 
-    public void setShoppingCartId(long shoppingCartId) {
+    public void setShoppingCartId(int shoppingCartId) {
         this.shoppingCartId = shoppingCartId;
     }
 
