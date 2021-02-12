@@ -49,6 +49,4 @@ public class Fields {
     public static final String ACCOUNT_ORDER_STATUS_ID = "status_id";
     public static final String ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID = "droped_by_account_id";
 
-
-
 }

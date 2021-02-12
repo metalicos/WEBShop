@@ -1,29 +1,107 @@
 package com.ostap.komplikevych.webshop.dao;
 
+import com.ostap.komplikevych.webshop.DBManager;
+import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.ShoppingCart;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 
 public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
+    private static final String SQL_CREATE_SHOPPING_CART =
+            "INSERT INTO `webshop`.`shopping_cart` " +
+                    "(`last_update`)" +
+                    "VALUES (?);";
+    private static final String SQL_READ_SHOPPING_CART =
+            "SELECT * FROM `webshop`.`shopping_cart` WHERE id = ?;";
+
+    private static final String SQL_UPDATE_SHOPPING_CART =
+            "UPDATE `webshop`.`shopping_cart` SET `last_update`= ?" +
+                    "WHERE id = ?;";
+    private static final String SQL_DELETE_SHOPPING_CART =
+            "DELETE FROM `webshop`.`shopping_cart` WHERE id = ?;";
+
     @Override
     public Integer create(ShoppingCart entity) {
-        return null;
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        int insertedWithId = -1;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_CREATE_SHOPPING_CART);
+            pstmt.setTimestamp(1, Timestamp.valueOf(entity.getLastUpdate()));
+            pstmt.executeUpdate();
+            insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            Const.logger.error(ex.getMessage());
+        } finally {
+            DBManager.getInstance().commit(con);
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
+        return insertedWithId;
     }
 
     @Override
     public ShoppingCart read(Integer id) {
-        return null;
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ShoppingCart shoppingCart = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_READ_SHOPPING_CART);
+            pstmt.setInt(1, id);
+            ShoppingCartMapper shoppingCartMapper = new ShoppingCartMapper();
+            shoppingCart = shoppingCartMapper.mapRow(pstmt.executeQuery());
+        } catch (SQLException ex) {
+            Const.logger.error(ex.getMessage());
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
+        return shoppingCart;
     }
 
     @Override
     public void update(ShoppingCart entity) {
-
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_UPDATE_SHOPPING_CART);
+            pstmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+            pstmt.setInt(2, entity.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            Const.logger.error(ex.getMessage());
+        } finally {
+            DBManager.getInstance().commit(con);
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
     }
 
     @Override
     public void delete(ShoppingCart entity) {
-
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ShoppingCart shoppingCart = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_DELETE_SHOPPING_CART);
+            pstmt.setInt(1, entity.getId());
+            ShoppingCartMapper shoppingCartMapper = new ShoppingCartMapper();
+            shoppingCart = shoppingCartMapper.mapRow(pstmt.executeQuery());
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            Const.logger.error(ex.getMessage());
+        } finally {
+            DBManager.getInstance().commit(con);
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
     }
 
     static class ShoppingCartMapper implements EntityMapper<ShoppingCart> {

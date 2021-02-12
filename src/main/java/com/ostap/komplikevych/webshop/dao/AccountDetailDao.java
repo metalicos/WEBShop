@@ -2,13 +2,13 @@ package com.ostap.komplikevych.webshop.dao;
 
 import com.ostap.komplikevych.webshop.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
+import com.ostap.komplikevych.webshop.entity.Account;
 import com.ostap.komplikevych.webshop.entity.AccountDetail;
+import com.ostap.komplikevych.webshop.entity.Role;
+import com.ostap.komplikevych.webshop.model.command.CreateAccount;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,8 +22,8 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
             "INSERT INTO `webshop`.`account_detail` " +
                     "(`phone`,`zip_code`,`last_update`,`surname_ua`,`first_name_ua`,`patronymic_ua`,`country_ua`," +
                     "`city_ua`,`street_ua`,`building_ua`,`flat_ua`,`surname_en`,`first_name_en`,`patronymic_en`," +
-                    "`country_en`,`city_en`,`street_en`,`building_en`,`flat_en`,`account_photo`,`account_id`)"+
-            "VALUES " +
+                    "`country_en`,`city_en`,`street_en`,`building_en`,`flat_en`,`account_photo`,`account_id`)" +
+                    "VALUES " +
                     "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     private static final String SQL_READ_ACCOUNT_DETAILS_BY_ID =
             "SELECT * FROM `webshop`.`account_detail` " +
@@ -38,7 +38,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
                     "WHERE id = ?;";
     private static final String SQL_DELETE_ACCOUNT_DETAILS =
             "DELETE FROM `webshop`.`account_detail` " +
-            "WHERE `account_id` = ?";
+                    "WHERE `account_id` = ?";
 
     @Override
     public Integer create(AccountDetail entity) {
@@ -75,9 +75,9 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             BufferedImage img = entity.getAccountPhoto();
-            if(img!=null) {
+            if (img != null) {
                 ImageIO.write(img, "png", baos);
-            }else {
+            } else {
                 img = ImageIO.read(new File("src/main/resources/img/account.png"));
                 ImageIO.write(img, "png", baos);
             }
@@ -102,18 +102,16 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
     public AccountDetail read(Integer id) {
         Connection con = null;
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
         AccountDetail accountDetail = null;
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_DETAILS_BY_ID);
-            pstmt.setInt(1,id);
+            pstmt.setInt(1, id);
             AccountDetailMapper accountDetailMapper = new AccountDetailMapper();
             accountDetail = accountDetailMapper.mapRow(pstmt.executeQuery());
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             Const.logger.error(ex.getMessage());
-        }finally {
-            DBManager.getInstance().close(rs);
+        } finally {
             DBManager.getInstance().close(pstmt);
             DBManager.getInstance().close(con);
         }
@@ -154,7 +152,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
             pstmt.setString(19, entity.getFlatEn());
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(entity.getAccountPhoto(),"png",baos);
+            ImageIO.write(entity.getAccountPhoto(), "png", baos);
             pstmt.setBlob(20, new ByteArrayInputStream(baos.toByteArray()));
 
             pstmt.setInt(21, entity.getAccountId());
@@ -179,7 +177,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_DELETE_ACCOUNT_DETAILS);
-            pstmt.setInt(1,entity.getId());
+            pstmt.setInt(1, entity.getId());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
@@ -231,10 +229,13 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
     }
 
     public static void main(String[] args) {
-        AccountDetailDao dao = new AccountDetailDao();
-        AccountDetail accountDetail = new AccountDetail();
-        accountDetail.setFirstNameEn("Ostap");
-        accountDetail.setPatronymicEn("Foder");
-        System.out.println(dao.create(accountDetail));
+        CreateAccount.createAccount(
+                new Account("boss@gmail.com", "whit", Role.ADMIN.getId()), new AccountDetail());
+        CreateAccount.createAccount(
+                new Account("sassy@gmail.com", "gorney", Role.ADMIN.getId()), new AccountDetail());
+        CreateAccount.createAccount(
+                new Account("hossy@gmail.com", "shit", Role.ADMIN.getId()), new AccountDetail());
+        CreateAccount.createAccount(
+                new Account("less@gmail.com", "whebit", Role.ADMIN.getId()), new AccountDetail());
     }
 }

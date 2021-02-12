@@ -3,14 +3,10 @@ package com.ostap.komplikevych.webshop.dao;
 import com.ostap.komplikevych.webshop.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.Account;
-import com.ostap.komplikevych.webshop.entity.Role;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
-public class AccountDao implements Crud<Account,Integer> {
+public class AccountDao implements Crud<Account, Integer> {
 
     public static final String SQL_FIND_ACCOUNT_BY_EMAIL =
             "SELECT * " +
@@ -28,137 +24,9 @@ public class AccountDao implements Crud<Account,Integer> {
     public static final String SQL_CREATE_ACCOUNT =
             "INSERT INTO `webshop`.`account` (`email`, `password`, `create_time`, `role_id`, `shopping_cart_id`) " +
                     "VALUES (?,?,?,?,?);";
+    private static final String SQL_DELETE_ACCOUNT =
+            "DELETE FROM `webshop`.`account` WHERE `id` = ?";
 
-
-
-
-/*
-
-    public Account createAccount(Account account) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            pstmt = con.prepareStatement(SQL_CREATE_ACCOUNT);
-            pstmt.setString(1, account.getEmail());
-            pstmt.setString(2, account.getPassword());
-            pstmt.setTimestamp(3, Timestamp.valueOf(account.getCreateTime()));
-            pstmt.setInt(4, account.getRoleId());
-            pstmt.setInt(5, account.getShoppingCartId());
-            pstmt.executeQuery();
-        } catch (SQLException ex) {
-            DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
-        } finally {
-            DBManager.getInstance().commit(con);
-            DBManager.getInstance().close(pstmt);
-            DBManager.getInstance().close(con);
-        }
-        return account;
-    }
-
-    public Account readAccount(int id) {
-        Account account = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            EntityMapper<Account> mapper = new AccountMapper();
-            pstmt = con.prepareStatement(SQL_FIND_ACCOUNT_BY_ID);
-            pstmt.setLong(1, id);
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                account = mapper.mapRow(rs);
-            }
-        } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
-        } finally {
-            DBManager.getInstance().close(con);
-            DBManager.getInstance().close(rs);
-            DBManager.getInstance().close(pstmt);
-        }
-        return account;
-    }
-
-    public Account readAccount(String email) {
-        Account account = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            EntityMapper<Account> mapper = new AccountMapper();
-            pstmt = con.prepareStatement(SQL_FIND_ACCOUNT_BY_EMAIL);
-            pstmt.setString(1, email);
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                account = mapper.mapRow(rs);
-            }
-        } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
-        } finally {
-            DBManager.getInstance().close(con);
-            DBManager.getInstance().close(rs);
-            DBManager.getInstance().close(pstmt);
-        }
-        return account;
-    }
-
-    public Account updateAccount(Account account) {
-        PreparedStatement pstmt = null;
-        Connection con = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            pstmt = con.prepareStatement(SQL_UPDATE_ACCOUNT);
-            pstmt.setString(1, account.getEmail());
-            pstmt.setString(2, account.getPassword());
-            pstmt.setInt(3, account.getRoleId());
-            pstmt.setInt(4, account.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-        } catch (SQLException ex) {
-            DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
-        } finally {
-            DBManager.getInstance().commit(con);
-            DBManager.getInstance().close(con);
-            DBManager.getInstance().close(pstmt);
-        }
-        return account;
-    }
-
-    public void deleteAccount(Account account){
-
-    }
-
-    public void deleteAccount(Account account){
-
-    }
-*/
-
-    public static void main(String[] args) {
-//        AccountDao accountDao = new AccountDao();
-//        System.out.println(accountDao.findAccount(3));
-//        Account baby;
-//        System.out.println(baby = accountDao.findAccount("baby@gmail.com"));
-//        baby.setEmail("baby@gmail.com");
-//        baby.setRoleId(Role.ADMIN.getId());
-//        System.out.println(accountDao.updateAccount(baby));
-//
-//        System.out.println(accountDao.findAccount("user@gmail.com"));
-
-        Account account = new Account();
-        account.setRoleId(Role.USER.getId());
-        account.setEmail("jaja@gmail.com");
-        account.setPassword("strong");
-        account.setCreateTime(LocalDateTime.now());
-        account.setShoppingCartId(24);
-
-        Crud crud = new AccountDao();
-        int id = (Integer) crud.create(account);
-        System.out.println(id);
-    }
 
     @Override
     public Integer create(Account entity) {
@@ -189,19 +57,93 @@ public class AccountDao implements Crud<Account,Integer> {
 
     @Override
     public Account read(Integer id) {
-        return null;
+        Account account = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            EntityMapper<Account> mapper = new AccountMapper();
+            pstmt = con.prepareStatement(SQL_FIND_ACCOUNT_BY_ID);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                account = mapper.mapRow(rs);
+            }
+        } catch (SQLException ex) {
+            Const.logger.error(ex.getMessage());
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(rs);
+            DBManager.getInstance().close(pstmt);
+        }
+        return account;
+    }
+
+    public Account read(String email) {
+        Account account = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            EntityMapper<Account> mapper = new AccountMapper();
+            pstmt = con.prepareStatement(SQL_FIND_ACCOUNT_BY_EMAIL);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                account = mapper.mapRow(rs);
+            }
+        } catch (SQLException ex) {
+            Const.logger.error(ex.getMessage());
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(rs);
+            DBManager.getInstance().close(pstmt);
+        }
+        return account;
     }
 
     @Override
     public void update(Account entity) {
-
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_UPDATE_ACCOUNT);
+            pstmt.setString(1, entity.getEmail());
+            pstmt.setString(2, entity.getPassword());
+            pstmt.setInt(3, entity.getRoleId());
+            pstmt.setInt(4, entity.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commit(con);
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
     }
 
     @Override
     public void delete(Account entity) {
-
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_DELETE_ACCOUNT);
+            pstmt.setInt(1, entity.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commit(con);
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
     }
-
 
     private static class AccountMapper implements EntityMapper<Account> {
 
