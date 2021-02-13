@@ -2,7 +2,7 @@ package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.dao.AccountDao;
 import com.ostap.komplikevych.webshop.dao.AccountDetailDao;
-import com.ostap.komplikevych.webshop.dao.MyChipher;
+import com.ostap.komplikevych.webshop.security.MyChipher;
 import com.ostap.komplikevych.webshop.dao.ShoppingCartDao;
 import com.ostap.komplikevych.webshop.entity.Account;
 import com.ostap.komplikevych.webshop.entity.AccountDetail;

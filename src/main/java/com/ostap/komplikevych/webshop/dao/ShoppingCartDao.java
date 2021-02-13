@@ -8,18 +8,17 @@ import java.sql.*;
 import java.time.LocalDateTime;
 
 public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
-    private static final String SQL_CREATE_SHOPPING_CART =
-            "INSERT INTO `webshop`.`shopping_cart` " +
-                    "(`last_update`)" +
-                    "VALUES (?);";
-    private static final String SQL_READ_SHOPPING_CART =
-            "SELECT * FROM `webshop`.`shopping_cart` WHERE id = ?;";
+    private static final String SQL_CREATE_SHOPPING_CART;
+    private static final String SQL_READ_SHOPPING_CART;
+    private static final String SQL_UPDATE_SHOPPING_CART;
+    private static final String SQL_DELETE_SHOPPING_CART;
 
-    private static final String SQL_UPDATE_SHOPPING_CART =
-            "UPDATE `webshop`.`shopping_cart` SET `last_update`= ?" +
-                    "WHERE id = ?;";
-    private static final String SQL_DELETE_SHOPPING_CART =
-            "DELETE FROM `webshop`.`shopping_cart` WHERE id = ?;";
+    static {
+        SQL_CREATE_SHOPPING_CART = Const.getProperty("sql.create_shopping_cart");
+        SQL_READ_SHOPPING_CART = Const.getProperty("sql.read_shopping_cart");
+        SQL_UPDATE_SHOPPING_CART = Const.getProperty("sql.update_shopping_cart");
+        SQL_DELETE_SHOPPING_CART = Const.getProperty("sql.delete_shopping_cart");
+    }
 
     @Override
     public Integer create(ShoppingCart entity) {
@@ -107,14 +106,18 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
     static class ShoppingCartMapper implements EntityMapper<ShoppingCart> {
         @Override
         public ShoppingCart mapRow(ResultSet rs) {
+            ShoppingCart cart = new ShoppingCart();
             try {
-                ShoppingCart cart = new ShoppingCart();
-                cart.setId(rs.getInt(Fields.ID));
-                cart.setLastUpdate(rs.getTimestamp(Fields.LAST_UPDATE_TIME).toLocalDateTime());
-                return cart;
-            } catch (SQLException e) {
-                throw new IllegalStateException(e);
+                if (rs.next()) {
+                    cart.setId(rs.getInt(Fields.ID));
+                    cart.setLastUpdate(rs.getTimestamp(Fields.LAST_UPDATE_TIME).toLocalDateTime());
+                }
+            } catch (SQLException ex) {
+                throw new IllegalStateException(ex.getMessage());
+            } finally {
+                DBManager.getInstance().close(rs);
             }
+            return cart;
         }
     }
 }

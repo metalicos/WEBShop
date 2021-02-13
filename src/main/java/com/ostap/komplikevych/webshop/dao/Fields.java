@@ -44,6 +44,26 @@ public class Fields {
     public static final String PRODUCT_ORDERED_AMOUNT = "ordered_amount";
     public static final String PRODUCT_CATEGORY_ID = "category_id";
 
+    // PRODUCT_DETAIL
+    public static final String PRODUCT_DETAIL_NAME_UA = "name_ua";
+    public static final String PRODUCT_DETAIL_NAME_EN = "name_en";
+    public static final String PRODUCT_DETAIL_COLOR_UA = "color_ua";
+    public static final String PRODUCT_DETAIL_COLOR_EN = "color_en";
+    public static final String PRODUCT_DETAIL_SIZE_UA = "size_ua";
+    public static final String PRODUCT_DETAIL_SIZE_EN = "size_en";
+    public static final String PRODUCT_DETAIL_ABOUT_UA = "about_ua";
+    public static final String PRODUCT_DETAIL_ABOUT_EN = "about_en";
+    public static final String PRODUCT_DETAIL_PHOTO_1 = "photo_1";
+    public static final String PRODUCT_DETAIL_PHOTO_2 = "photo_2";
+    public static final String PRODUCT_DETAIL_PHOTO_3 = "photo_3";
+    public static final String PRODUCT_DETAIL_PRODUCT_ID = "product_id";
+
+    // CATEGORY
+    public static final String CATEGORY_NAME_EN = "name_en";
+    public static final String CATEGORY_NAME_UA = "name_ua";
+    public static final String CATEGORY_DESCRIPTION_EN = "description_en";
+    public static final String CATEGORY_DESCRIPTION_UA = "description_ua";
+
     // ACCOUNT_ORDER
     public static final String ACCOUNT_ORDER_ACCOUNT_ID = "account_id";
     public static final String ACCOUNT_ORDER_STATUS_ID = "status_id";

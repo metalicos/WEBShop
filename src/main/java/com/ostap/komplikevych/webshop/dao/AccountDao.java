@@ -8,25 +8,19 @@ import java.sql.*;
 
 public class AccountDao implements Crud<Account, Integer> {
 
-    public static final String SQL_FIND_ACCOUNT_BY_EMAIL =
-            "SELECT * " +
-                    "FROM `webshop`.`account` " +
-                    "WHERE `email` = ?";
-    public static final String SQL_FIND_ACCOUNT_BY_ID =
-            "SELECT * " +
-                    "FROM `webshop`.`account` " +
-                    "WHERE `id` = ?";
-    public static final String SQL_UPDATE_ACCOUNT =
-            "UPDATE `webshop`.`account` " +
-                    "SET `email`= ?, `password`= ?, `role_id`= ?" +
-                    "  WHERE `id` = ?";
+    public static final String SQL_READ_ACCOUNT_BY_EMAIL;
+    public static final String SQL_READ_ACCOUNT_BY_ID;
+    public static final String SQL_UPDATE_ACCOUNT;
+    public static final String SQL_CREATE_ACCOUNT;
+    private static final String SQL_DELETE_ACCOUNT;
 
-    public static final String SQL_CREATE_ACCOUNT =
-            "INSERT INTO `webshop`.`account` (`email`, `password`, `create_time`, `role_id`, `shopping_cart_id`) " +
-                    "VALUES (?,?,?,?,?);";
-    private static final String SQL_DELETE_ACCOUNT =
-            "DELETE FROM `webshop`.`account` WHERE `id` = ?";
-
+    static {
+        SQL_READ_ACCOUNT_BY_ID = Const.getProperty("sql.read_account_by_id");
+        SQL_READ_ACCOUNT_BY_EMAIL = Const.getProperty("sql.read_account_by_email");
+        SQL_UPDATE_ACCOUNT = Const.getProperty("sql.update_account");
+        SQL_CREATE_ACCOUNT = Const.getProperty("sql.create_account");
+        SQL_DELETE_ACCOUNT = Const.getProperty("sql.delete_account");
+    }
 
     @Override
     public Integer create(Account entity) {
@@ -64,7 +58,7 @@ public class AccountDao implements Crud<Account, Integer> {
         try {
             con = DBManager.getInstance().getConnection();
             EntityMapper<Account> mapper = new AccountMapper();
-            pstmt = con.prepareStatement(SQL_FIND_ACCOUNT_BY_ID);
+            pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_ID);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -88,7 +82,7 @@ public class AccountDao implements Crud<Account, Integer> {
         try {
             con = DBManager.getInstance().getConnection();
             EntityMapper<Account> mapper = new AccountMapper();
-            pstmt = con.prepareStatement(SQL_FIND_ACCOUNT_BY_EMAIL);
+            pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_EMAIL);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -149,18 +143,22 @@ public class AccountDao implements Crud<Account, Integer> {
 
         @Override
         public Account mapRow(ResultSet rs) {
+            Account account = new Account();
             try {
-                Account account = new Account();
-                account.setId(rs.getInt(Fields.ID));
-                account.setEmail(rs.getString(Fields.ACCOUNT_EMAIL));
-                account.setPassword(rs.getString(Fields.ACCOUNT_PASSWORD));
-                account.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
-                account.setRoleId(rs.getInt(Fields.ACCOUNT_ROLE_ID));
-                account.setShoppingCartId(rs.getInt(Fields.ACCOUNT_SHOPPING_CART_ID));
-                return account;
-            } catch (SQLException e) {
-                throw new IllegalStateException(e);
+                if (rs.next()) {
+                    account.setId(rs.getInt(Fields.ID));
+                    account.setEmail(rs.getString(Fields.ACCOUNT_EMAIL));
+                    account.setPassword(rs.getString(Fields.ACCOUNT_PASSWORD));
+                    account.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
+                    account.setRoleId(rs.getInt(Fields.ACCOUNT_ROLE_ID));
+                    account.setShoppingCartId(rs.getInt(Fields.ACCOUNT_SHOPPING_CART_ID));
+                }
+            } catch (SQLException ex) {
+                throw new IllegalStateException(ex.getMessage());
+            } finally {
+                DBManager.getInstance().close(rs);
             }
+            return account;
         }
     }
 }

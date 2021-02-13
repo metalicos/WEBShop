@@ -18,27 +18,17 @@ import java.time.LocalDateTime;
 
 public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
-    private static final String SQL_CREATE_ACCOUNT_DETAILS =
-            "INSERT INTO `webshop`.`account_detail` " +
-                    "(`phone`,`zip_code`,`last_update`,`surname_ua`,`first_name_ua`,`patronymic_ua`,`country_ua`," +
-                    "`city_ua`,`street_ua`,`building_ua`,`flat_ua`,`surname_en`,`first_name_en`,`patronymic_en`," +
-                    "`country_en`,`city_en`,`street_en`,`building_en`,`flat_en`,`account_photo`,`account_id`)" +
-                    "VALUES " +
-                    "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-    private static final String SQL_READ_ACCOUNT_DETAILS_BY_ID =
-            "SELECT * FROM `webshop`.`account_detail` " +
-                    "WHERE `account_id` = ?";
+    private static final String SQL_CREATE_ACCOUNT_DETAILS;
+    private static final String SQL_READ_ACCOUNT_DETAILS_BY_ID;
+    private static final String SQL_UPDATE_ACCOUNT_DETAILS;
+    private static final String SQL_DELETE_ACCOUNT_DETAILS;
 
-    private static final String SQL_UPDATE_ACCOUNT_DETAILS =
-            "UPDATE `webshop`.`account_detail` " +
-                    "SET `phone`= ?,`zip_code`= ?,`last_update`= ?,`surname_ua`= ?,`first_name_ua`= ?,`patronymic_ua`= ?," +
-                    "`country_ua`= ?, `city_ua`= ?,`street_ua`= ?,`building_ua`= ?,`flat_ua`= ?,`surname_en`= ?," +
-                    "`first_name_en`= ?,`patronymic_en`= ?,`country_en`= ?,`city_en`= ?,`street_en`= ?,`building_en`= ?," +
-                    "`flat_en`= ?,`account_photo`= ?,`account_id`= ?" +
-                    "WHERE id = ?;";
-    private static final String SQL_DELETE_ACCOUNT_DETAILS =
-            "DELETE FROM `webshop`.`account_detail` " +
-                    "WHERE `account_id` = ?";
+    static {
+        SQL_CREATE_ACCOUNT_DETAILS = Const.getProperty("sql.create_account_details");
+        SQL_READ_ACCOUNT_DETAILS_BY_ID = Const.getProperty("sql.read_account_details_by_id");
+        SQL_UPDATE_ACCOUNT_DETAILS = Const.getProperty("sql.update_account_details");
+        SQL_DELETE_ACCOUNT_DETAILS = Const.getProperty("sql.delete_account_details");
+    }
 
     @Override
     public Integer create(AccountDetail entity) {
@@ -48,11 +38,6 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_CREATE_ACCOUNT_DETAILS);
-            /*
-            "(`phone`,`zip_code`,`last_update`,`surname_ua`,`first_name_ua`,`patronymic_ua`,`country_ua`," +
-                    "`city_ua`,`street_ua`,`building_ua`,`flat_ua`,`surname_en`,`first_name_en`,`patronymic_en`," +
-                    "`country_en`,`city_en`,`street_en`,`building_en`,`flat_en`,`account_photo`,`account_id`)"+
-            * */
             pstmt.setString(1, entity.getPhone());
             pstmt.setInt(2, entity.getZipCode());
             pstmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
@@ -193,49 +178,56 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
         @Override
         public AccountDetail mapRow(ResultSet rs) {
+            AccountDetail aDetail = new AccountDetail();
             try {
-                AccountDetail aDetail = new AccountDetail();
-                aDetail.setId(rs.getInt(Fields.ID));
-                aDetail.setPhone(rs.getString(Fields.ACCOUNT_DETAIL_PHONE));
-                aDetail.setZipCode(rs.getInt(Fields.ACCOUNT_DETAIL_ZIP_CODE));
+                if(rs.next()) {
+                    aDetail.setId(rs.getInt(Fields.ID));
+                    aDetail.setPhone(rs.getString(Fields.ACCOUNT_DETAIL_PHONE));
+                    aDetail.setZipCode(rs.getInt(Fields.ACCOUNT_DETAIL_ZIP_CODE));
 
-                aDetail.setSurnameEn(rs.getString(Fields.ACCOUNT_DETAIL_SURNAME_EN));
-                aDetail.setSurnameUa(rs.getString(Fields.ACCOUNT_DETAIL_SURNAME_UA));
-                aDetail.setFirstNameEn(rs.getString(Fields.ACCOUNT_DETAIL_FIRST_NAME_EN));
-                aDetail.setFirstNameUa(rs.getString(Fields.ACCOUNT_DETAIL_FIRST_NAME_UA));
-                aDetail.setPatronymicEn(rs.getString(Fields.ACCOUNT_DETAIL_PATRONYMIC_EN));
-                aDetail.setPatronymicUa(rs.getString(Fields.ACCOUNT_DETAIL_PATRONYMIC_UA));
+                    aDetail.setSurnameEn(rs.getString(Fields.ACCOUNT_DETAIL_SURNAME_EN));
+                    aDetail.setSurnameUa(rs.getString(Fields.ACCOUNT_DETAIL_SURNAME_UA));
+                    aDetail.setFirstNameEn(rs.getString(Fields.ACCOUNT_DETAIL_FIRST_NAME_EN));
+                    aDetail.setFirstNameUa(rs.getString(Fields.ACCOUNT_DETAIL_FIRST_NAME_UA));
+                    aDetail.setPatronymicEn(rs.getString(Fields.ACCOUNT_DETAIL_PATRONYMIC_EN));
+                    aDetail.setPatronymicUa(rs.getString(Fields.ACCOUNT_DETAIL_PATRONYMIC_UA));
 
-                aDetail.setCountryEn(rs.getString(Fields.ACCOUNT_DETAIL_COUNTRY_EN));
-                aDetail.setCountryUa(rs.getString(Fields.ACCOUNT_DETAIL_COUNTRY_UA));
-                aDetail.setCityEn(rs.getString(Fields.ACCOUNT_DETAIL_CITY_EN));
-                aDetail.setCityUa(rs.getString(Fields.ACCOUNT_DETAIL_CITY_UA));
-                aDetail.setStreetEn(rs.getString(Fields.ACCOUNT_DETAIL_STREET_EN));
-                aDetail.setStreetUa(rs.getString(Fields.ACCOUNT_DETAIL_STREET_UA));
-                aDetail.setBuildingEn(rs.getString(Fields.ACCOUNT_DETAIL_BUILDING_EN));
-                aDetail.setBuildingUa(rs.getString(Fields.ACCOUNT_DETAIL_BUILDING_UA));
-                aDetail.setFlatEn(rs.getString(Fields.ACCOUNT_DETAIL_FLAT_EN));
-                aDetail.setFlatUa(rs.getString(Fields.ACCOUNT_DETAIL_FLAT_UA));
+                    aDetail.setCountryEn(rs.getString(Fields.ACCOUNT_DETAIL_COUNTRY_EN));
+                    aDetail.setCountryUa(rs.getString(Fields.ACCOUNT_DETAIL_COUNTRY_UA));
+                    aDetail.setCityEn(rs.getString(Fields.ACCOUNT_DETAIL_CITY_EN));
+                    aDetail.setCityUa(rs.getString(Fields.ACCOUNT_DETAIL_CITY_UA));
+                    aDetail.setStreetEn(rs.getString(Fields.ACCOUNT_DETAIL_STREET_EN));
+                    aDetail.setStreetUa(rs.getString(Fields.ACCOUNT_DETAIL_STREET_UA));
+                    aDetail.setBuildingEn(rs.getString(Fields.ACCOUNT_DETAIL_BUILDING_EN));
+                    aDetail.setBuildingUa(rs.getString(Fields.ACCOUNT_DETAIL_BUILDING_UA));
+                    aDetail.setFlatEn(rs.getString(Fields.ACCOUNT_DETAIL_FLAT_EN));
+                    aDetail.setFlatUa(rs.getString(Fields.ACCOUNT_DETAIL_FLAT_UA));
 
-                Blob blob = rs.getBlob(Fields.ACCOUNT_DETAIL_ACCOUNT_PHOTO);
-                aDetail.setAccountPhoto(ImageIO.read(blob.getBinaryStream()));
-
-                aDetail.setAccountId(rs.getInt(Fields.ACCOUNT_DETAIL_ACCOUNT_ID));
-                return aDetail;
-            } catch (SQLException | IOException e) {
-                throw new IllegalStateException(e);
+                    Blob blob = rs.getBlob(Fields.ACCOUNT_DETAIL_ACCOUNT_PHOTO);
+                    aDetail.setAccountPhoto(ImageIO.read(blob.getBinaryStream()));
+                    aDetail.setAccountId(rs.getInt(Fields.ACCOUNT_DETAIL_ACCOUNT_ID));
+                }
+            } catch (SQLException | IOException ex) {
+                throw new IllegalStateException(ex.getMessage());
+            }finally {
+                DBManager.getInstance().close(rs);
             }
+            return aDetail;
         }
     }
 
-    public static void main(String[] args) {
-        CreateAccount.createAccount(
-                new Account("boss@gmail.com", "whit", Role.ADMIN.getId()), new AccountDetail());
-        CreateAccount.createAccount(
-                new Account("sassy@gmail.com", "gorney", Role.ADMIN.getId()), new AccountDetail());
-        CreateAccount.createAccount(
-                new Account("hossy@gmail.com", "shit", Role.ADMIN.getId()), new AccountDetail());
-        CreateAccount.createAccount(
-                new Account("less@gmail.com", "whebit", Role.ADMIN.getId()), new AccountDetail());
+    public static void main(String[] args) throws IOException {
+//        CreateAccount.createAccount(
+//                new Account("boss@gmail.com", "whit", Role.ADMIN.getId()), new AccountDetail());
+//        CreateAccount.createAccount(
+//                new Account("sassy@gmail.com", "gorney", Role.ADMIN.getId()), new AccountDetail());
+//        CreateAccount.createAccount(
+//                new Account("hossy@gmail.com", "shit", Role.ADMIN.getId()), new AccountDetail());
+//        CreateAccount.createAccount(
+//                new Account("less@gmail.com", "whebit", Role.ADMIN.getId()), new AccountDetail());
+
+        AccountDetailDao accountDetailDao = new AccountDetailDao();
+        AccountDetail ad = accountDetailDao.read(8);
+        ImageIO.write(ad.getAccountPhoto(),"png",new File("C:\\ACCOUNT.png"));
     }
 }

@@ -1,4 +1,4 @@
-package com.ostap.komplikevych.webshop.dao;
+package com.ostap.komplikevych.webshop.security;
 
 import com.ostap.komplikevych.webshop.constant.Const;
 import org.apache.commons.codec.binary.Base64;
@@ -73,12 +73,4 @@ public class MyChipher {
             return null;
         }
     }
-
-
-    public static void main(String[] args) {
-        MyChipher chipher = new MyChipher();
-        String pass = chipher.encrypt("secret");
-        System.out.println(chipher.decrypt(pass));
-    }
-
 }
