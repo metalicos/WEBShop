@@ -8,6 +8,16 @@ public class Product extends AbstractEntity {
     private int orderedAmount;
     private int categoryId;
 
+    public Product() {
+    }
+
+    public Product(BigDecimal price, int amount, int orderedAmount, int categoryId) {
+        this.price = price;
+        this.amount = amount;
+        this.orderedAmount = orderedAmount;
+        this.categoryId = categoryId;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -43,7 +53,8 @@ public class Product extends AbstractEntity {
     @Override
     public String toString() {
         return "Product{" +
-                "price=" + price +
+                "id=" + getId() +
+                ", price=" + price +
                 ", amount=" + amount +
                 ", orderedAmount=" + orderedAmount +
                 ", categoryId=" + categoryId +

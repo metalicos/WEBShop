@@ -1,13 +1,15 @@
 package com.ostap.komplikevych.webshop.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AccountOrder extends AbstractEntity {
 
     private LocalDateTime createTime;
-    private long accountId;
-    private long statusId;
-    private long droppedByAccountId;
+    private int accountId;
+    private int statusId;
+    private int droppedByAccountId;
+    private List<ProductInOrder> products;
 
     public LocalDateTime getCreateTime() {
         return createTime;
@@ -17,37 +19,46 @@ public class AccountOrder extends AbstractEntity {
         this.createTime = createTime;
     }
 
-    public long getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(long accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
-    public long getStatusId() {
+    public int getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(long statusId) {
+    public void setStatusId(int statusId) {
         this.statusId = statusId;
     }
 
-    public long getDroppedByAccountId() {
+    public int getDroppedByAccountId() {
         return droppedByAccountId;
     }
 
-    public void setDroppedByAccountId(long droppedByAccountId) {
+    public void setDroppedByAccountId(int droppedByAccountId) {
         this.droppedByAccountId = droppedByAccountId;
+    }
+
+    public List<ProductInOrder> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<ProductInOrder> products) {
+        this.products = products;
     }
 
     @Override
     public String toString() {
-        return "AccountOrder{" +
-                "createTime=" + createTime +
-                ", accountId=" + accountId +
-                ", statusId=" + statusId +
-                ", droppedByAccountId=" + droppedByAccountId +
-                '}';
+        return "AccountOrder{" + "\n" +
+                "createTime=" + createTime + "\n" +
+                ", accountId=" + accountId + "\n" +
+                ", statusId=" + statusId + "\n" +
+                ", droppedByAccountId=" + droppedByAccountId + "\n" +
+                ", products=" + products + "\n" +
+                '}' + "\n";
     }
 }

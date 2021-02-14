@@ -1,3 +1,8 @@
 # WebShop
+## @*author* Ostap Komplikevych
 WebShop
-@author Ostap Komplikevych
+Release notes:
+- V1.0
+    - Added DB
+    - Added 
+

@@ -34,15 +34,21 @@ public class Fields {
     public static final String ACCOUNT_DETAIL_ACCOUNT_PHOTO = "account_photo";
     public static final String ACCOUNT_DETAIL_ACCOUNT_ID = "account_id";
 
-    // SHOPPING_CART_HAS_PRODUCT
-    public static final String SHOPPING_CART_HAS_PRODUCT_SHOPPING_CART_ID = "shopping_cart_id";
-    public static final String SHOPPING_CART_HAS_PRODUCT_PRODUCT_ID = "product_id";
-
     // PRODUCT
     public static final String PRODUCT_PRICE = "price";
     public static final String PRODUCT_AMOUNT = "amount";
     public static final String PRODUCT_ORDERED_AMOUNT = "ordered_amount";
     public static final String PRODUCT_CATEGORY_ID = "category_id";
+
+    // PRODUCT_IN_CART
+    public static final String PRODUCT_IN_CART_PRODUCT_ID = "product_id";
+    public static final String PRODUCT_IN_CART_AMOUNT = "product_pcs_at_cart";
+
+    // PRODUCT_IN_ORDER
+    public static final String PRODUCT_IN_ORDER_ACCOUNT_ORDER_ID = "account_order_id";
+    public static final String PRODUCT_IN_ORDER_PRODUCT_ID = "product_id";
+    public static final String PRODUCT_IN_ORDER_PRICE = "price";
+    public static final String PRODUCT_IN_ORDER_PRODUCT_AMOUNT = "product_amount";
 
     // PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL_NAME_UA = "name_ua";
@@ -68,5 +74,6 @@ public class Fields {
     public static final String ACCOUNT_ORDER_ACCOUNT_ID = "account_id";
     public static final String ACCOUNT_ORDER_STATUS_ID = "status_id";
     public static final String ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID = "droped_by_account_id";
+
 
 }
