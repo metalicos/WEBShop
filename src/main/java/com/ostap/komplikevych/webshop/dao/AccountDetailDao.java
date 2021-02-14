@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 
+/**
+ * The type AccountDetailDao.
+ *
+ * @author Ostap Komplikevych
+ */
 public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
     private static final String SQL_CREATE_ACCOUNT_DETAILS;
@@ -174,6 +179,9 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         }
     }
 
+    /**
+     * The type AccountDetailMapper.
+     */
     static class AccountDetailMapper implements EntityMapper<AccountDetail> {
 
         @Override
@@ -216,6 +224,12 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         }
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
     public static void main(String[] args) throws IOException {
 //        CreateAccount.createAccount(
 //                new Account("boss@gmail.com", "whit", Role.ADMIN.getId()), new AccountDetail());

@@ -9,15 +9,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type ProductDao.
+ *
+ * @author Ostap Komplikevych
+ */
 public class ProductDao implements Crud<Product, Integer> {
-    private static final String SQL_CREATE_PRODUCT =
-            "INSERT INTO `webshop`.`product` (`price`,`amount`,`ordered_amount`,`category_id`) VALUES (?,?,?,?);";
-    private static final String SQL_READ_PRODUCT_BY_ID =
-            "SELECT * FROM `webshop`.`product` WHERE `id` = ?;";
-    private static final String SQL_UPDATE_PRODUCT =
-            "UPDATE `webshop`.`product` SET `price`=?,`amount`=?,`ordered_amount`=?,`category_id`=? WHERE `id`=?;";
-    private static final String SQL_DELETE_PRODUCT =
-            "DELETE FROM `webshop`.`product` WHERE `id` = ?;";
+
+    private static final String SQL_CREATE_PRODUCT;
+    private static final String SQL_READ_PRODUCT_BY_ID;
+    private static final String SQL_UPDATE_PRODUCT;
+    private static final String SQL_DELETE_PRODUCT;
+
+    static {
+        SQL_CREATE_PRODUCT = Const.getProperty("sql.create_product");
+        SQL_READ_PRODUCT_BY_ID = Const.getProperty("sql.read_product_by_id");
+        SQL_UPDATE_PRODUCT = Const.getProperty("sql.update_product");
+        SQL_DELETE_PRODUCT = Const.getProperty("sql.delete_product");
+    }
 
     @Override
     public Integer create(Product entity) {
@@ -109,6 +118,9 @@ public class ProductDao implements Crud<Product, Integer> {
         }
     }
 
+    /**
+     * The type ProductMapper.
+     */
     static class ProductMapper implements EntityMapper<Product> {
 
         @Override

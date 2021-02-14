@@ -6,12 +6,32 @@ import com.ostap.komplikevych.webshop.entity.Account;
 
 import java.sql.*;
 
+/**
+ * The type AccountDao.
+ *
+ * @author Ostap Komplikevych
+ */
 public class AccountDao implements Crud<Account, Integer> {
 
+    /**
+     * The constant SQL_READ_ACCOUNT_BY_EMAIL.
+     */
     public static final String SQL_READ_ACCOUNT_BY_EMAIL;
+    /**
+     * The constant SQL_READ_ACCOUNT_BY_ID.
+     */
     public static final String SQL_READ_ACCOUNT_BY_ID;
+    /**
+     * The constant SQL_UPDATE_ACCOUNT.
+     */
     public static final String SQL_UPDATE_ACCOUNT;
+    /**
+     * The constant SQL_CREATE_ACCOUNT.
+     */
     public static final String SQL_CREATE_ACCOUNT;
+    /**
+     * The constant SQL_DELETE_ACCOUNT.
+     */
     private static final String SQL_DELETE_ACCOUNT;
 
     static {
@@ -74,6 +94,12 @@ public class AccountDao implements Crud<Account, Integer> {
         return account;
     }
 
+    /**
+     * Read account by email.
+     *
+     * @param email the email
+     * @return the account
+     */
     public Account read(String email) {
         Account account = null;
         PreparedStatement pstmt = null;
@@ -139,6 +165,9 @@ public class AccountDao implements Crud<Account, Integer> {
         }
     }
 
+    /**
+     * The type AccountMapper.
+     */
     private static class AccountMapper implements EntityMapper<Account> {
 
         @Override

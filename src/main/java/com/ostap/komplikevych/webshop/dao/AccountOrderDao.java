@@ -12,40 +12,56 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type AccountOrderDao.
+ *
+ * @author Ostap Komplikevych
+ */
 public class AccountOrderDao implements Crud<AccountOrder, Integer> {
 
-    private static final String SQL_CREATE_ACCOUNT_ORDER =
-            "INSERT INTO `webshop`.`account_order` (`account_id`,`status_id`) VALUES (?,?);";
-    private static final String SQL_READ_ACCOUNT_ORDER =
-            "SELECT * FROM `webshop`.`account_order` WHERE id = ?";
-    private static final String SQL_UPDATE_ACCOUNT_ORDER =
-            "UPDATE `webshop`.`account_order` SET `account_id`= ?, `status_id`=?, `droped_by_account_id`=?  WHERE id = ?;";
-    private static final String SQL_DELETE_ACCOUNT_ORDER =
-            "DELETE FROM `webshop`.`account_order` WHERE id = ?;";
+    private static final String SQL_CREATE_ACCOUNT_ORDER;
+    private static final String SQL_READ_ACCOUNT_ORDER;
+    private static final String SQL_UPDATE_ACCOUNT_ORDER;
+    private static final String SQL_DELETE_ACCOUNT_ORDER;
 
-    public static final String SQL_CREATE_PRODUCT_ACCOUNT_ORDER =
-            "INSERT INTO webshop.account_order_has_product (`account_order_id`, `product_id`,`price`,`product_amount`,`create_time`,`last_update`) VALUES (?,?,?,?,?,?);";
+    /**
+     * The constant SQL_CREATE_PRODUCT_ACCOUNT_ORDER.
+     */
+    public static final String SQL_CREATE_PRODUCT_ACCOUNT_ORDER;
+    /**
+     * The constant SQL_READ_ALL_PRODUCTS_BY_ACCOUNT_ORDER_ID.
+     */
+    public static final String SQL_READ_ALL_PRODUCTS_BY_ACCOUNT_ORDER_ID;
+    /**
+     * The constant SQL_READ_PRODUCT_FROM_ACCOUNT_ORDER_BY_ID.
+     */
+    public static final String SQL_READ_PRODUCT_FROM_ACCOUNT_ORDER_BY_ID;
+    /**
+     * The constant SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER.
+     */
+    public static final String SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER;
+    /**
+     * The constant SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER.
+     */
+    public static final String SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER;
+    /**
+     * The constant SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER.
+     */
+    public static final String SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER;
 
-    public static final String SQL_READ_ALL_PRODUCTS_BY_ACCOUNT_ORDER_ID =
-            "SELECT * FROM webshop.account_order AS a_order \n" +
-                    "\n" +
-                    "INNER JOIN webshop.account_order_has_product AS order_h_product\n" +
-                    "\n" +
-                    "ON a_order.id = order_h_product.account_order_id \n" +
-                    "\n" +
-                    "WHERE a_order.id = ?;";
+    static {
+        SQL_CREATE_ACCOUNT_ORDER = Const.getProperty("sql.create_account_order");
+        SQL_READ_ACCOUNT_ORDER = Const.getProperty("sql.read_account_order");
+        SQL_UPDATE_ACCOUNT_ORDER = Const.getProperty("sql.update_account_order");
+        SQL_DELETE_ACCOUNT_ORDER = Const.getProperty("sql.delete_account_order");
 
-    public static final String SQL_READ_PRODUCT_FROM_ACCOUNT_ORDER_BY_ID =
-            "SELECT * FROM webshop.account_order_has_product WHERE `account_order_id` = ? AND `product_id` = ?;";
-
-    public static final String SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER =
-            "UPDATE webshop.account_order_has_product SET price=?,product_amount=? WHERE account_order_id=? AND product_id=?;";
-
-    public static final String SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER =
-            "DELETE FROM webshop.account_order_has_product WHERE account_order_id = ?;";
-
-    public static final String SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER =
-            "DELETE FROM webshop.account_order_has_product WHERE `account_order_id` = ? AND `product_id` = ?;";
+        SQL_CREATE_PRODUCT_ACCOUNT_ORDER = Const.getProperty("sql.create_product_in_order");
+        SQL_READ_ALL_PRODUCTS_BY_ACCOUNT_ORDER_ID = Const.getProperty("sql.read_all_products_in_order");
+        SQL_READ_PRODUCT_FROM_ACCOUNT_ORDER_BY_ID = Const.getProperty("sql.read_product_from_order_by_id");
+        SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER = Const.getProperty("sql.update_product_in_order");
+        SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER = Const.getProperty("sql.delete_all_products_in_order");
+        SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER = Const.getProperty("sql.delete_product_in_order");
+    }
 
     @Override
     public Integer create(AccountOrder entity) {
@@ -135,6 +151,9 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
+    /**
+     * The type AccountOrderMapper.
+     */
     static class AccountOrderMapper implements EntityMapper<AccountOrder> {
 
         @Override
@@ -158,6 +177,9 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
+    /**
+     * The type ProductInOrderMapper.
+     */
     static class ProductInOrderMapper implements EntityMapper<ProductInOrder> {
 
         @Override
@@ -178,6 +200,12 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
+    /**
+     * Read ProductsInOrderList.
+     *
+     * @param orderId the order id
+     * @return the list
+     */
     public static List<ProductInOrder> readProductsInOrder(int orderId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -202,7 +230,12 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return products;
     }
 
-
+    /**
+     * Delete all ProductsInOrder.
+     *
+     * @param orderId          the order id
+     * @param droppedByAccount the dropped by account
+     */
     public static void deleteAllProductsInOrder(int orderId, int droppedByAccount) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -227,6 +260,13 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
+    /**
+     * Create ProductsInOrder integer.
+     *
+     * @param orderId the order id
+     * @param entity  the entity
+     * @return the integer
+     */
     public static Integer createProductInOrder(int orderId, ProductInOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -259,6 +299,12 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return insertedWithId;
     }
 
+    /**
+     * Delete Product InOrder.
+     *
+     * @param orderId   the order id
+     * @param productId the product id
+     */
     public static void deleteProductInOrder(int orderId, int productId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -279,6 +325,12 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
+    /**
+     * Update Product InOrder.
+     *
+     * @param orderId the order id
+     * @param entity  the entity
+     */
     public static void updateProductInOrder(int orderId, ProductInOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -300,6 +352,13 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
+    /**
+     * Read Product InOrder.
+     *
+     * @param orderId   the order id
+     * @param productId the product id
+     * @return the product in order
+     */
     public static ProductInOrder readProductInOrder(int orderId, int productId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -325,6 +384,11 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return productInOrder;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         AccountOrderDao orderDao = new AccountOrderDao();
         AccountOrder ao = new AccountOrder();

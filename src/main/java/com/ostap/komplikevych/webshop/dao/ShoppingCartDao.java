@@ -11,17 +11,40 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type ShoppingCartDao.
+ *
+ * @author Ostap Komplikevych
+ */
 public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
     private static final String SQL_CREATE_SHOPPING_CART;
     private static final String SQL_READ_SHOPPING_CART;
     private static final String SQL_UPDATE_SHOPPING_CART;
     private static final String SQL_DELETE_SHOPPING_CART;
 
+    /**
+     * The constant SQL_CREATE_PRODUCT_IN_CART.
+     */
     public static final String SQL_CREATE_PRODUCT_IN_CART;
+    /**
+     * The constant SQL_READ_ALL_PRODUCTS_BY_CART_ID.
+     */
     public static final String SQL_READ_ALL_PRODUCTS_BY_CART_ID;
+    /**
+     * The constant SQL_READ_PRODUCT_FROM_CART_BY_ID.
+     */
     public static final String SQL_READ_PRODUCT_FROM_CART_BY_ID;
+    /**
+     * The constant SQL_UPDATE_PRODUCT_IN_CART.
+     */
     public static final String SQL_UPDATE_PRODUCT_IN_CART;
+    /**
+     * The constant SQL_DELETE_ALL_PRODUCTS_IN_CART.
+     */
     public static final String SQL_DELETE_ALL_PRODUCTS_IN_CART;
+    /**
+     * The constant SQL_DELETE_PRODUCT_IN_CART.
+     */
     public static final String SQL_DELETE_PRODUCT_IN_CART;
 
     static {
@@ -119,6 +142,9 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         }
     }
 
+    /**
+     * The type ShoppingCartMapper.
+     */
     static class ShoppingCartMapper implements EntityMapper<ShoppingCart> {
         @Override
         public ShoppingCart mapRow(ResultSet rs) {
@@ -138,6 +164,9 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         }
     }
 
+    /**
+     * The type ProductInCartMapper.
+     */
     static class ProductInCartMapper implements EntityMapper<ProductInCart> {
 
         @Override
@@ -155,6 +184,12 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         }
     }
 
+    /**
+     * Read products in cart list.
+     *
+     * @param cartId the cart id
+     * @return the list
+     */
     public static List<ProductInCart> readProductsInCart(int cartId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -179,6 +214,11 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         return products;
     }
 
+    /**
+     * Delete all products in cart.
+     *
+     * @param cartId the cart id
+     */
     public static void deleteAllProductsInCart(int cartId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -197,6 +237,14 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         }
     }
 
+    /**
+     * Create product in cart.
+     *
+     * @param cartId    the cart id
+     * @param productId the product id
+     * @param amount    the amount
+     * @return the integer
+     */
     public static Integer createProductInCart(int cartId, int productId, int amount) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -220,6 +268,12 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         return insertedWithId;
     }
 
+    /**
+     * Delete product in cart.
+     *
+     * @param cartId    the cart id
+     * @param productId the product id
+     */
     public static void deleteProductInCart(int cartId, int productId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -239,6 +293,13 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         }
     }
 
+    /**
+     * Update product in cart.
+     *
+     * @param cartId       the cart id
+     * @param productId    the product id
+     * @param updateAmount the update amount
+     */
     public static void updateProductInCart(int cartId, int productId, int updateAmount) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -259,6 +320,13 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         }
     }
 
+    /**
+     * Get product in cart.
+     *
+     * @param cartId    the cart id
+     * @param productId the product id
+     * @return the product in cart
+     */
     public static ProductInCart readProductInCart(int cartId, int productId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -284,6 +352,11 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
         return productInCart;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         ShoppingCartDao cartDao = new ShoppingCartDao();
         System.out.println("\n########### DELETE ALL PRODUCTS IN CART ##################");

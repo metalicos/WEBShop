@@ -12,16 +12,24 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 
+/**
+ * The type ProductDetailDao.
+ *
+ * @author Ostap Komplikevych
+ */
 public class ProductDetailDao implements Crud<ProductDetail, Integer> {
 
-    private static final String SQL_CREATE_PRODUCT_DETAIL =
-            "INSERT INTO `webshop`.`product_detail` (`name_ua`,`color_ua`,`size_ua`,`about_ua`,`name_en`,`color_en`,`size_en`,`about_en`,`photo_1`,`photo_2`,`photo_3`,`product_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
-    private static final String SQL_READ_PRODUCT_DETAIL_BY_ID =
-            "SELECT * FROM `webshop`.`product_detail` WHERE `id` = ?;";
-    private static final String SQL_UPDATE_PRODUCT_DETAIL =
-            "UPDATE `webshop`.`product_detail` SET `name_ua`=?,`color_ua`=?,`size_ua`=?,`about_ua`=?,`name_en`=?,`color_en`=?,`size_en`=?,`about_en`=?,`photo_1`=?,`photo_2`=?,`photo_3`=?,`product_id`=? WHERE `id`=?;";
-    private static final String SQL_DELETE_PRODUCT_DETAIL =
-            "DELETE FROM `webshop`.`product_detail` WHERE `id` = ?;";
+    private static final String SQL_CREATE_PRODUCT_DETAIL;
+    private static final String SQL_READ_PRODUCT_DETAIL_BY_ID;
+    private static final String SQL_UPDATE_PRODUCT_DETAIL;
+    private static final String SQL_DELETE_PRODUCT_DETAIL;
+
+    static {
+        SQL_CREATE_PRODUCT_DETAIL = Const.getProperty("sql.create_product_details");
+        SQL_READ_PRODUCT_DETAIL_BY_ID = Const.getProperty("sql.read_product_details_by_id");
+        SQL_UPDATE_PRODUCT_DETAIL = Const.getProperty("sql.update_product_details");
+        SQL_DELETE_PRODUCT_DETAIL = Const.getProperty("sql.delete_product_details");
+    }
 
     private ByteArrayOutputStream getImageAsByteArrayOutputStream(BufferedImage img) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -159,6 +167,9 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
         }
     }
 
+    /**
+     * The type ProductDetailMapper.
+     */
     static class ProductDetailMapper implements EntityMapper<ProductDetail> {
 
         @Override

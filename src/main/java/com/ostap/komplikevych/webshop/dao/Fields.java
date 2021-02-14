@@ -1,5 +1,10 @@
 package com.ostap.komplikevych.webshop.dao;
 
+/**
+ * The type Fields that contains names of the tables fields.
+ *
+ * @author Ostap Komplikevych
+ */
 public class Fields {
 
     public static final String ID = "id";

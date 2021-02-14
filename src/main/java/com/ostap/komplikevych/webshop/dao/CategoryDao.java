@@ -3,23 +3,28 @@ package com.ostap.komplikevych.webshop.dao;
 import com.ostap.komplikevych.webshop.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.Category;
-import com.ostap.komplikevych.webshop.entity.Product;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type CategoryDao.
+ */
 public class CategoryDao implements Crud<Category, Integer> {
 
-    private static final String SQL_CREATE_CATEGORY =
-            "INSERT INTO `webshop`.`category` (`name_ua`,`name_en`,`description_ua`,`description_en`) VALUES (?,?,?,?);";
-    private static final String SQL_READ_CATEGORY_BY_ID =
-            "SELECT * FROM `webshop`.`category` WHERE `id` = ?;";
-    private static final String SQL_UPDATE_CATEGORY =
-            "UPDATE `webshop`.`category` SET `name_ua`=?,`name_en`=?,`description_ua`=?,`description_en`=? WHERE `id`=?;";
-    private static final String SQL_DELETE_CATEGORY =
-            "DELETE FROM `webshop`.`category` WHERE `id` = ?;";
+    private static final String SQL_CREATE_CATEGORY;
+    private static final String SQL_READ_CATEGORY_BY_ID;
+    private static final String SQL_UPDATE_CATEGORY;
+    private static final String SQL_DELETE_CATEGORY;
+
+    static {
+        SQL_CREATE_CATEGORY = Const.getProperty("sql.create_category");
+        SQL_READ_CATEGORY_BY_ID = Const.getProperty("sql.read_category_by_id");
+        SQL_UPDATE_CATEGORY = Const.getProperty("sql.update_category");
+        SQL_DELETE_CATEGORY = Const.getProperty("sql.delete_category");
+    }
 
     @Override
     public Integer create(Category entity) {
@@ -111,6 +116,9 @@ public class CategoryDao implements Crud<Category, Integer> {
         }
     }
 
+    /**
+     * The type CategoryMapper.
+     */
     static class CategoryMapper implements EntityMapper<Category> {
 
         @Override
