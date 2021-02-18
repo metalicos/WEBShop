@@ -27,9 +27,12 @@ public class ShoppingCart extends AbstractEntity {
 
     @Override
     public String toString() {
+        String prod = "empty";
+        if (products != null) {
+            prod = Arrays.toString(products.toArray());
+        }
         return "ShoppingCart{\n" +
-                "lastUpdate=" + lastUpdate + "\n"+
-                "products=" + Arrays.toString(products.toArray()) +
-                "\n}";
+                "lastUpdate=" + lastUpdate + "\n" +
+                "products=" + prod + "\n}";
     }
 }

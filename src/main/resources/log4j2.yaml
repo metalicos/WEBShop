@@ -12,55 +12,39 @@ Configuration:
       PatternLayout:
         Pattern: "%highlight{%-5level}{FATAL=bg_red} %style{%date{yyyy-MM-dd
                   HH:mm:ss.SSS}}{blue} %class{1}:%L - %highlight{%msg} %xEx{short}%n"
-      Filters:
-        ThresholdFilter:
-          level: warn
-          onMatch: DENY
-          onMismatch: NEUTRAL
+    #  фільтр який відтинає логування від важчого до легшого
+    #      Filters:
+    #        ThresholdFilter:
+    #          level: fatal
+    #          onMatch: DENY
+    #          onMismatch: NEUTRAL
     File:
       - name: rootLogFile
-        fileName: ${log-path}/rootFile.log
+        fileName: ${log-path}/root.log
         PatternLayout:
-          Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %class{1}:%L - %msg
-                    %xEx{short}%n"
-      - name: higherThanWarn
-        fileName: ${log-path}/hihgerWarn.log
-        PatternLayout:
-          Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %class{1}:%L - %msg
-                    %xEx{short}%n"
-        Filters:
-          ThresholdFilter:
-            level: error
-            onMatch: DENY
-            onMismatch: NEUTRAL
-#    SMTP:
-#      name: MailAppender
-#      subject: "Error Log"
-#      to: "ostap.komplikevych.ki.2017@lpnu.ua"
-#      from: "ostap.ja@gmail.com"
-#      smtpHost: "smtp.gmail.com"
-#      smtpPort: 465
-#      smtpProtocol: smtps
-#      smtpUsername: "ostap.ja@gmail.com"
-#      smtpPassword: ""
-#      bufferSize: 512
-#      HTMLLayout:
-#        charset: "UTF-8"
-#        title: "Logs from Komplikevych project"
+          Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %class{1}:%L - %msg %xEx{short}%n"
+    #  фільтр який відтинає логування від важчого до легшого
+    #        Filters:
+    #          ThresholdFilter:
+    #            level: fatal
+    #            onMatch: DENY
+    #            onMismatch: NEUTRAL
+
   # --------------------- Логери ---------------
   Loggers:
     Root:
+      # - обмеження для всіх логерів
       level: all
-      AppenderRef:
-        - ref: rootLogFile
-          level: debug
-        - ref: higherThanWarn
-          level: info
+
     Logger:
+      # - обмеження для логера в папці com.ostap.komplikevych.webshop.constant.Const
       - name: com.ostap.komplikevych.webshop.constant.Const
+        # - загальне обмеження по логуванню
         level: all
         AppenderRef:
+          # - обмеження КОНСОЛІ по логуванню
           - ref: Console_Appender
-            level: debug
-#          - ref: MailAppender
-#            level: error
+            level: all
+          # - обмеження ФАЙЛУ по логуванню
+          - ref: rootLogFile
+            level: warn

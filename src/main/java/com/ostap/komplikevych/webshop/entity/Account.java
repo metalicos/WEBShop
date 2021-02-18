@@ -10,15 +10,6 @@ public class Account extends AbstractEntity {
     private int roleId;
     private int shoppingCartId;
 
-    public Account(String email, String password, int roleId) {
-        this.email = email;
-        this.password = password;
-        this.roleId = roleId;
-    }
-
-    public Account() {
-    }
-
     public String getEmail() {
         return email;
     }
@@ -59,14 +50,4 @@ public class Account extends AbstractEntity {
         this.shoppingCartId = shoppingCartId;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", createTime=" + createTime +
-                ", roleId=" + roleId +
-                ", shoppingCartId=" + shoppingCartId +
-                '}';
-    }
 }

@@ -75,7 +75,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException | IOException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -97,7 +97,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             pstmt.setLong(1, id);
             productDetail = mapper.mapRow(pstmt.executeQuery());
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(rs);
@@ -139,7 +139,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException | IOException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -159,7 +159,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             pstmt.setLong(1, entity.getId());
             pstmt.executeQuery();
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(rs);
@@ -174,9 +174,10 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
 
         @Override
         public ProductDetail mapRow(ResultSet rs) {
-            ProductDetail productDetail = new ProductDetail();
+            ProductDetail productDetail = null;
             try {
                 if (rs.next()) {
+                    productDetail = new ProductDetail();
                     productDetail.setNameEn(rs.getString(Fields.PRODUCT_DETAIL_NAME_EN));
                     productDetail.setNameUa(rs.getString(Fields.PRODUCT_DETAIL_NAME_UA));
                     productDetail.setColorEn(rs.getString(Fields.PRODUCT_DETAIL_COLOR_EN));
@@ -196,6 +197,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
                     productDetail.setProductId(rs.getInt(Fields.PRODUCT_DETAIL_PRODUCT_ID));
                 }
             } catch (SQLException | IOException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             } finally {
                 DBManager.getInstance().close(rs);

@@ -1,0 +1,28 @@
+.custom-wrapper,.footer-light{
+  color: #48b83e;
+  background-color: #f8f8f8;
+  max-width: 400px;
+}
+.footer-light{
+  border-style:solid;
+  border-top-style: initial;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.custom-wrapper{
+  border-style:solid;
+  border-bottom-style: initial;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+.btn.btn-primary {
+  background-color: #48b83e;
+  color: #fff;
+  border: 1px solid #008000;
+  border-radius: 10px;
+  font-weight: 800
+}
+
+.btn.btn-primary:hover {
+  background-color: #48b83ee8
+}

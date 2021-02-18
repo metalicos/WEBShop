@@ -74,7 +74,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -95,7 +95,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             ShoppingCartMapper shoppingCartMapper = new ShoppingCartMapper();
             shoppingCart = shoppingCartMapper.mapRow(pstmt.executeQuery());
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);
@@ -115,7 +115,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -134,7 +134,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -148,14 +148,16 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
     static class ShoppingCartMapper implements EntityMapper<ShoppingCart> {
         @Override
         public ShoppingCart mapRow(ResultSet rs) {
-            ShoppingCart cart = new ShoppingCart();
+            ShoppingCart cart = null;
             try {
                 if (rs.next()) {
+                    cart = new ShoppingCart();
                     cart.setId(rs.getInt(Fields.ID));
                     cart.setLastUpdate(rs.getTimestamp(Fields.LAST_UPDATE_TIME).toLocalDateTime());
                     cart.setProducts(readProductsInCart(cart.getId()));
                 }
             } catch (SQLException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             } finally {
                 DBManager.getInstance().close(rs);
@@ -171,13 +173,15 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
 
         @Override
         public ProductInCart mapRow(ResultSet rs) {
-            ProductInCart productInCart = new ProductInCart();
+            ProductInCart productInCart = null;
             try {
+                productInCart = new ProductInCart();
                 productInCart.setAmount(rs.getInt(Fields.PRODUCT_IN_CART_AMOUNT));
                 ProductDao productDao = new ProductDao();
                 Product product = productDao.read(rs.getInt(Fields.PRODUCT_IN_CART_PRODUCT_ID));
                 productInCart.setProduct(product);
             } catch (SQLException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             }
             return productInCart;
@@ -205,7 +209,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
                 products.add(mapper.mapRow(rs));
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);
@@ -229,7 +233,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -259,7 +263,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -285,7 +289,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -312,7 +316,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -343,7 +347,7 @@ public class ShoppingCartDao implements Crud<ShoppingCart, Integer> {
                 productInCart = mapper.mapRow(rs);
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);

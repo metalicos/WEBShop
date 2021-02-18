@@ -19,8 +19,9 @@ public class DBManager {
             ds.setMaxIdle(10);
             ds.setMaxOpenPreparedStatements(100);
             ds.setDefaultAutoCommit(false);
+            Const.logger.info(ds);
         } catch (Exception ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.fatal(ex);
         }
     }
 
@@ -32,14 +33,14 @@ public class DBManager {
     }
 
     public static Connection getConnectionFromDriverManager() throws SQLException {
-        String url = null;
-        String user = null;
-        String password = null;
+        String url;
+        String user;
+        String password;
         try {
             url = Const.getProperty("db.url");
             user = Const.getProperty("db.user");
             password = Const.getProperty("db.password");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Const.logger.error(ex);
             return null;
         }
@@ -52,11 +53,11 @@ public class DBManager {
 
     public void commit(Connection con) {
         try {
-            if(con!=null) {
+            if (con != null) {
                 con.commit();
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         }
     }
 
@@ -72,8 +73,8 @@ public class DBManager {
                     Const.logger.error("Last inserted ID not found.");
                 }
             } catch (Exception ex) {
-                Const.logger.error(ex.getMessage());
-            }finally {
+                Const.logger.error(ex);
+            } finally {
                 close(rs);
             }
         }
@@ -82,11 +83,11 @@ public class DBManager {
 
     public void rollback(Connection con) {
         try {
-            if(con!=null) {
+            if (con != null) {
                 con.rollback();
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         }
     }
 
@@ -95,7 +96,7 @@ public class DBManager {
             try {
                 closeable.close();
             } catch (Exception ex) {
-                Const.logger.error(ex.getMessage());
+                Const.logger.error(ex);
             }
         }
     }

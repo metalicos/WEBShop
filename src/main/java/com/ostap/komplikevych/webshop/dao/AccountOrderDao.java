@@ -79,7 +79,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -100,7 +100,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             EntityMapper<AccountOrder> mapper = new AccountOrderMapper();
             accountOrder = mapper.mapRow(pstmt.executeQuery());
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);
@@ -124,7 +124,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -143,7 +143,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -158,9 +158,10 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
 
         @Override
         public AccountOrder mapRow(ResultSet rs) {
-            AccountOrder order = new AccountOrder();
+            AccountOrder order = null;
             try {
                 if (rs.next()) {
+                    order = new AccountOrder();
                     order.setId(rs.getInt(Fields.ID));
                     order.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
                     order.setAccountId(rs.getInt(Fields.ACCOUNT_ORDER_ACCOUNT_ID));
@@ -169,6 +170,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
                     order.setProducts(readProductsInOrder(order.getId()));
                 }
             } catch (SQLException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             } finally {
                 DBManager.getInstance().close(rs);
@@ -184,8 +186,9 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
 
         @Override
         public ProductInOrder mapRow(ResultSet rs) {
-            ProductInOrder productInOrder = new ProductInOrder();
+            ProductInOrder productInOrder = null;
             try {
+                productInOrder = new ProductInOrder();
                 productInOrder.setProductAmount(rs.getInt(Fields.PRODUCT_IN_ORDER_PRODUCT_AMOUNT));
                 productInOrder.setPrice(rs.getBigDecimal(Fields.PRODUCT_IN_ORDER_PRICE));
                 productInOrder.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
@@ -194,6 +197,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
                 Product product = productDao.read(rs.getInt(Fields.PRODUCT_IN_ORDER_PRODUCT_ID));
                 productInOrder.setProduct(product);
             } catch (SQLException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             }
             return productInOrder;
@@ -221,7 +225,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
                 products.add(mapper.mapRow(rs));
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);
@@ -252,7 +256,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
 
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -290,7 +294,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -317,7 +321,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -344,7 +348,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -375,7 +379,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
                 productInOrder = mapper.mapRow(rs);
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);

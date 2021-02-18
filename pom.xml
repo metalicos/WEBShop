@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ostap.komplikevych.webShop</groupId>
-    <artifactId>WEBShop</artifactId>
+    <groupId>komplikevych.ostap</groupId>
+    <artifactId>WebShop</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
 
-    <name>WEBShop Maven Webapp</name>
-    <url>http://www.cd-shop.com</url>
+    <packaging>war</packaging>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
+<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
 
     <dependencies>
-
-        <!-- WEB -->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -28,22 +24,24 @@
             <version>8.0.23</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>jstl</artifactId>-->
+<!--            <version>1.2</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.3</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-catalina</artifactId>
-            <version>10.0.0</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
         </dependency>
-
-        <!-- END WEB -->
-
-        <!-- TESTING -->
 
         <dependency>
             <groupId>junit</groupId>
@@ -52,11 +50,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- END TESTING -->
-
-        <!-- LOGGING -->
-
-        <!--log4j2-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -68,68 +61,69 @@
             <artifactId>log4j-core</artifactId>
             <version>2.9.1</version>
         </dependency>
-        <!--yaml-->
+
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>2.9.4</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.9.4</version>
         </dependency>
-        <!-- MAIL -->
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.5.1</version>
-        </dependency>
-        <!-- END LOGGING -->
 
-        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <!--        <dependency>-->
+        <!--            <groupId>com.sun.mail</groupId>-->
+        <!--            <artifactId>javax.mail</artifactId>-->
+        <!--            <version>1.5.1</version>-->
+        <!--        </dependency>-->
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.14</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0</version>
+            <scope>provided</scope>
+        </dependency>
+
 
     </dependencies>
+    <!--    <build>-->
+    <!--        <plugins>-->
+    <!--            <plugin>-->
+    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+    <!--                <version>3.1</version>-->
+    <!--                <configuration>-->
+    <!--                    <source>1.8</source>-->
+    <!--                    <target>1.8</target>-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.0</version>
-                    <executions>
-                        <execution>
-                            <id>tomcat-run</id>
-                            <goals>
-                                <goal>exec-war-only</goal>
-                            </goals>
-                            <phase>package</phase>
-                            <configuration>
-                                <path>/</path>
-                                <enableNaming>false</enableNaming>
-                                <finalName>webapp.jar</finalName>
-                                <charset>utf-8</charset>
-                                <port>8088</port>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-war-plugin</artifactId>-->
+    <!--                <version>3.2.2</version>-->
+    <!--                <configuration>-->
+    <!--                    <webXml>web\WEB-INF\web.xml</webXml>-->
+    <!--                    <warName>WebShop</warName>-->
+    <!--                    <attachClasses>true</attachClasses>-->
+    <!--                    <warSourceDirectory>web</warSourceDirectory>-->
+    <!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
+    <!--        </plugins>-->
+    <!--    </build>-->
 </project>

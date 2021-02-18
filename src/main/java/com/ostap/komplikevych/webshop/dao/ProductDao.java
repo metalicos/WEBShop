@@ -44,7 +44,7 @@ public class ProductDao implements Crud<Product, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -66,7 +66,7 @@ public class ProductDao implements Crud<Product, Integer> {
             pstmt.setLong(1, id);
             product = mapper.mapRow(pstmt.executeQuery());
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(rs);
@@ -90,7 +90,7 @@ public class ProductDao implements Crud<Product, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -110,7 +110,7 @@ public class ProductDao implements Crud<Product, Integer> {
             pstmt.setLong(1, entity.getId());
             pstmt.executeQuery();
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(rs);
@@ -125,9 +125,10 @@ public class ProductDao implements Crud<Product, Integer> {
 
         @Override
         public Product mapRow(ResultSet rs) {
-            Product product = new Product();
+            Product product = null;
             try {
                 if (rs.next()) {
+                    product = new Product();
                     product.setId(rs.getInt(Fields.ID));
                     product.setAmount(rs.getInt(Fields.PRODUCT_AMOUNT));
                     product.setOrderedAmount(rs.getInt(Fields.PRODUCT_ORDERED_AMOUNT));
@@ -135,6 +136,7 @@ public class ProductDao implements Crud<Product, Integer> {
                     product.setCategoryId(rs.getInt(Fields.PRODUCT_CATEGORY_ID));
                 }
             } catch (SQLException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             } finally {
                 DBManager.getInstance().close(rs);

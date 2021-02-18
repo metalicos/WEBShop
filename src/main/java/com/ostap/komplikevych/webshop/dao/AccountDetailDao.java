@@ -2,10 +2,7 @@ package com.ostap.komplikevych.webshop.dao;
 
 import com.ostap.komplikevych.webshop.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
-import com.ostap.komplikevych.webshop.entity.Account;
 import com.ostap.komplikevych.webshop.entity.AccountDetail;
-import com.ostap.komplikevych.webshop.entity.Role;
-import com.ostap.komplikevych.webshop.model.command.CreateAccount;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -79,7 +76,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
         } catch (SQLException | IOException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -100,7 +97,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
             AccountDetailMapper accountDetailMapper = new AccountDetailMapper();
             accountDetail = accountDetailMapper.mapRow(pstmt.executeQuery());
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(pstmt);
             DBManager.getInstance().close(con);
@@ -152,7 +149,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
         } catch (SQLException | IOException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -171,7 +168,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -186,9 +183,10 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
 
         @Override
         public AccountDetail mapRow(ResultSet rs) {
-            AccountDetail aDetail = new AccountDetail();
+            AccountDetail aDetail = null;
             try {
                 if(rs.next()) {
+                    aDetail = new AccountDetail();
                     aDetail.setId(rs.getInt(Fields.ID));
                     aDetail.setPhone(rs.getString(Fields.ACCOUNT_DETAIL_PHONE));
                     aDetail.setZipCode(rs.getInt(Fields.ACCOUNT_DETAIL_ZIP_CODE));
@@ -216,6 +214,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
                     aDetail.setAccountId(rs.getInt(Fields.ACCOUNT_DETAIL_ACCOUNT_ID));
                 }
             } catch (SQLException | IOException ex) {
+                Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             }finally {
                 DBManager.getInstance().close(rs);

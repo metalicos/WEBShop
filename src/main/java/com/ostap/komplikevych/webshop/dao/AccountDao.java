@@ -50,7 +50,7 @@ public class AccountDao implements Crud<Account, Integer> {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_CREATE_ACCOUNT);
-            // (`email`, `password`, `create_time`, `role_id`, `shopping_cart_id`)
+
             pstmt.setString(1, entity.getEmail());
             pstmt.setString(2, entity.getPassword());
             pstmt.setTimestamp(3, Timestamp.valueOf(entity.getCreateTime()));
@@ -60,7 +60,7 @@ public class AccountDao implements Crud<Account, Integer> {
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -77,7 +77,7 @@ public class AccountDao implements Crud<Account, Integer> {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            EntityMapper<Account> mapper = new AccountMapper();
+            AccountMapper mapper = new AccountMapper();
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_ID);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
@@ -85,7 +85,7 @@ public class AccountDao implements Crud<Account, Integer> {
                 account = mapper.mapRow(rs);
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(rs);
@@ -107,7 +107,7 @@ public class AccountDao implements Crud<Account, Integer> {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            EntityMapper<Account> mapper = new AccountMapper();
+            AccountMapper mapper = new AccountMapper();
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_EMAIL);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
@@ -115,7 +115,7 @@ public class AccountDao implements Crud<Account, Integer> {
                 account = mapper.mapRow(rs);
             }
         } catch (SQLException ex) {
-            Const.logger.error(ex.getMessage());
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(rs);
@@ -138,7 +138,7 @@ public class AccountDao implements Crud<Account, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -157,7 +157,7 @@ public class AccountDao implements Crud<Account, Integer> {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
+            Const.logger.error(ex);
         } finally {
             DBManager.getInstance().commit(con);
             DBManager.getInstance().close(con);
@@ -172,9 +172,10 @@ public class AccountDao implements Crud<Account, Integer> {
 
         @Override
         public Account mapRow(ResultSet rs) {
-            Account account = new Account();
+            Account account = null;
             try {
                 if (rs.next()) {
+                    account = new Account();
                     account.setId(rs.getInt(Fields.ID));
                     account.setEmail(rs.getString(Fields.ACCOUNT_EMAIL));
                     account.setPassword(rs.getString(Fields.ACCOUNT_PASSWORD));
@@ -183,7 +184,8 @@ public class AccountDao implements Crud<Account, Integer> {
                     account.setShoppingCartId(rs.getInt(Fields.ACCOUNT_SHOPPING_CART_ID));
                 }
             } catch (SQLException ex) {
-                throw new IllegalStateException(ex.getMessage());
+                Const.logger.error(ex);
+                throw new IllegalStateException(ex);
             } finally {
                 DBManager.getInstance().close(rs);
             }
