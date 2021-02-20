@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS `webshop`.`shopping_cart`
     `last_update` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE = INNODB
-  AUTO_INCREMENT = 3
   DEFAULT CHARACTER SET = UTF8;
 
 CREATE TABLE IF NOT EXISTS `webshop`.`account`
@@ -45,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `webshop`.`account`
     `create_time`      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `role_id`          INT           NOT NULL,
     `shopping_cart_id` INT           NOT NULL,
+    `account_status_id`INT           NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_account_role1_idx` (`role_id` ASC) VISIBLE,
     INDEX `fk_account_shopping_cart1_idx` (`shopping_cart_id` ASC) VISIBLE,
@@ -53,13 +53,23 @@ CREATE TABLE IF NOT EXISTS `webshop`.`account`
             REFERENCES `webshop`.`role` (`id`),
     CONSTRAINT `fk_account_shopping_cart1`
         FOREIGN KEY (`shopping_cart_id`)
-            REFERENCES `webshop`.`shopping_cart` (`id`)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
+            REFERENCES `webshop`.`shopping_cart` (`id`),
+    CONSTRAINT `fk_account_status_id1`
+        FOREIGN KEY (`account_status_id`)
+            REFERENCES `webshop`.`account_status` (`id`)
 )
     ENGINE = InnoDB
-    AUTO_INCREMENT = 3
     DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `webshop`.`account_status`
+(
+    `id`   INT NOT NULL AUTO_INCREMENT,
+    `name` ENUM ('ENABLED', 'DISABLED') NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+) ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8;
+
 
 CREATE TABLE IF NOT EXISTS `webshop`.`account_detail`
 (
@@ -97,18 +107,17 @@ CREATE TABLE IF NOT EXISTS `webshop`.`account_detail`
 CREATE TABLE IF NOT EXISTS `webshop`.`status`
 (
     `id`   INT                                                                   NOT NULL AUTO_INCREMENT,
-    `name` ENUM ('IN_PROGRESS', 'DELIVERY', 'CANCELED', 'DELIVERED', 'FINISHED') NOT NULL,
+    `name` ENUM ('REGISTERED', 'PAID', 'CANCELED') NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
 )
     ENGINE = InnoDB
-    AUTO_INCREMENT = 6
     DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS `webshop`.`account_order`
 (
-    `id`                   INT       NOT NULL,
-    `create_time`          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `id`                   INT          NOT NULL AUTO_INCREMENT,
+    `create_time`          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `account_id`           INT       NULL     DEFAULT NULL,
     `status_id`            INT       NOT NULL,
     `droped_by_account_id` INT       NULL     DEFAULT NULL,
@@ -146,11 +155,12 @@ CREATE TABLE IF NOT EXISTS `webshop`.`category`
 
 CREATE TABLE IF NOT EXISTS `webshop`.`product`
 (
-    `id`             INT            NOT NULL AUTO_INCREMENT,
+    `id`             INT          NOT NULL AUTO_INCREMENT,
     `price`          DECIMAL(10, 0) NOT NULL DEFAULT '0',
     `amount`         INT            NOT NULL DEFAULT '0',
     `ordered_amount` INT            NOT NULL DEFAULT '0',
     `category_id`    INT            NOT NULL,
+    `create_time`      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     INDEX `fk_product_category1_idx` (`category_id` ASC) VISIBLE,
     CONSTRAINT `fk_product_category1`
@@ -168,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `webshop`.`account_order_has_product`
     `product_id`       INT            NOT NULL,
     `price`            DECIMAL(10, 0) NOT NULL,
     `product_amount`   INT            NOT NULL,
-    `create_date`      TIMESTAMP      NULL DEFAULT CURRENT_TIMESTAMP,
+    `create_time`      TIMESTAMP      NULL DEFAULT CURRENT_TIMESTAMP,
     `last_update`      TIMESTAMP      NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`account_order_id`, `product_id`),
     INDEX `fk_account_order_has_product_product1_idx` (`product_id` ASC) VISIBLE,
@@ -248,6 +258,25 @@ COMMIT;
 
 START TRANSACTION;
 USE `webshop`;
+INSERT INTO `webshop`.`status` (`id`, `name`)
+VALUES (1, 'REGISTERED');
+INSERT INTO `webshop`.`status` (`id`, `name`)
+VALUES (2, 'PAID');
+INSERT INTO `webshop`.`status` (`id`, `name`)
+VALUES (3, 'CANCELED');
+COMMIT;
+
+START TRANSACTION;
+USE `webshop`;
+INSERT INTO `webshop`.`account_status` (`id`, `name`)
+VALUES (1, 'ENABLED');
+INSERT INTO `webshop`.`account_status` (`id`, `name`)
+VALUES (2, 'DISABLED');
+COMMIT;
+
+/*
+START TRANSACTION;
+USE `webshop`;
 INSERT INTO `webshop`.`shopping_cart` (`id`, `last_update`)
 VALUES (1, CURRENT_TIMESTAMP);
 INSERT INTO `webshop`.`shopping_cart` (`id`, `last_update`)
@@ -255,6 +284,8 @@ VALUES (2, CURRENT_TIMESTAMP);
 INSERT INTO `webshop`.`shopping_cart` (`id`, `last_update`)
 VALUES (3, CURRENT_TIMESTAMP);
 COMMIT;
+
+
 
 START TRANSACTION;
 USE `webshop`;
@@ -281,31 +312,16 @@ COMMIT;
 START TRANSACTION;
 USE `webshop`;
 INSERT INTO `webshop`.`account`
-(`id`, `email`, `password`, `create_time`, `role_id`, `shopping_cart_id`)
-VALUES (1, 'root@gmail.com', 'root', DEFAULT, 1, 1);
+(`id`, `email`, `password`, `create_time`, `role_id`, `shopping_cart_id`,`account_status_id`)
+VALUES (1, 'root@gmail.com', 'root', DEFAULT, 1, 1,1);
 INSERT INTO `webshop`.`account`
-(`id`, `email`, `password`, `create_time`, `role_id`, `shopping_cart_id`)
-VALUES (2, 'user@gmail.com', 'user', DEFAULT, 2, 2);
+(`id`, `email`, `password`, `create_time`, `role_id`, `shopping_cart_id`,`account_status_id`)
+VALUES (2, 'user@gmail.com', 'user', DEFAULT, 2, 2 ,1);
 INSERT INTO `webshop`.`account`
-(`id`, `email`, `password`, `create_time`, `role_id`, `shopping_cart_id`)
-VALUES (3, 'tester@gmail.com', 'tester', DEFAULT, 2, 3);
+(`id`, `email`, `password`, `create_time`, `role_id`, `shopping_cart_id`,`account_status_id`)
+VALUES (3, 'tester@gmail.com', 'tester', DEFAULT, 2, 3,1);
 COMMIT;
-
-START TRANSACTION;
-USE `webshop`;
-INSERT INTO `webshop`.`status` (`id`, `name`)
-VALUES (1, 'IN_PROGRESS');
-INSERT INTO `webshop`.`status` (`id`, `name`)
-VALUES (2, 'DELIVERY');
-INSERT INTO `webshop`.`status` (`id`, `name`)
-VALUES (3, 'CANCELED');
-INSERT INTO `webshop`.`status` (`id`, `name`)
-VALUES (4, 'DELIVERED');
-INSERT INTO `webshop`.`status` (`id`, `name`)
-VALUES (5, 'FINISHED');
-COMMIT;
-
-
+*/
 
 START TRANSACTION;
 USE `webshop`;

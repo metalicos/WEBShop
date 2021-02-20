@@ -1,4 +1,4 @@
-package com.ostap.komplikevych.webshop;
+package com.ostap.komplikevych.webshop.model;
 
 import com.ostap.komplikevych.webshop.constant.Const;
 import org.apache.commons.dbcp.BasicDataSource;

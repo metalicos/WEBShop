@@ -24,12 +24,9 @@ public class SetLanguageCommand extends Command {
         if (language == null) {
             language = Language.EN.getName();
         }
-        request.setAttribute("language",language);
-        Const.logger.debug("Language added to request attribute");
-
         request.getSession().setAttribute("language",language);
         Const.logger.debug("Language added to session");
 
-        return Const.PAGE_PATH_HOME;
+        return "/";
     }
 }

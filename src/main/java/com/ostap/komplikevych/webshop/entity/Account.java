@@ -9,6 +9,15 @@ public class Account extends AbstractEntity {
     private LocalDateTime createTime;
     private int roleId;
     private int shoppingCartId;
+    private int accountStatusId;
+
+    public int getAccountStatusId() {
+        return accountStatusId;
+    }
+
+    public void setAccountStatusId(int accountStatusId) {
+        this.accountStatusId = accountStatusId;
+    }
 
     public String getEmail() {
         return email;

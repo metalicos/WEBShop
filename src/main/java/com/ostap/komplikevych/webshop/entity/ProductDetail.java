@@ -11,9 +11,10 @@ public class ProductDetail extends AbstractEntity {
     private String sizeEn;
     private String aboutUa;
     private String aboutEn;
-    private BufferedImage photo1;
-    private BufferedImage photo2;
-    private BufferedImage photo3;
+    /* Images as base64 */
+    private String photo1;
+    private String photo2;
+    private String photo3;
     private int productId;
 
     public ProductDetail() {
@@ -25,8 +26,8 @@ public class ProductDetail extends AbstractEntity {
 
     public ProductDetail(String nameUa, String nameEn, String colorUa,
                          String colorEn, String sizeUa, String sizeEn,
-                         String aboutUa, String aboutEn, BufferedImage photo1,
-                         BufferedImage photo2, BufferedImage photo3, int productId) {
+                         String aboutUa, String aboutEn, String photo1,
+                         String photo2, String photo3, int productId) {
         this.nameUa = nameUa;
         this.nameEn = nameEn;
         this.colorUa = colorUa;
@@ -105,27 +106,26 @@ public class ProductDetail extends AbstractEntity {
         this.aboutEn = aboutEn;
     }
 
-    public BufferedImage getPhoto1() {
+    public String getPhoto1() {
         return photo1;
     }
 
-    public void setPhoto1(BufferedImage photo1) {
+    public void setPhoto1(String photo1) {
         this.photo1 = photo1;
     }
 
-    public BufferedImage getPhoto2() {
+    public String getPhoto2() {
         return photo2;
     }
-
-    public void setPhoto2(BufferedImage photo2) {
+    public void setPhoto2(String photo2) {
         this.photo2 = photo2;
     }
 
-    public BufferedImage getPhoto3() {
+    public String getPhoto3() {
         return photo3;
     }
 
-    public void setPhoto3(BufferedImage photo3) {
+    public void setPhoto3(String photo3) {
         this.photo3 = photo3;
     }
 

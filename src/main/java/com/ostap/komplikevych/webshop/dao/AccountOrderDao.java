@@ -1,6 +1,6 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.DBManager;
+import com.ostap.komplikevych.webshop.model.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.AccountOrder;
 import com.ostap.komplikevych.webshop.entity.Product;
@@ -17,36 +17,18 @@ import java.util.List;
  *
  * @author Ostap Komplikevych
  */
-public class AccountOrderDao implements Crud<AccountOrder, Integer> {
+public class AccountOrderDao{
 
     private static final String SQL_CREATE_ACCOUNT_ORDER;
     private static final String SQL_READ_ACCOUNT_ORDER;
     private static final String SQL_UPDATE_ACCOUNT_ORDER;
     private static final String SQL_DELETE_ACCOUNT_ORDER;
 
-    /**
-     * The constant SQL_CREATE_PRODUCT_ACCOUNT_ORDER.
-     */
     public static final String SQL_CREATE_PRODUCT_ACCOUNT_ORDER;
-    /**
-     * The constant SQL_READ_ALL_PRODUCTS_BY_ACCOUNT_ORDER_ID.
-     */
     public static final String SQL_READ_ALL_PRODUCTS_BY_ACCOUNT_ORDER_ID;
-    /**
-     * The constant SQL_READ_PRODUCT_FROM_ACCOUNT_ORDER_BY_ID.
-     */
     public static final String SQL_READ_PRODUCT_FROM_ACCOUNT_ORDER_BY_ID;
-    /**
-     * The constant SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER.
-     */
     public static final String SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER;
-    /**
-     * The constant SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER.
-     */
     public static final String SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER;
-    /**
-     * The constant SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER.
-     */
     public static final String SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER;
 
     static {
@@ -63,8 +45,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER = Const.getProperty("sql.delete_product_in_order");
     }
 
-    @Override
-    public Integer create(AccountOrder entity) {
+    public Integer createAccountOrder(AccountOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         int insertedWithId = -1;
@@ -88,8 +69,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return insertedWithId;
     }
 
-    @Override
-    public AccountOrder read(Integer id) {
+    public AccountOrder readAccountOrderByAccountOrderId(Integer id) {
         Connection con = null;
         PreparedStatement pstmt = null;
         AccountOrder accountOrder = null;
@@ -108,8 +88,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return accountOrder;
     }
 
-    @Override
-    public void update(AccountOrder entity) {
+    public void updateAccountOrder(AccountOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -132,8 +111,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
-    @Override
-    public void delete(AccountOrder entity) {
+    public void deleteAccountOrder(AccountOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -151,65 +129,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
-    /**
-     * The type AccountOrderMapper.
-     */
-    static class AccountOrderMapper implements EntityMapper<AccountOrder> {
 
-        @Override
-        public AccountOrder mapRow(ResultSet rs) {
-            AccountOrder order = null;
-            try {
-                if (rs.next()) {
-                    order = new AccountOrder();
-                    order.setId(rs.getInt(Fields.ID));
-                    order.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
-                    order.setAccountId(rs.getInt(Fields.ACCOUNT_ORDER_ACCOUNT_ID));
-                    order.setStatusId(rs.getInt(Fields.ACCOUNT_ORDER_STATUS_ID));
-                    order.setDroppedByAccountId(rs.getInt(Fields.ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID));
-                    order.setProducts(readProductsInOrder(order.getId()));
-                }
-            } catch (SQLException ex) {
-                Const.logger.error(ex);
-                throw new IllegalStateException(ex.getMessage());
-            } finally {
-                DBManager.getInstance().close(rs);
-            }
-            return order;
-        }
-    }
-
-    /**
-     * The type ProductInOrderMapper.
-     */
-    static class ProductInOrderMapper implements EntityMapper<ProductInOrder> {
-
-        @Override
-        public ProductInOrder mapRow(ResultSet rs) {
-            ProductInOrder productInOrder = null;
-            try {
-                productInOrder = new ProductInOrder();
-                productInOrder.setProductAmount(rs.getInt(Fields.PRODUCT_IN_ORDER_PRODUCT_AMOUNT));
-                productInOrder.setPrice(rs.getBigDecimal(Fields.PRODUCT_IN_ORDER_PRICE));
-                productInOrder.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
-                productInOrder.setLastUpdateTime(rs.getTimestamp(Fields.LAST_UPDATE_TIME).toLocalDateTime());
-                ProductDao productDao = new ProductDao();
-                Product product = productDao.read(rs.getInt(Fields.PRODUCT_IN_ORDER_PRODUCT_ID));
-                productInOrder.setProduct(product);
-            } catch (SQLException ex) {
-                Const.logger.error(ex);
-                throw new IllegalStateException(ex.getMessage());
-            }
-            return productInOrder;
-        }
-    }
-
-    /**
-     * Read ProductsInOrderList.
-     *
-     * @param orderId the order id
-     * @return the list
-     */
     public static List<ProductInOrder> readProductsInOrder(int orderId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -234,13 +154,7 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return products;
     }
 
-    /**
-     * Delete all ProductsInOrder.
-     *
-     * @param orderId          the order id
-     * @param droppedByAccount the dropped by account
-     */
-    public static void deleteAllProductsInOrder(int orderId, int droppedByAccount) {
+    public static void deleteAllProductsInOrder(int orderId, int droppedByAccountId) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -250,9 +164,9 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
             pstmt.executeUpdate();
 
             AccountOrderDao aod = new AccountOrderDao();
-            AccountOrder accountOrder = aod.read(orderId);
-            accountOrder.setDroppedByAccountId(droppedByAccount);
-            aod.update(accountOrder);
+            AccountOrder accountOrder = aod.readAccountOrderByAccountOrderId(orderId);
+            accountOrder.setDroppedByAccountId(droppedByAccountId);
+            aod.updateAccountOrder(accountOrder);
 
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
@@ -264,13 +178,6 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
-    /**
-     * Create ProductsInOrder integer.
-     *
-     * @param orderId the order id
-     * @param entity  the entity
-     * @return the integer
-     */
     public static Integer createProductInOrder(int orderId, ProductInOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -303,12 +210,6 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return insertedWithId;
     }
 
-    /**
-     * Delete Product InOrder.
-     *
-     * @param orderId   the order id
-     * @param productId the product id
-     */
     public static void deleteProductInOrder(int orderId, int productId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -329,12 +230,6 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
-    /**
-     * Update Product InOrder.
-     *
-     * @param orderId the order id
-     * @param entity  the entity
-     */
     public static void updateProductInOrder(int orderId, ProductInOrder entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -356,13 +251,6 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         }
     }
 
-    /**
-     * Read Product InOrder.
-     *
-     * @param orderId   the order id
-     * @param productId the product id
-     * @return the product in order
-     */
     public static ProductInOrder readProductInOrder(int orderId, int productId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -388,43 +276,92 @@ public class AccountOrderDao implements Crud<AccountOrder, Integer> {
         return productInOrder;
     }
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
+
+
+    static class AccountOrderMapper implements EntityMapper<AccountOrder> {
+
+        @Override
+        public AccountOrder mapRow(ResultSet rs) {
+            AccountOrder order = null;
+            try {
+                if (rs.next()) {
+                    order = new AccountOrder();
+                    order.setId(rs.getInt(Fields.ID));
+                    order.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
+                    order.setAccountId(rs.getInt(Fields.ACCOUNT_ORDER_ACCOUNT_ID));
+                    order.setStatusId(rs.getInt(Fields.ACCOUNT_ORDER_STATUS_ID));
+                    order.setDroppedByAccountId(rs.getInt(Fields.ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID));
+                    order.setProducts(readProductsInOrder(order.getId()));
+                }
+            } catch (SQLException ex) {
+                Const.logger.error(ex);
+                throw new IllegalStateException(ex.getMessage());
+            } finally {
+                DBManager.getInstance().close(rs);
+            }
+            return order;
+        }
+    }
+
+    static class ProductInOrderMapper implements EntityMapper<ProductInOrder> {
+
+        @Override
+        public ProductInOrder mapRow(ResultSet rs) {
+            ProductInOrder productInOrder = null;
+            try {
+                productInOrder = new ProductInOrder();
+                productInOrder.setProductAmount(rs.getInt(Fields.PRODUCT_IN_ORDER_PRODUCT_AMOUNT));
+                productInOrder.setPrice(rs.getBigDecimal(Fields.PRODUCT_IN_ORDER_PRICE));
+                productInOrder.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
+                productInOrder.setLastUpdateTime(rs.getTimestamp(Fields.LAST_UPDATE_TIME).toLocalDateTime());
+                ProductDao productDao = new ProductDao();
+                Product product = productDao.readProductByProductId(rs.getInt(Fields.PRODUCT_IN_ORDER_PRODUCT_ID));
+                productInOrder.setProduct(product);
+            } catch (SQLException ex) {
+                Const.logger.error(ex);
+                throw new IllegalStateException(ex.getMessage());
+            }
+            return productInOrder;
+        }
+    }
+
+
     public static void main(String[] args) {
         AccountOrderDao orderDao = new AccountOrderDao();
         AccountOrder ao = new AccountOrder();
         ao.setStatusId(1);
-        ao.setAccountId(1);
-        int id = orderDao.create(ao);
-        System.out.println(id);
-        System.out.println("\n########### DELETE ALL PRODUCTS IN ORDER ##################");
-        deleteAllProductsInOrder(id, 3);
-        System.out.println(orderDao.read(id));
+        ao.setAccountId(5);
 
-        System.out.println("\n########### CREATE 10 PRODUCTS IN ORDER 1 ##################");
+        int orderId = orderDao.createAccountOrder(ao);
+
+        Const.logger.info("CHECKING DB DAO");
+        Const.logger.debug(orderId);
+
+        Const.logger.debug("\n########### DELETE ALL PRODUCTS IN ORDER ##################");
+        deleteAllProductsInOrder(orderId, 2);
+        Const.logger.debug(orderDao.readAccountOrderByAccountOrderId(orderId));
+
+        Const.logger.debug("\n########### CREATE 10 PRODUCTS IN ORDER 1 ##################");
         for (int i = 1; i <= 10; i++) {
             ProductDao productDao = new ProductDao();
-            createProductInOrder(id, new ProductInOrder(productDao.read(i),
+            createProductInOrder(orderId, new ProductInOrder(productDao.readProductByProductId(i),
                     new BigDecimal(32), 22, LocalDateTime.now(), LocalDateTime.now()));
         }
-        System.out.println(orderDao.read(id));
+        Const.logger.debug(orderDao.readAccountOrderByAccountOrderId(orderId));
 
-        System.out.println("\n########### UPDATE 10 PRODUCTS IN ORDER 1 ##################");
+        Const.logger.debug("\n########### UPDATE 10 PRODUCTS IN ORDER 1 ##################");
         for (int i = 1; i <= 10; i++) {
             ProductDao productDao = new ProductDao();
 
-            updateProductInOrder(id, new ProductInOrder(productDao.read(i),
+            updateProductInOrder(orderId, new ProductInOrder(productDao.readProductByProductId(i),
                     new BigDecimal(999), 34, LocalDateTime.now(), LocalDateTime.now()));
         }
-        System.out.println(orderDao.read(id));
+        Const.logger.debug(orderDao.readAccountOrderByAccountOrderId(orderId));
 
-        System.out.println("\n########### DELETE 5 PRODUCTS IN ORDER 1 ##################");
+        Const.logger.debug("\n########### DELETE 5 PRODUCTS IN ORDER 1 ##################");
         for (int i = 6; i <= 10; i++) {
-            deleteProductInOrder(id, i);
+            deleteProductInOrder(orderId, i);
         }
-        System.out.println(orderDao.read(id));
+        Const.logger.debug(orderDao.readAccountOrderByAccountOrderId(orderId));
     }
 }

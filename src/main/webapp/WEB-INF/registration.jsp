@@ -11,7 +11,10 @@
         <jsp:param name="description"
                    value="Welcome to EShop. Create an account to be part of EShop. We provide special offers and qualificated support for our customers."/>
     </jsp:include>
-    <link href="../../../design/css/loginAndRegistration.css" rel="stylesheet">
+    <link rel="stylesheet" href="../design/css/loginAndRegistration.css">
+<%--    <style>--%>
+<%--        <%@ include file="/design/css/loginAndRegistration.css"%>--%>
+<%--    </style>--%>
 </head>
 
 <body class="m-1 m-md-5">
@@ -23,7 +26,7 @@
                 <input type="hidden" name="command" value="register"/>
 
                 <a href="controller?command=open-home-page">
-                    <img class="mb-4" src="../../../design/img/logo.png" alt="" width="50" height="50">
+                    <img class="mb-4" src="../design/img/logo.png" alt="" width="50" height="50">
                 </a>
 
                 <h1 class="h3 my-3 fw-normal">Реєстрація у EShop!</h1>

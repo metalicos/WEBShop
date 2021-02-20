@@ -7,7 +7,7 @@
         <jsp:param name="pageName" value="ERROR 404"/>
         <jsp:param name="description" value="ERROR"/>
     </jsp:include>
-    <link rel="stylesheet" href="design/css/index.css">
+    <link rel="stylesheet" href="design/css/home.css">
 </head>
 <body>
 

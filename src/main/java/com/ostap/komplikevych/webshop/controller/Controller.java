@@ -26,9 +26,10 @@ public class Controller extends HttpServlet {
 
     private void process(HttpServletRequest request,
                          HttpServletResponse response) throws IOException, ServletException {
+
         Locale locale = request.getLocale();
         Const.logger.debug("Current language is ("+locale.getLanguage() + ")");
-        String language = (String) request.getAttribute("language");
+        String language = (String) request.getSession().getAttribute("language");
         if(language==null){
             request.setAttribute("language",locale.getLanguage());
             Const.logger.debug("Language setted as ("+locale.getLanguage() + ")");

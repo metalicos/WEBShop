@@ -1,6 +1,6 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.DBManager;
+import com.ostap.komplikevych.webshop.model.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.Category;
 
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 /**
  * The type CategoryDao.
  */
-public class CategoryDao implements Crud<Category, Integer> {
+public class CategoryDao {
 
     private static final String SQL_CREATE_CATEGORY;
     private static final String SQL_READ_CATEGORY_BY_ID;
@@ -26,8 +26,7 @@ public class CategoryDao implements Crud<Category, Integer> {
         SQL_DELETE_CATEGORY = Const.getProperty("sql.delete_category");
     }
 
-    @Override
-    public Integer create(Category entity) {
+    public Integer createCategory(Category entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         int insertedWithId = -1;
@@ -51,8 +50,7 @@ public class CategoryDao implements Crud<Category, Integer> {
         return insertedWithId;
     }
 
-    @Override
-    public Category read(Integer id) {
+    public Category readCategoryByCategoryId(Integer id) {
         Category category = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -73,8 +71,7 @@ public class CategoryDao implements Crud<Category, Integer> {
         return category;
     }
 
-    @Override
-    public void update(Category entity) {
+    public void updateCategory(Category entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -96,8 +93,7 @@ public class CategoryDao implements Crud<Category, Integer> {
         }
     }
 
-    @Override
-    public void delete(Category entity) {
+    public void deleteCategory(Category entity) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -116,9 +112,7 @@ public class CategoryDao implements Crud<Category, Integer> {
         }
     }
 
-    /**
-     * The type CategoryMapper.
-     */
+
     static class CategoryMapper implements EntityMapper<Category> {
 
         @Override

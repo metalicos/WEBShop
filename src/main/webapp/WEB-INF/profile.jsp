@@ -8,7 +8,10 @@
         <jsp:param name="pageName" value="EShop | Profile"/>
         <jsp:param name="description" value="Welcome to EShop. Change the information in profile to set the delivery adress."/>
     </jsp:include>
-    <link href="../../../design/css/profile.css" rel="stylesheet">
+    <link rel="stylesheet" href="../design/css/profile.css">
+<%--    <style>--%>
+<%--        <%@ include file="/design/css/profile.css"%>--%>
+<%--    </style>--%>
 </head>
 
 
@@ -29,7 +32,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="../../../design/img/person2.jpg" alt="Admin" class="rounded-circle" width="150">
+                            <img src="../design/img/accont.jpg" alt="Admin" class="rounded-circle" width="150">
                             <a href="#" class="align-self-end text-decoration-none text-dark">
                                 <span class="fa fa-2x fa-edit"></span>
                             </a>

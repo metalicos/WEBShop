@@ -8,7 +8,10 @@
         <jsp:param name="description" value="Welcome to EShop. Login to order a new item."/>
         <jsp:param name="pageName" value="EShop | Login"/>
     </jsp:include>
-    <link href="../../../design/css/loginAndRegistration.css" rel="stylesheet">
+    <link rel="stylesheet" href="../design/css/loginAndRegistration.css">
+<%--    <style>--%>
+<%--        <%@ include file="/design/css/loginAndRegistration.css"%>--%>
+<%--    </style>--%>
 </head>
 
 <body class="m-3 m-md-5">
@@ -21,7 +24,7 @@
                 <input type="hidden" name="command" value="login"/>
 
                 <a href="controller?command=open-home-page">
-                    <img class="mb-4" src="../../../design/img/logo.png" alt="" width="50" height="50">
+                    <img class="mb-4" src="../design/img/logo.png" alt="" width="50" height="50">
                 </a>
                 <h1 class="h3 mb-3 fw-normal">Вітаємо у EShop!</h1>
 

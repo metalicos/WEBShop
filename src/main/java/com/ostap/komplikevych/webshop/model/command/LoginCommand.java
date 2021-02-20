@@ -2,13 +2,11 @@ package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.constant.SessionAttribute;
+import com.ostap.komplikevych.webshop.constant.Validator;
 import com.ostap.komplikevych.webshop.dao.AccountDao;
 import com.ostap.komplikevych.webshop.dao.ShoppingCartDao;
-import com.ostap.komplikevych.webshop.entity.Account;
-import com.ostap.komplikevych.webshop.entity.ProductInCart;
-import com.ostap.komplikevych.webshop.entity.Role;
-import com.ostap.komplikevych.webshop.entity.ShoppingCart;
-import com.ostap.komplikevych.webshop.security.MyChipher;
+import com.ostap.komplikevych.webshop.entity.*;
+import com.ostap.komplikevych.webshop.model.security.MyChipher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +31,15 @@ public class LoginCommand extends Command {
         String errorMessage = null;
         String forward = Const.PAGE_PATH_LOGIN;
 
-        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
+        if (Validator.checkIfNullOrEmptyReturnTrue(email,password)) {
             errorMessage = "Login/password cannot be empty";
             request.setAttribute("errorMessage", errorMessage);
             Const.logger.error("errorMessage --> " + errorMessage);
             return forward;
         }
+
         AccountDao accountDao = new AccountDao();
-        Account account = accountDao.read(email);
+        Account account = accountDao.readAccountByEmail(email);
 
         Const.logger.trace("Found in DB: account --> " + account);
 
@@ -52,28 +51,36 @@ public class LoginCommand extends Command {
             return forward;
         } else {
             Role accountRole = Role.getRole(account);
+            AccountStatus accountStatus = AccountStatus.getAccountStatus(account);
             Const.logger.trace("accountRole --> " + accountRole);
-            forward = Const.PAGE_PATH_HOME;
+            Const.logger.trace("accountStatus --> " + accountStatus);
             ShoppingCart cart = (ShoppingCart) session.getAttribute(SessionAttribute.SHOPPING_CART);
             if(cart!=null){
                 ShoppingCartDao cartDao = new ShoppingCartDao();
-                ShoppingCart accountLoggedShoppingCart = cartDao.read(account.getShoppingCartId());
+                ShoppingCart accountLoggedShoppingCart =
+                        cartDao.readShoppingCartByShoppingCartId(account.getShoppingCartId());
                 List<ProductInCart> productsInLoggedCart = accountLoggedShoppingCart.getProducts();
                 productsInLoggedCart.addAll(cart.getProducts());
                 accountLoggedShoppingCart.setProducts(productsInLoggedCart);
-                cartDao.update(accountLoggedShoppingCart);
+                cartDao.updateShoppingCart(accountLoggedShoppingCart);
             }
 
             session.setAttribute(SessionAttribute.ACCOUNT, account);
+            request.setAttribute(SessionAttribute.ACCOUNT, account);
             Const.logger.trace("Set the session attribute: " + SessionAttribute.ACCOUNT + " --> " + account);
 
             session.setAttribute(SessionAttribute.ROLE, accountRole);
+            request.setAttribute(SessionAttribute.ROLE, accountRole);
             Const.logger.trace("Set the session attribute: " + SessionAttribute.ROLE + " --> " + accountRole);
+
+            session.setAttribute(SessionAttribute.ACCOUNT_STATUS, accountStatus);
+            request.setAttribute(SessionAttribute.ACCOUNT_STATUS, accountStatus);
+            Const.logger.trace("Set the session attribute: " + SessionAttribute.ACCOUNT_STATUS + " --> " + accountStatus);
 
             Const.logger.debug("Account " + account + " logged as " + accountRole.name().toLowerCase());
 
         }
         Const.logger.debug("Command finished");
-        return forward;
+        return "/";
     }
 }

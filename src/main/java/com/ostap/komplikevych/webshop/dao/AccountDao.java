@@ -1,61 +1,52 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.Account;
+import com.ostap.komplikevych.webshop.model.DBManager;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * The type AccountDao.
  *
  * @author Ostap Komplikevych
  */
-public class AccountDao implements Crud<Account, Integer> {
+public class AccountDao {
 
-    /**
-     * The constant SQL_READ_ACCOUNT_BY_EMAIL.
-     */
     public static final String SQL_READ_ACCOUNT_BY_EMAIL;
-    /**
-     * The constant SQL_READ_ACCOUNT_BY_ID.
-     */
+
     public static final String SQL_READ_ACCOUNT_BY_ID;
-    /**
-     * The constant SQL_UPDATE_ACCOUNT.
-     */
+
     public static final String SQL_UPDATE_ACCOUNT;
-    /**
-     * The constant SQL_CREATE_ACCOUNT.
-     */
+
     public static final String SQL_CREATE_ACCOUNT;
-    /**
-     * The constant SQL_DELETE_ACCOUNT.
-     */
+
     private static final String SQL_DELETE_ACCOUNT;
 
     static {
+        SQL_CREATE_ACCOUNT = Const.getProperty("sql.create_account");
         SQL_READ_ACCOUNT_BY_ID = Const.getProperty("sql.read_account_by_id");
         SQL_READ_ACCOUNT_BY_EMAIL = Const.getProperty("sql.read_account_by_email");
         SQL_UPDATE_ACCOUNT = Const.getProperty("sql.update_account");
-        SQL_CREATE_ACCOUNT = Const.getProperty("sql.create_account");
         SQL_DELETE_ACCOUNT = Const.getProperty("sql.delete_account");
     }
 
-    @Override
-    public Integer create(Account entity) {
+
+    public Integer createAccount(Account entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         int insertedWithId = -1;
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_CREATE_ACCOUNT);
-
             pstmt.setString(1, entity.getEmail());
             pstmt.setString(2, entity.getPassword());
-            pstmt.setTimestamp(3, Timestamp.valueOf(entity.getCreateTime()));
-            pstmt.setInt(4, entity.getRoleId());
-            pstmt.setInt(5, entity.getShoppingCartId());
+            pstmt.setInt(3, entity.getRoleId());
+            pstmt.setInt(4, entity.getShoppingCartId());
+            pstmt.setInt(5, entity.getAccountStatusId());
             pstmt.executeUpdate();
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
         } catch (SQLException ex) {
@@ -69,8 +60,7 @@ public class AccountDao implements Crud<Account, Integer> {
         return insertedWithId;
     }
 
-    @Override
-    public Account read(Integer id) {
+    public Account readAccountByAccountId(Integer id) {
         Account account = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -81,9 +71,7 @@ public class AccountDao implements Crud<Account, Integer> {
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_ID);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
-            if (rs.next()) {
-                account = mapper.mapRow(rs);
-            }
+            account = mapper.mapRow(rs);
         } catch (SQLException ex) {
             Const.logger.error(ex);
         } finally {
@@ -94,13 +82,7 @@ public class AccountDao implements Crud<Account, Integer> {
         return account;
     }
 
-    /**
-     * Read account by email.
-     *
-     * @param email the email
-     * @return the account
-     */
-    public Account read(String email) {
+    public Account readAccountByEmail(String email) {
         Account account = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -111,9 +93,7 @@ public class AccountDao implements Crud<Account, Integer> {
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_EMAIL);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
-            if (rs.next()) {
-                account = mapper.mapRow(rs);
-            }
+            account = mapper.mapRow(rs);
         } catch (SQLException ex) {
             Const.logger.error(ex);
         } finally {
@@ -124,17 +104,22 @@ public class AccountDao implements Crud<Account, Integer> {
         return account;
     }
 
-    @Override
-    public void update(Account entity) {
+    public void updateAccount(Account entity) {
         PreparedStatement pstmt = null;
         Connection con = null;
         try {
+            //UPDATE `webshop`.`account`
+            // SET `email`= ?, `password`= ?, `role_id`= ?, `shopping_cart_id`=?, `account_status_id`=? WHERE `id` = ?;
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_UPDATE_ACCOUNT);
             pstmt.setString(1, entity.getEmail());
             pstmt.setString(2, entity.getPassword());
             pstmt.setInt(3, entity.getRoleId());
-            pstmt.setInt(4, entity.getId());
+            pstmt.setInt(4, entity.getShoppingCartId());
+            pstmt.setInt(5, entity.getAccountStatusId());
+            pstmt.setInt(6, entity.getId());
+
+            DBManager.getInstance().getLastInsertedId(pstmt);
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
@@ -146,8 +131,7 @@ public class AccountDao implements Crud<Account, Integer> {
         }
     }
 
-    @Override
-    public void delete(Account entity) {
+    public void deleteAccount(Account entity) {
         PreparedStatement pstmt = null;
         Connection con = null;
         try {
@@ -165,9 +149,6 @@ public class AccountDao implements Crud<Account, Integer> {
         }
     }
 
-    /**
-     * The type AccountMapper.
-     */
     private static class AccountMapper implements EntityMapper<Account> {
 
         @Override
@@ -182,6 +163,7 @@ public class AccountDao implements Crud<Account, Integer> {
                     account.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
                     account.setRoleId(rs.getInt(Fields.ACCOUNT_ROLE_ID));
                     account.setShoppingCartId(rs.getInt(Fields.ACCOUNT_SHOPPING_CART_ID));
+                    account.setAccountStatusId(rs.getInt(Fields.ACCOUNT_STATUS_ID));
                 }
             } catch (SQLException ex) {
                 Const.logger.error(ex);

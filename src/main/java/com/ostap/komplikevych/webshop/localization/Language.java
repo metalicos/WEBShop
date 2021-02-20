@@ -1,5 +1,7 @@
 package com.ostap.komplikevych.webshop.localization;
 
+import com.ostap.komplikevych.webshop.entity.Role;
+
 public enum Language {
     UA("ua"),
     EN("en");
@@ -11,5 +13,14 @@ public enum Language {
 
     public String getName(){
         return name;
+    }
+
+    public static Language getLang(String language){
+        for(Language l:Language.values()){
+            if(l.name.equals(language)){
+                return l;
+            }
+        }
+        return Language.UA;
     }
 }

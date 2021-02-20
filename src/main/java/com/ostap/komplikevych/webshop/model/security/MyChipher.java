@@ -1,4 +1,4 @@
-package com.ostap.komplikevych.webshop.security;
+package com.ostap.komplikevych.webshop.model.security;
 
 import com.ostap.komplikevych.webshop.constant.Const;
 import org.apache.commons.codec.binary.Base64;

@@ -1,15 +1,11 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.DBManager;
+import com.ostap.komplikevych.webshop.model.DBManager;
+import com.ostap.komplikevych.webshop.model.ImageConverter;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.AccountDetail;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
 
@@ -18,7 +14,7 @@ import java.time.LocalDateTime;
  *
  * @author Ostap Komplikevych
  */
-public class AccountDetailDao implements Crud<AccountDetail, Integer> {
+public class AccountDetailDao {
 
     private static final String SQL_CREATE_ACCOUNT_DETAILS;
     private static final String SQL_READ_ACCOUNT_DETAILS_BY_ID;
@@ -32,8 +28,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         SQL_DELETE_ACCOUNT_DETAILS = Const.getProperty("sql.delete_account_details");
     }
 
-    @Override
-    public Integer create(AccountDetail entity) {
+    public Integer createAccountDetail(AccountDetail entity, InputStream accountPhoto) {
         Connection con = null;
         PreparedStatement pstmt = null;
         int insertedWithId = -1;
@@ -60,21 +55,17 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
             pstmt.setString(18, entity.getBuildingEn());
             pstmt.setString(19, entity.getFlatEn());
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            BufferedImage img = entity.getAccountPhoto();
-            if (img != null) {
-                ImageIO.write(img, "png", baos);
-            } else {
-                img = ImageIO.read(new File("src/main/resources/img/account.png"));
-                ImageIO.write(img, "png", baos);
-            }
-            pstmt.setBlob(20, new ByteArrayInputStream(baos.toByteArray()));
+            String defaultPhotoPath = Const.RESOURCE_IMAGE_PATH + "account.png";
+
+            pstmt.setBlob(20, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    accountPhoto, defaultPhotoPath));
+
             pstmt.setInt(21, entity.getAccountId());
 
             pstmt.executeUpdate();
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
 
-        } catch (SQLException | IOException ex) {
+        } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             Const.logger.error(ex);
         } finally {
@@ -85,8 +76,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         return insertedWithId;
     }
 
-    @Override
-    public AccountDetail read(Integer id) {
+    public AccountDetail readAccountDetailByAccountId(Integer id) {
         Connection con = null;
         PreparedStatement pstmt = null;
         AccountDetail accountDetail = null;
@@ -105,8 +95,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         return accountDetail;
     }
 
-    @Override
-    public void update(AccountDetail entity) {
+    public void updateAccountDetail(AccountDetail entity, InputStream accountPhoto) {
         Connection con = null;
         PreparedStatement pstmt = null;
 
@@ -138,16 +127,17 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
             pstmt.setString(18, entity.getBuildingEn());
             pstmt.setString(19, entity.getFlatEn());
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(entity.getAccountPhoto(), "png", baos);
-            pstmt.setBlob(20, new ByteArrayInputStream(baos.toByteArray()));
+            String defaultPhotoPath = Const.RESOURCE_IMAGE_PATH + "account.png";
+
+            pstmt.setBlob(20, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    accountPhoto, defaultPhotoPath));
 
             pstmt.setInt(21, entity.getAccountId());
             pstmt.setInt(22, entity.getId());
 
             pstmt.executeUpdate();
 
-        } catch (SQLException | IOException ex) {
+        } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             Const.logger.error(ex);
         } finally {
@@ -157,8 +147,7 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         }
     }
 
-    @Override
-    public void delete(AccountDetail entity) {
+    public void deleteAccountDetail(AccountDetail entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -176,16 +165,13 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
         }
     }
 
-    /**
-     * The type AccountDetailMapper.
-     */
     static class AccountDetailMapper implements EntityMapper<AccountDetail> {
 
         @Override
         public AccountDetail mapRow(ResultSet rs) {
             AccountDetail aDetail = null;
             try {
-                if(rs.next()) {
+                if (rs.next()) {
                     aDetail = new AccountDetail();
                     aDetail.setId(rs.getInt(Fields.ID));
                     aDetail.setPhone(rs.getString(Fields.ACCOUNT_DETAIL_PHONE));
@@ -209,38 +195,21 @@ public class AccountDetailDao implements Crud<AccountDetail, Integer> {
                     aDetail.setFlatEn(rs.getString(Fields.ACCOUNT_DETAIL_FLAT_EN));
                     aDetail.setFlatUa(rs.getString(Fields.ACCOUNT_DETAIL_FLAT_UA));
 
-                    Blob blob = rs.getBlob(Fields.ACCOUNT_DETAIL_ACCOUNT_PHOTO);
-                    aDetail.setAccountPhoto(ImageIO.read(blob.getBinaryStream()));
+                    String accountPhoto = ImageConverter.convertBlobToBase64StringImage(
+                            rs.getBlob(Fields.ACCOUNT_DETAIL_ACCOUNT_PHOTO),
+                            ImageConverter.MAX_IMAGE_SIZE_1MB);
+                    aDetail.setAccountPhoto(accountPhoto);
+
                     aDetail.setAccountId(rs.getInt(Fields.ACCOUNT_DETAIL_ACCOUNT_ID));
                 }
-            } catch (SQLException | IOException ex) {
+            } catch (SQLException ex) {
                 Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
-            }finally {
+            } finally {
                 DBManager.getInstance().close(rs);
             }
             return aDetail;
         }
     }
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     * @throws IOException the io exception
-     */
-    public static void main(String[] args) throws IOException {
-//        CreateAccount.createAccount(
-//                new Account("boss@gmail.com", "whit", Role.ADMIN.getId()), new AccountDetail());
-//        CreateAccount.createAccount(
-//                new Account("sassy@gmail.com", "gorney", Role.ADMIN.getId()), new AccountDetail());
-//        CreateAccount.createAccount(
-//                new Account("hossy@gmail.com", "shit", Role.ADMIN.getId()), new AccountDetail());
-//        CreateAccount.createAccount(
-//                new Account("less@gmail.com", "whebit", Role.ADMIN.getId()), new AccountDetail());
-
-        AccountDetailDao accountDetailDao = new AccountDetailDao();
-        AccountDetail ad = accountDetailDao.read(8);
-        ImageIO.write(ad.getAccountPhoto(),"png",new File("C:\\ACCOUNT.png"));
-    }
 }

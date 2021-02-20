@@ -1,49 +1,41 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.DBManager;
+import com.ostap.komplikevych.webshop.model.DBManager;
+import com.ostap.komplikevych.webshop.model.ImageConverter;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.ProductDetail;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.sql.*;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * The type ProductDetailDao.
  *
  * @author Ostap Komplikevych
  */
-public class ProductDetailDao implements Crud<ProductDetail, Integer> {
+public class ProductDetailDao {
 
     private static final String SQL_CREATE_PRODUCT_DETAIL;
     private static final String SQL_READ_PRODUCT_DETAIL_BY_ID;
+    private static final String SQL_READ_PRODUCT_DETAIL_BY_PRODUCT_ID;
     private static final String SQL_UPDATE_PRODUCT_DETAIL;
     private static final String SQL_DELETE_PRODUCT_DETAIL;
+    private static final String SQL_SEARCH_PRODUCT_DETAIL_BY_NAME;
 
     static {
         SQL_CREATE_PRODUCT_DETAIL = Const.getProperty("sql.create_product_details");
         SQL_READ_PRODUCT_DETAIL_BY_ID = Const.getProperty("sql.read_product_details_by_id");
+        SQL_SEARCH_PRODUCT_DETAIL_BY_NAME = Const.getProperty("sql.search_product_detail_by_name");
+        SQL_READ_PRODUCT_DETAIL_BY_PRODUCT_ID = Const.getProperty("sql.read_product_details_by_product_id");
         SQL_UPDATE_PRODUCT_DETAIL = Const.getProperty("sql.update_product_details");
         SQL_DELETE_PRODUCT_DETAIL = Const.getProperty("sql.delete_product_details");
     }
 
-    private ByteArrayOutputStream getImageAsByteArrayOutputStream(BufferedImage img) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (img != null) {
-            ImageIO.write(img, "png", baos);
-        } else {
-            img = ImageIO.read(new File("src/main/resources/img/camera.png"));
-            ImageIO.write(img, "png", baos);
-        }
-        return baos;
-    }
-
-    @Override
-    public Integer create(ProductDetail entity) {
+    public Integer createProductDetail(ProductDetail entity, InputStream photo1, InputStream photo2, InputStream photo3) {
         Connection con = null;
         PreparedStatement pstmt = null;
         int insertedWithId = -1;
@@ -60,20 +52,20 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             pstmt.setString(7, entity.getSizeEn());
             pstmt.setString(8, entity.getAboutEn());
 
-            ByteArrayOutputStream baos = getImageAsByteArrayOutputStream(entity.getPhoto1());
-            pstmt.setBlob(9, new ByteArrayInputStream(baos.toByteArray()));
+            String defaultPhotoPath = Const.RESOURCE_IMAGE_PATH + "camera.png";
 
-            baos = getImageAsByteArrayOutputStream(entity.getPhoto2());
-            pstmt.setBlob(10, new ByteArrayInputStream(baos.toByteArray()));
-
-            baos = getImageAsByteArrayOutputStream(entity.getPhoto3());
-            pstmt.setBlob(11, new ByteArrayInputStream(baos.toByteArray()));
+            pstmt.setBlob(9, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    photo1, defaultPhotoPath));
+            pstmt.setBlob(10, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    photo2, defaultPhotoPath));
+            pstmt.setBlob(11, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    photo3, defaultPhotoPath));
 
             pstmt.setInt(12, entity.getProductId());
 
             pstmt.executeUpdate();
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
-        } catch (SQLException | IOException ex) {
+        } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             Const.logger.error(ex);
         } finally {
@@ -84,8 +76,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
         return insertedWithId;
     }
 
-    @Override
-    public ProductDetail read(Integer id) {
+    public ProductDetail readProductDetailByDetailId(Integer productDetailId) {
         ProductDetail productDetail = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -94,7 +85,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             con = DBManager.getInstance().getConnection();
             EntityMapper<ProductDetail> mapper = new ProductDetailMapper();
             pstmt = con.prepareStatement(SQL_READ_PRODUCT_DETAIL_BY_ID);
-            pstmt.setLong(1, id);
+            pstmt.setLong(1, productDetailId);
             productDetail = mapper.mapRow(pstmt.executeQuery());
         } catch (SQLException ex) {
             Const.logger.error(ex);
@@ -106,8 +97,28 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
         return productDetail;
     }
 
-    @Override
-    public void update(ProductDetail entity) {
+    public ProductDetail readProductDetailByProductId(Integer productId) {
+        ProductDetail productDetail = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            EntityMapper<ProductDetail> mapper = new ProductDetailMapper();
+            pstmt = con.prepareStatement(SQL_READ_PRODUCT_DETAIL_BY_PRODUCT_ID);
+            pstmt.setLong(1, productId);
+            productDetail = mapper.mapRow(pstmt.executeQuery());
+        } catch (SQLException ex) {
+            Const.logger.error(ex);
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(rs);
+            DBManager.getInstance().close(pstmt);
+        }
+        return productDetail;
+    }
+
+    public void updateProductDetail(ProductDetail entity, InputStream photo1, InputStream photo2, InputStream photo3) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -123,21 +134,21 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
             pstmt.setString(7, entity.getSizeEn());
             pstmt.setString(8, entity.getAboutEn());
 
-            ByteArrayOutputStream baos = getImageAsByteArrayOutputStream(entity.getPhoto1());
-            pstmt.setBlob(9, new ByteArrayInputStream(baos.toByteArray()));
+            String defaultPhotoPath = Const.RESOURCE_IMAGE_PATH + "camera.png";
 
-            baos = getImageAsByteArrayOutputStream(entity.getPhoto2());
-            pstmt.setBlob(10, new ByteArrayInputStream(baos.toByteArray()));
-
-            baos = getImageAsByteArrayOutputStream(entity.getPhoto3());
-            pstmt.setBlob(11, new ByteArrayInputStream(baos.toByteArray()));
+            pstmt.setBlob(9, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    photo1, defaultPhotoPath));
+            pstmt.setBlob(10, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    photo2, defaultPhotoPath));
+            pstmt.setBlob(11, ImageConverter.setDefaultImageBytesIfStreamNull(
+                    photo3, defaultPhotoPath));
 
             pstmt.setInt(12, entity.getProductId());
 
             pstmt.setInt(13, entity.getId());
 
             pstmt.executeUpdate();
-        } catch (SQLException | IOException ex) {
+        } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             Const.logger.error(ex);
         } finally {
@@ -147,8 +158,7 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
         }
     }
 
-    @Override
-    public void delete(ProductDetail entity) {
+    public void deleteProductDetail(ProductDetail entity) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -167,9 +177,6 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
         }
     }
 
-    /**
-     * The type ProductDetailMapper.
-     */
     static class ProductDetailMapper implements EntityMapper<ProductDetail> {
 
         @Override
@@ -187,16 +194,25 @@ public class ProductDetailDao implements Crud<ProductDetail, Integer> {
                     productDetail.setAboutEn(rs.getString(Fields.PRODUCT_DETAIL_ABOUT_EN));
                     productDetail.setAboutUa(rs.getString(Fields.PRODUCT_DETAIL_ABOUT_UA));
 
-                    Blob blob = rs.getBlob(Fields.PRODUCT_DETAIL_PHOTO_1);
-                    productDetail.setPhoto1(ImageIO.read(blob.getBinaryStream()));
-                    blob = rs.getBlob(Fields.PRODUCT_DETAIL_PHOTO_2);
-                    productDetail.setPhoto2(ImageIO.read(blob.getBinaryStream()));
-                    blob = rs.getBlob(Fields.PRODUCT_DETAIL_PHOTO_3);
-                    productDetail.setPhoto3(ImageIO.read(blob.getBinaryStream()));
+
+                    String photo1 = ImageConverter.convertBlobToBase64StringImage(
+                            rs.getBlob(Fields.PRODUCT_DETAIL_PHOTO_1),
+                            ImageConverter.MAX_IMAGE_SIZE_1MB);
+                    productDetail.setPhoto1(photo1);
+
+                    String photo2 = ImageConverter.convertBlobToBase64StringImage(
+                            rs.getBlob(Fields.PRODUCT_DETAIL_PHOTO_2),
+                            ImageConverter.MAX_IMAGE_SIZE_1MB);
+                    productDetail.setPhoto2(photo2);
+
+                    String photo3 = ImageConverter.convertBlobToBase64StringImage(
+                            rs.getBlob(Fields.PRODUCT_DETAIL_PHOTO_3),
+                            ImageConverter.MAX_IMAGE_SIZE_1MB);
+                    productDetail.setPhoto3(photo3);
 
                     productDetail.setProductId(rs.getInt(Fields.PRODUCT_DETAIL_PRODUCT_ID));
                 }
-            } catch (SQLException | IOException ex) {
+            } catch (SQLException ex) {
                 Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
             } finally {

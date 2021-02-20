@@ -16,7 +16,7 @@ public class Fields {
     public static final String ACCOUNT_PASSWORD = "password";
     public static final String ACCOUNT_ROLE_ID = "role_id";
     public static final String ACCOUNT_SHOPPING_CART_ID = "shopping_cart_id";
-
+    public static final String ACCOUNT_STATUS_ID = "account_status_id";
     // ACCOUNT_DETAIL
     public static final String ACCOUNT_DETAIL_PHONE = "phone";
     public static final String ACCOUNT_DETAIL_ZIP_CODE = "zip_code";

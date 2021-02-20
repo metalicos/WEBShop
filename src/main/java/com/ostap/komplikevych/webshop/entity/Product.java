@@ -1,12 +1,14 @@
 package com.ostap.komplikevych.webshop.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class Product extends AbstractEntity {
     private BigDecimal price;
     private int amount;
     private int orderedAmount;
     private int categoryId;
+    private LocalDateTime createDate;
 
     public Product() {
     }
@@ -50,14 +52,22 @@ public class Product extends AbstractEntity {
         this.categoryId = categoryId;
     }
 
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + getId() +
-                ", price=" + price +
+                "price=" + price +
                 ", amount=" + amount +
                 ", orderedAmount=" + orderedAmount +
                 ", categoryId=" + categoryId +
+                ", createDate=" + createDate +
                 '}';
     }
 }

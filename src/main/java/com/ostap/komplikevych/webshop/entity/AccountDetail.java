@@ -1,6 +1,5 @@
 package com.ostap.komplikevych.webshop.entity;
 
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 public class AccountDetail extends AbstractEntity {
@@ -24,7 +23,7 @@ public class AccountDetail extends AbstractEntity {
     private String streetEn;
     private String buildingEn;
     private String flatEn;
-    private BufferedImage accountPhoto;
+    private String accountPhoto;
     private int accountId;
 
     public String getPhone() {
@@ -179,11 +178,11 @@ public class AccountDetail extends AbstractEntity {
         this.flatEn = flatEn;
     }
 
-    public BufferedImage getAccountPhoto() {
+    public String getAccountPhoto() {
         return accountPhoto;
     }
 
-    public void setAccountPhoto(BufferedImage accountPhoto) {
+    public void setAccountPhoto(String accountPhoto) {
         this.accountPhoto = accountPhoto;
     }
 

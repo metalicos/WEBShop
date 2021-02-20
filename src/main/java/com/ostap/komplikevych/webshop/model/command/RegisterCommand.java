@@ -6,11 +6,8 @@ import com.ostap.komplikevych.webshop.constant.Validator;
 import com.ostap.komplikevych.webshop.dao.AccountDao;
 import com.ostap.komplikevych.webshop.dao.AccountDetailDao;
 import com.ostap.komplikevych.webshop.dao.ShoppingCartDao;
-import com.ostap.komplikevych.webshop.entity.Account;
-import com.ostap.komplikevych.webshop.entity.AccountDetail;
-import com.ostap.komplikevych.webshop.entity.Role;
-import com.ostap.komplikevych.webshop.entity.ShoppingCart;
-import com.ostap.komplikevych.webshop.security.MyChipher;
+import com.ostap.komplikevych.webshop.entity.*;
+import com.ostap.komplikevych.webshop.model.security.MyChipher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -84,7 +81,7 @@ public class RegisterCommand extends Command {
             Const.logger.error("errorMessage --> " + errorMessage);
             return forward;
         }
-        account = accountDao.read(email);
+        account = accountDao.readAccountByEmail(email);
         if (account != null) {
             errorMessage = "You already have an account, please login.";
             request.setAttribute("errorMessage", errorMessage);
@@ -103,43 +100,46 @@ public class RegisterCommand extends Command {
             Const.logger.error("errorMessage --> " + errorMessage);
             return forward;
         }
+        try {
+            account = new Account();
+            account.setPassword(password);
+            account.setEmail(email);
+            account.setRoleId(Role.USER.getId());
+            account.setAccountStatusId(AccountStatus.ENABLED.getId());
 
-        account = new Account();
-        account.setPassword(password);
-        account.setEmail(email);
-        account.setRoleId(Role.USER.getId());
+            accountDetail = new AccountDetail();
 
-        accountDetail = new AccountDetail();
+            accountDetail.setSurnameUa(surnameUa);
+            accountDetail.setFirstNameUa(request.getParameter(firstNameUa));
+            accountDetail.setPatronymicUa(request.getParameter(patronymicUa));
+            accountDetail.setSurnameEn(request.getParameter(surnameEn));
+            accountDetail.setFirstNameEn(request.getParameter(firstNameEn));
+            accountDetail.setPatronymicEn(request.getParameter(patronymicEn));
 
-        accountDetail.setSurnameUa(surnameUa);
-        accountDetail.setFirstNameUa(request.getParameter(firstNameUa));
-        accountDetail.setPatronymicUa(request.getParameter(patronymicUa));
-        accountDetail.setSurnameEn(request.getParameter(surnameEn));
-        accountDetail.setFirstNameEn(request.getParameter(firstNameEn));
-        accountDetail.setPatronymicEn(request.getParameter(patronymicEn));
+            ShoppingCart cart = new ShoppingCart();
+            cart.setLastUpdate(LocalDateTime.now());
 
-        ShoppingCart cart = new ShoppingCart();
-        cart.setLastUpdate(LocalDateTime.now());
+            int shoppingCartId = shoppingCartDao.createShoppingCart(cart);
+            account.setShoppingCartId(shoppingCartId);
+            account.setCreateTime(LocalDateTime.now());
 
-        int shoppingCartId = shoppingCartDao.create(cart);
-        account.setShoppingCartId(shoppingCartId);
-        account.setCreateTime(LocalDateTime.now());
+            MyChipher myChipher = new MyChipher();
+            String encryptedPassword = myChipher.encrypt(account.getPassword());
+            account.setPassword(encryptedPassword);
 
-        MyChipher myChipher = new MyChipher();
-        String encryptedPassword = myChipher.encrypt(account.getPassword());
-        account.setPassword(encryptedPassword);
+            int accountId = accountDao.createAccount(account);
 
-        int accountId = accountDao.create(account);
+            accountDetail.setAccountId(accountId);
+            dao.createAccountDetail(accountDetail, null);
 
-        accountDetail.setAccountId(accountId);
-        dao.create(accountDetail);
+            Const.logger.info("Created Account --> " + account + " with account details --> " + accountDetail + "\n" +
+                    "with shopping cart --> " + cart);
 
-        Const.logger.info("Created Account --> " + account + " with account details --> " + accountDetail + "\n" +
-                "with shopping cart --> " + cart);
-
-        session.setAttribute(SessionAttribute.ACCOUNT, account);
-        session.setAttribute(SessionAttribute.ROLE, Role.USER);
-
+            session.setAttribute(SessionAttribute.ACCOUNT, account);
+            session.setAttribute(SessionAttribute.ROLE, Role.USER);
+        }catch (Exception ex){
+            Const.logger.error(ex);
+        }
         return Const.PAGE_PATH_LOGIN;
     }
 }
