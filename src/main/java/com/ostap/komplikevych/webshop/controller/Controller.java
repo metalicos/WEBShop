@@ -1,6 +1,7 @@
 package com.ostap.komplikevych.webshop.controller;
 
 import com.ostap.komplikevych.webshop.constant.Const;
+import com.ostap.komplikevych.webshop.localization.Language;
 import com.ostap.komplikevych.webshop.model.command.Command;
 import com.ostap.komplikevych.webshop.model.command.CommandContainer;
 
@@ -16,23 +17,13 @@ public class Controller extends HttpServlet {
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
-        process(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    private void process(HttpServletRequest request,
-                         HttpServletResponse response) throws IOException, ServletException {
-
         Locale locale = request.getLocale();
-        Const.logger.debug("Current language is ("+locale.getLanguage() + ")");
+        Const.logger.debug("Current language is (" + locale.getLanguage() + ")");
         String language = (String) request.getSession().getAttribute("language");
-        if(language==null){
-            request.setAttribute("language",locale.getLanguage());
-            Const.logger.debug("Language setted as ("+locale.getLanguage() + ")");
+        if (language == null) {
+            language = Language.getLang(locale.getLanguage()).getName();
+            request.setAttribute("language", language);
+            Const.logger.debug("Language setted as (" + language + ")");
         }
 
         String commandName = request.getParameter("command");
@@ -50,5 +41,10 @@ public class Controller extends HttpServlet {
             RequestDispatcher disp = request.getRequestDispatcher(forward);
             disp.forward(request, response);
         }
+    }
+
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
     }
 }

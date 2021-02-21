@@ -24,6 +24,7 @@ public class Const {
 
     public static final String PAGE_PATH_ERROR = "error.jsp";
     public static final String PAGE_PATH_HOME = JSP_PAGE_LOCATION +"home.jsp";
+    public static final String PAGE_ERROR_PERMITION_DENIED = "error-permition-denied.jsp";
 
     public static final String COMMAND_OPEN_LOGIN_PAGE = "open-login-page";
 
@@ -33,7 +34,7 @@ public class Const {
     public static final String COMMAND_MY_CART = "my-cart";
     public static final String COMMAND_MY_ORDERS = "my-orders";
 
-    public static final String RESOURCE_IMAGE_PATH = "img/";
+    public static final String RESOURCE_IMAGE_PATH = "design/img/";
 
     public static String getProperty(String key) {
         try {

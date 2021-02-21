@@ -9,9 +9,6 @@
         <jsp:param name="description" value="Welcome to EShop. Change the information in profile to set the delivery adress."/>
     </jsp:include>
     <link rel="stylesheet" href="../design/css/profile.css">
-<%--    <style>--%>
-<%--        <%@ include file="/design/css/profile.css"%>--%>
-<%--    </style>--%>
 </head>
 
 
@@ -37,7 +34,14 @@
                                 <span class="fa fa-2x fa-edit"></span>
                             </a>
                             <div class="mt-3">
-                                <h4 class="text-dark  h3">Ostap Komplikevych</h4>
+                                <h4 class="text-dark  h3">
+                                    <c:if test="${language == 'ua'}">
+                                    ${detailedAccount.firstNameUa} ${detailedAccount.surnameUa}
+                                    </c:if>
+                                    <c:if test="${language == 'en'}">
+                                        ${detailedAccount.firstNameEn} ${detailedAccount.surnameEn}
+                                    </c:if>
+                                </h4>
                             </div>
                         </div>
                     </div>
@@ -63,13 +67,13 @@
                                 <h6 class="mb-0">Прізвище</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Комплікевич
+                                ${detailedAccount.surnameUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Surname</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Komplikevych
+                                ${detailedAccount.surnameEn}
                             </div>
                         </div>
                         <hr>
@@ -78,13 +82,13 @@
                                 <h6 class="mb-0">Ім'я</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Остап
+                                ${detailedAccount.firstNameUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">First Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Ostap
+                                ${detailedAccount.firstNameEn}
                             </div>
                         </div>
                         <hr>
@@ -93,13 +97,13 @@
                                 <h6 class="mb-0">По батькові</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Ярославович
+                                ${detailedAccount.patronymicUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Patronymic</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Yaroslavovych
+                                ${detailedAccount.patronymicEn}
                             </div>
                         </div>
                         <hr>
@@ -108,7 +112,7 @@
                                 <h6 class="mb-0">E-mail</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                ostap.ja@gmail.com
+                                ${detailedAccount.email}
                             </div>
                         </div>
                         <hr>
@@ -117,7 +121,7 @@
                                 <h6 class="mb-0">Моб. тел.</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                +(380) 68 781 49 17
+                                ${detailedAccount.phone}
                             </div>
                         </div>
                         <hr>
@@ -126,37 +130,37 @@
                                 <h6 class="mb-0">Країна</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Україна
+                                ${detailedAccount.countryUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Місто</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Львів
+                                ${detailedAccount.cityUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Вулиця</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                С. Петлюри
+                                ${detailedAccount.streetUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Буд.</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                66
+                                ${detailedAccount.buildingUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Квартира</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                33
+                                ${detailedAccount.flatUa}
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Поштовий індекс</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                79021
+                                ${detailedAccount.zipCode}
                             </div>
                         </div>
                     </div>
@@ -192,53 +196,61 @@
                                                 <div class="col-sm-3">
                                                     <label for="surname-ua" class="visually-hidden">Прізвище</label>
                                                     <input type="text" id="surname-ua"
-                                                           aria-describedby="surname-ua-help" placeholder="Прізвище">
+                                                           aria-describedby="surname-ua-help" placeholder="Прізвище"
+                                                           value="${detailedAccount.surnameUa}">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <label for="first-name-ua" class="visually-hidden">Ім'я</label>
                                                     <input type="text" id="first-name-ua"
-                                                           aria-describedby="first-name-ua-help" placeholder="Ім'я">
+                                                           aria-describedby="first-name-ua-help" placeholder="Ім'я"
+                                                           value="${detailedAccount.firstNameUa}">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <label for="patronymic-ua" class="visually-hidden">По
                                                         батькові</label>
                                                     <input type="text" id="patronymic-ua"
                                                            aria-describedby="patronymic-ua-help"
-                                                           placeholder="По батькові">
+                                                           placeholder="По батькові"
+                                                           value="${detailedAccount.patronymicUa}">
                                                 </div>
 
                                                 <h1 class="mt-3 h5 col-12">П.І.Б. англійською мовою</h1>
                                                 <div class="col-sm-3">
                                                     <label for="surname-en" class="visually-hidden">Surname</label>
                                                     <input type="text" id="surname-en"
-                                                           aria-describedby="surname-en-help" placeholder="Surname">
+                                                           aria-describedby="surname-en-help" placeholder="Surname"
+                                                           value="${detailedAccount.surnameEn}">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <label for="first-name-en" class="visually-hidden">First
                                                         name</label>
                                                     <input type="text" id="first-name-en"
                                                            aria-describedby="first-name-en-help"
-                                                           placeholder="First name">
+                                                           placeholder="First name"
+                                                           value="${detailedAccount.firstNameEn}">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <label for="patronymic-en"
                                                            class="visually-hidden">Patronymic</label>
                                                     <input type="text" id="patronymic-en"
                                                            aria-describedby="patronymic-en-help"
-                                                           placeholder="Patronymic">
+                                                           placeholder="Patronymic"
+                                                           value="${detailedAccount.patronymicEn}">
                                                 </div>
 
                                                 <h1 class="mt-3 h5 col-12">Електронна адреса</h1>
                                                 <div class="col-12">
                                                     <label for="email" class="visually-hidden">Surname</label>
                                                     <input type="email" id="email" aria-describedby="email-help"
-                                                           placeholder="E-mail">
+                                                           placeholder="E-mail"
+                                                           value="${detailedAccount.email}">
                                                 </div>
                                                 <h1 class="mt-3 h5 col-12">Мобільний телефон</h1>
                                                 <div class="col-12">
                                                     <label for="mobile" class="visually-hidden">Surname</label>
                                                     <input type="mobile" id="mobile" aria-describedby="mobile-help"
-                                                           placeholder="Mobile tel.">
+                                                           placeholder="Mobile tel."
+                                                           value="${detailedAccount.phone}">
                                                 </div>
 
                                                 <h1 class="mt-3 h5 col-12">Країна, місто, вулиця, буд., кв., українською
@@ -247,30 +259,35 @@
                                                     <div class="col-sm-6">
                                                         <label for="country-ua" class="visually-hidden">Країна</label>
                                                         <input type="text" id="country-ua"
-                                                               aria-describedby="country-ua-help" placeholder="Країна">
+                                                               aria-describedby="country-ua-help" placeholder="Країна"
+                                                               value="${detailedAccount.countryUa}">
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label for="city-ua" class="visually-hidden">Місто</label>
                                                         <input type="text" id="city-ua" aria-describedby="city-ua-help"
-                                                               placeholder="Місто">
+                                                               placeholder="Місто"
+                                                               value="${detailedAccount.cityUa}">
                                                     </div>
                                                 </div>
                                                 <div class="mt-3 col-12">
                                                     <label for="street-ua" class="visually-hidden">Вулиця</label>
                                                     <input type="text" id="street-ua"
-                                                           aria-describedby="street-ua-help" placeholder="Вулиця">
+                                                           aria-describedby="street-ua-help" placeholder="Вулиця"
+                                                           value="${detailedAccount.streetUa}">
                                                 </div>
                                                 <div class="mt-3 d-flex align-content-between">
                                                     <div class="col-sm-6">
                                                         <label for="building-ua" class="visually-hidden">Будинок</label>
                                                         <input type="text" id="building-ua"
                                                                aria-describedby="building-ua-help"
-                                                               placeholder="Будинок">
+                                                               placeholder="Будинок"
+                                                               value="${detailedAccount.buildingUa}">
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label for="flat-ua" class="visually-hidden">Квартира</label>
                                                         <input type="text" id="flat-ua" aria-describedby="flat-ua-help"
-                                                               placeholder="Квартира">
+                                                               placeholder="Квартира"
+                                                               value="${detailedAccount.flatUa}">
                                                     </div>
                                                 </div>
 
@@ -280,18 +297,21 @@
                                                     <div class="col-sm-6">
                                                         <label for="country-en" class="visually-hidden">Country</label>
                                                         <input type="text" id="country-en"
-                                                               aria-describedby="country-en-help" placeholder="Country">
+                                                               aria-describedby="country-en-help" placeholder="Country"
+                                                               value="${detailedAccount.countryEn}">
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label for="city-en" class="visually-hidden">City</label>
                                                         <input type="text" id="city-en" aria-describedby="city-en-help"
-                                                               placeholder="City">
+                                                               placeholder="City"
+                                                               value="${detailedAccount.cityEn}">
                                                     </div>
                                                 </div>
                                                 <div class="mt-3 col-12">
                                                     <label for="street-en" class="visually-hidden">Street</label>
                                                     <input type="text" id="street-en"
-                                                           aria-describedby="street-en-help" placeholder="Street">
+                                                           aria-describedby="street-en-help" placeholder="Street"
+                                                           value="${detailedAccount.streetEn}">
                                                 </div>
                                                 <div class="mt-3 d-flex align-content-between">
                                                     <div class="col-sm-6">
@@ -299,12 +319,14 @@
                                                                class="visually-hidden">Building</label>
                                                         <input type="text" id="building-en"
                                                                aria-describedby="building-en-help"
-                                                               placeholder="Building">
+                                                               placeholder="Building"
+                                                               value="${detailedAccount.buildingEn}">
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label for="flat-en" class="visually-hidden">Flat</label>
                                                         <input type="text" id="flat-en" aria-describedby="flat-en-help"
-                                                               placeholder="Flat">
+                                                               placeholder="Flat"
+                                                               value="${detailedAccount.flatEn}">
                                                     </div>
                                                 </div>
 
@@ -314,7 +336,8 @@
                                                         індекс</label>
                                                     <input type="text" id="zip-code-ua"
                                                            aria-describedby="zip-code-ua-help"
-                                                           placeholder="Поштовий індекс">
+                                                           placeholder="Поштовий індекс"
+                                                           value="${detailedAccount.zipCode}">
                                                 </div>
                                             </div>
                                         </div>

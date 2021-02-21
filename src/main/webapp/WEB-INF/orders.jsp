@@ -9,9 +9,6 @@
         <jsp:param name="description" value=""/>
     </jsp:include>
     <link rel="stylesheet" href="../design/css/orders.css">
-<%--    <style>--%>
-<%--        <%@ include file="/design/css/orders.css"%>--%>
-<%--    </style>--%>
 </head>
 
 <body>

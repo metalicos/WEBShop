@@ -15,17 +15,35 @@
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
 
-<!--    <servlet>-->
-<!--        <servlet-name>Home</servlet-name>-->
-<!--        <servlet-class>com.ostap.komplikevych.webshop.controller.Home</servlet-class>-->
-<!--    </servlet>-->
+<!--    <filter>-->
+<!--        <filter-name>CommandAccessFilter</filter-name>-->
+<!--        <filter-class>com.ostap.komplikevych.webshop.filter.CommandAccessFilter</filter-class>-->
 
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>Home</servlet-name>-->
-<!--        <url-pattern>/home</url-pattern>-->
-<!--    </servlet-mapping>-->
+<!--        <init-param>-->
+<!--            <param-name>logged-admin</param-name>-->
+<!--            <param-value>logout open-profile-page open-orders-page</param-value>-->
+<!--        </init-param>-->
 
+<!--        <init-param>-->
+<!--            <param-name>logged-user</param-name>-->
+<!--            <param-value>logout open-profile-page open-orders-page</param-value>-->
+<!--        </init-param>-->
 
+<!--        <init-param>-->
+<!--            <param-name>unlogged</param-name>-->
+<!--            <param-value>login register open-login-page open-register-page set-language sort-products add-to-cart delete-from-cart select-by-selector</param-value>-->
+<!--        </init-param>-->
+
+<!--        <init-param>-->
+<!--            <param-name>out-of-control</param-name>-->
+<!--            <param-value>open-cart-page open-home-page</param-value>-->
+<!--        </init-param>-->
+<!--    </filter>-->
+
+<!--    <filter-mapping>-->
+<!--        <filter-name>CommandAccessFilter</filter-name>-->
+<!--        <servlet-name>Controller</servlet-name>-->
+<!--    </filter-mapping>-->
 
 
     <welcome-file-list>

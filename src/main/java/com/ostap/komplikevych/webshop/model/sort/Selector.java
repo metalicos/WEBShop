@@ -1,5 +1,6 @@
 package com.ostap.komplikevych.webshop.model.sort;
 
+import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.dao.ProductDao;
 import com.ostap.komplikevych.webshop.entity.DetailedProduct;
 import com.ostap.komplikevych.webshop.entity.Product;
@@ -9,65 +10,125 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Selector {
 
-    public static List<DetailedProduct> selectDetailedProductsThatMatchPrice(List<DetailedProduct> products,
-                                                                             double minPrice, double maxPrice) {
-        Predicate<DetailedProduct> pred =
-                (detailedProduct) -> (detailedProduct.getPrice().doubleValue() >= minPrice &&
-                        detailedProduct.getPrice().doubleValue() <= maxPrice);
-        return products.stream().filter(pred).collect(Collectors.toList());
+    public static List<DetailedProduct> selectDetailedProductsThatMatchPrice(
+            List<DetailedProduct> products, double minPrice, double maxPrice) {
+        return products.stream()
+                .filter(detailedProduct ->
+                        (detailedProduct.getPrice().doubleValue() >= minPrice
+                                && detailedProduct.getPrice().doubleValue() <= maxPrice))
+                .collect(Collectors.toList());
     }
 
-    public static List<DetailedProduct> selectDetailedProductsByCategoryName(List<DetailedProduct> products
-            , String categoryName) {
-        Predicate<DetailedProduct> pred =
-                (detailedProduct) -> (detailedProduct.getCategoryName().equals(categoryName));
-        return products.stream().filter(pred).collect(Collectors.toList());
+    public static List<DetailedProduct> selectDetailedProductsByCategoryName(
+            List<DetailedProduct> products, String categoryName) {
+        return products.stream()
+                .filter((detailedProduct) -> (detailedProduct.getCategoryName().equals(categoryName)))
+                .collect(Collectors.toList());
     }
 
-    public static List<DetailedProduct> selectDetailedProductsByColor(List<DetailedProduct> products
-            , String color) {
-        Predicate<DetailedProduct> pred =
-                (detailedProduct) -> (detailedProduct.getColor().equals(color));
-        return products.stream().filter(pred).collect(Collectors.toList());
+    public static List<DetailedProduct> selectDetailedProductsByColor(
+            List<DetailedProduct> products, String color) {
+        return products.stream()
+                .filter(detailedProduct -> (detailedProduct.getColor().equals(color)))
+                .collect(Collectors.toList());
     }
 
-    public static List<DetailedProduct> selectDetailedProductsThatContainStringValue(List<DetailedProduct> products
-            , String searchString) {
-        Predicate<DetailedProduct> pred =
-                (detailedProduct) -> (detailedProduct.getName().toLowerCase().contains(searchString.toLowerCase()));
-        return products.stream().filter(pred).collect(Collectors.toList());
+    public static List<DetailedProduct> selectDetailedProductsThatContainStringValue(
+            List<DetailedProduct> products, String searchString) {
+        return products.stream()
+                .filter(detailedProduct -> (detailedProduct.getName()
+                        .toLowerCase()
+                        .contains(searchString.toLowerCase())))
+                .collect(Collectors.toList());
     }
 
-    public static List<String> selectCategoryNamesFromDetailedProducts(List<DetailedProduct> products) {
+    public static List<String> selectCategoryNamesFromDetailedProducts(
+            List<DetailedProduct> products) {
         return products.stream()
                 .map(DetailedProduct::getCategoryName)
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    public static Map<String, Integer> selectProductsAmountInCategory(List<DetailedProduct> products, List<String> category) {
-        Map<String, Integer> map = new HashMap<>();
+    public static List<String> selectProductColorNamesFromDetailedProducts(
+            List<DetailedProduct> products) {
+        return products.stream()
+                .map(DetailedProduct::getColor)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
-        for (int i = 0; i < category.size(); i++) {
-            for (int j = 0; j < products.size(); j++) {
-                if (products.get(j).getCategoryName().equals(category.get(i))) {
-                    Integer amount = map.get(category.get(i));
+    public static List<String> selectProductSizeNamesFromDetailedProducts(
+            List<DetailedProduct> products) {
+        return products.stream()
+                .map(DetailedProduct::getSize)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+
+    public static Map<String, Integer> selectProductsAmountWithColorNames(
+            List<DetailedProduct> products) {
+        Map<String, Integer> map = new HashMap<>();
+        List<String> colors = selectProductColorNamesFromDetailedProducts(products);
+        for (String color : colors) {
+            for (DetailedProduct product : products) {
+                if (product.getColor().equals(color)) {
+                    Integer amount = map.get(color);
                     if (amount == null) {
-                        map.put(category.get(i), 1);
+                        map.put(color, 1);
                     } else {
-                        map.put(category.get(i), ++amount);
+                        map.put(color, ++amount);
                     }
                 }
             }
         }
-
         return map;
     }
+
+    public static Map<String, Integer> selectProductsAmountWithCategoryNames(
+            List<DetailedProduct> products) {
+        Map<String, Integer> map = new HashMap<>();
+        List<String> categories = selectCategoryNamesFromDetailedProducts(products);
+        for (String category : categories) {
+            for (DetailedProduct product : products) {
+                if (product.getCategoryName().equals(category)) {
+                    Integer amount = map.get(category);
+                    if (amount == null) {
+                        map.put(category, 1);
+                    } else {
+                        map.put(category, ++amount);
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
+    public static Map<String, Integer> selectProductsAmountWithSizeNames(
+            List<DetailedProduct> products) {
+        Map<String, Integer> map = new HashMap<>();
+        List<String> sizes = selectProductSizeNamesFromDetailedProducts(products);
+        for (String size : sizes) {
+            for (DetailedProduct product : products) {
+                if (product.getSize().equals(size)) {
+                    Integer amount = map.get(size);
+                    if (amount == null) {
+                        map.put(size, 1);
+                    } else {
+                        map.put(size, ++amount);
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
+
 
 
     public static void main(String[] args) {
@@ -77,40 +138,54 @@ public class Selector {
         for (Product p : products) {
             in.add(new DetailedProduct(p.getId(), Language.EN));
         }
-        System.out.println("------------PRICE----------------");
-        in.forEach(System.out::println);
+
+        Const.logger.debug("------------PRICE----------------");
+        in.forEach(Const.logger::trace);
         List<DetailedProduct> out = selectDetailedProductsThatMatchPrice(in, 33, 12);
-        System.out.println("----------------------------");
-        out.forEach(System.out::println);
+        Const.logger.debug("----------------------------");
+        out.forEach(Const.logger::trace);
 
-        System.out.println("------------CATEGORY----------------");
-        in.forEach(System.out::println);
+        Const.logger.debug("------------CATEGORY----------------");
+        in.forEach(Const.logger::trace);
         out = selectDetailedProductsByCategoryName(in, in.get(3).getCategoryName());
-        System.out.println("----------------------------");
-        out.forEach(System.out::println);
+        Const.logger.debug("----------------------------");
+        out.forEach(Const.logger::trace);
 
-        System.out.println("------------COLOR----------------");
-        in.forEach(System.out::println);
+        Const.logger.debug("------------COLOR----------------");
+        in.forEach(Const.logger::trace);
         out = selectDetailedProductsByColor(in, in.get(3).getColor());
-        System.out.println("----------------------------");
-        out.forEach(System.out::println);
+        Const.logger.debug("----------------------------");
+        out.forEach(Const.logger::trace);
 
-        System.out.println("------------CONTAIN STRING----------------");
-        in.forEach(System.out::println);
+        Const.logger.debug("------------CONTAIN STRING----------------");
+        in.forEach(Const.logger::trace);
         out = selectDetailedProductsThatContainStringValue(in, "fl");
-        System.out.println("----------------------------");
-        out.forEach(System.out::println);
+        Const.logger.debug("----------------------------");
+        out.forEach(Const.logger::trace);
 
 
-        System.out.println("------------CATEGORY NAMES----------------");
+        Const.logger.debug("------------CATEGORY NAMES----------------");
         List<String> categoryNames = selectCategoryNamesFromDetailedProducts(in);
-        categoryNames.forEach(System.out::println);
+        categoryNames.forEach(Const.logger::trace);
+        Map<String, Integer> amount1 = selectProductsAmountWithCategoryNames(in);
+        for (int i = 0; i < amount1.size(); i++) {
+            Const.logger.trace(amount1.get(categoryNames.get(i)));
+        }
 
-        System.out.println("------------CATEGORY NAMES----------------");
-        Map<String,Integer> amount = selectProductsAmountInCategory(in,categoryNames);
+        Const.logger.debug("------------COLOR NAMES----------------");
+        List<String> colors = selectProductColorNamesFromDetailedProducts(in);
+        colors.forEach(Const.logger::trace);
+        Map<String, Integer> amount2 = selectProductsAmountWithColorNames(in);
+        for (int i = 0; i < amount2.size(); i++) {
+            Const.logger.trace(amount2.get(colors.get(i)));
+        }
 
-        for (int i = 0; i < amount.size(); i++) {
-            System.out.println(amount.get(categoryNames.get(i)));
+        Const.logger.debug("------------SIZE NAMES----------------");
+        List<String> sizes = selectProductSizeNamesFromDetailedProducts(in);
+        sizes.forEach(Const.logger::trace);
+        Map<String, Integer> amount3 = selectProductsAmountWithSizeNames(in);
+        for (int i = 0; i < amount3.size(); i++) {
+            Const.logger.trace(amount3.get(sizes.get(i)));
         }
     }
 }

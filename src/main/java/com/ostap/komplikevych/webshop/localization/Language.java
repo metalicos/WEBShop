@@ -16,11 +16,13 @@ public enum Language {
     }
 
     public static Language getLang(String language){
+        if("uk".equals(language))
+            return Language.UA;
         for(Language l:Language.values()){
             if(l.name.equals(language)){
                 return l;
             }
         }
-        return Language.UA;
+        return Language.EN;
     }
 }

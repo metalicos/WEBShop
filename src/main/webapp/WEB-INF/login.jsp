@@ -9,9 +9,6 @@
         <jsp:param name="pageName" value="EShop | Login"/>
     </jsp:include>
     <link rel="stylesheet" href="../design/css/loginAndRegistration.css">
-<%--    <style>--%>
-<%--        <%@ include file="/design/css/loginAndRegistration.css"%>--%>
-<%--    </style>--%>
 </head>
 
 <body class="m-3 m-md-5">
