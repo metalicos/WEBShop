@@ -18,6 +18,6 @@ public class OpenOrdersPageCommand extends Command {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        return Const.PAGE_PATH_ORDERS;
+        return Const.PAGE_ORDERS;
     }
 }

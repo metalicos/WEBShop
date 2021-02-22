@@ -73,6 +73,6 @@ public class SortCommand extends Command {
             }
         }
 
-        return Const.PAGE_PATH_HOME;
+        return Const.PAGE_HOME;
     }
 }

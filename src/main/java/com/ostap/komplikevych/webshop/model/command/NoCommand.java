@@ -18,7 +18,7 @@ public class NoCommand extends Command {
         request.setAttribute("errorMessage", errorMessage);
         Const.logger.error("Set the request attribute: errorMessage --> " + errorMessage);
 
-        return Const.PAGE_PATH_ERROR;
+        return Const.PAGE_ERROR;
     }
 
 }

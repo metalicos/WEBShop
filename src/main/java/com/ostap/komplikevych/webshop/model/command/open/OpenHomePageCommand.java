@@ -21,7 +21,7 @@ public class OpenHomePageCommand extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         CommonOperations.setupHomePageAndGetAllProducts(request);
         request.setAttribute("categoryLabel", "Наші товари");
-        return Const.PAGE_PATH_HOME;
+        return Const.PAGE_HOME;
     }
 
 }

@@ -35,6 +35,18 @@ public class AccountDetailDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_CREATE_ACCOUNT_DETAILS);
+            /*
+            INSERT INTO `webshop`.`account_detail`
+            (`phone`,`zip_code`,`last_update`,`surname_ua`,`first_name_ua`,`patronymic_ua`,`country_ua`,
+            `city_ua`,`street_ua`,`building_ua`,`flat_ua`,`surname_en`,`first_name_en`,`patronymic_en`,
+            `country_en`,`city_en`,`street_en`,`building_en`,`flat_en`,`account_photo`,`account_id`)
+            VALUES
+            (?,?,?,?
+            ,?,?,?,?
+            ,?,?,?,?
+            ,?,?,?,?
+            ,?,?,?,?,?);
+            * */
             pstmt.setString(1, entity.getPhone());
             pstmt.setInt(2, entity.getZipCode());
             pstmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));

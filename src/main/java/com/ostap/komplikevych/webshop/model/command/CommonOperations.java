@@ -31,27 +31,19 @@ public class CommonOperations {
         ProductDao productDao = new ProductDao();
         List<Product> products = productDao.readAllProductsInShop();
 
-        Const.logger.debug("STEP1 Getting Products from DB");
-        for (Product p : products) {
-            Const.logger.trace(p);
-        }
+        Const.logger.debug("Setting Up Home Page");
+        //products.forEach(Const.logger::trace);
         List<DetailedProduct> detailedProducts = new ArrayList<>();
 
 
-
-        Const.logger.debug("STEP3 reading language");
         String language = (String) session.getAttribute("language");
-        Const.logger.trace(language);
+        Const.logger.trace("Language="+language);
 
 
-
-        Const.logger.debug("STEP4 creating detailed products DB");
         for (Product p : products) {
             detailedProducts.add(new DetailedProduct(p.getId(), Language.getLang(language)));
         }
-        for (DetailedProduct p : detailedProducts) {
-            Const.logger.trace(p);
-        }
+        //detailedProducts.forEach(Const.logger::trace);
 
 
         Map<String,Integer> categoryNamesWithProductAmountMap =
@@ -61,9 +53,6 @@ public class CommonOperations {
         Map<String,Integer> sizeNamesWithProductAmountMap =
                 Selector.selectProductsAmountWithSizeNames(detailedProducts);
 
-
-
-        Const.logger.debug("STEP5 setting values to request and session");
         session.setAttribute("language", language);
         request.setAttribute("language", language);
 
@@ -79,6 +68,7 @@ public class CommonOperations {
 
         request.setAttribute("productsFound", detailedProducts.size());
         request.setAttribute("checkedR1", "checked");
+        Const.logger.debug("Setting Up Finished");
         return detailedProducts;
     }
 }

@@ -7,6 +7,7 @@ import com.ostap.komplikevych.webshop.localization.Language;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class DetailedProduct {
     private int id;
@@ -157,6 +158,31 @@ public class DetailedProduct {
 
     public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DetailedProduct that = (DetailedProduct) o;
+        return id == that.id &&
+                availableNumber == that.availableNumber &&
+                orderedNumber == that.orderedNumber &&
+                Objects.equals(createDate, that.createDate) &&
+                Objects.equals(price, that.price) &&
+                Objects.equals(categoryName, that.categoryName) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(color, that.color) &&
+                Objects.equals(size, that.size) &&
+                Objects.equals(about, that.about) &&
+                Objects.equals(photo1, that.photo1) &&
+                Objects.equals(photo2, that.photo2) &&
+                Objects.equals(photo3, that.photo3);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createDate, price, availableNumber, orderedNumber, categoryName, name, color, size, about, photo1, photo2, photo3);
     }
 
     @Override

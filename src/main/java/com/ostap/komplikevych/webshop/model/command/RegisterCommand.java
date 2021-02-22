@@ -47,7 +47,7 @@ public class RegisterCommand extends Command {
         String firstNameEn = request.getParameter("first-name-en");
         String patronymicEn = request.getParameter("patronymic-en");
         String errorMessage = null;
-        String forward = Const.PAGE_PATH_REGISTRATION;
+        String forward = Const.PAGE_REGISTRATION;
 
         if (Validator.checkIfNullOrEmptyReturnTrue(email, password, checkPassword,
                 surnameEn, surnameUa, firstNameEn, firstNameUa, patronymicEn, patronymicUa)) {
@@ -100,46 +100,69 @@ public class RegisterCommand extends Command {
             Const.logger.error("errorMessage --> " + errorMessage);
             return forward;
         }
-        try {
-            account = new Account();
-            account.setPassword(password);
-            account.setEmail(email);
-            account.setRoleId(Role.USER.getId());
-            account.setAccountStatusId(AccountStatus.ENABLED.getId());
 
-            accountDetail = new AccountDetail();
+        account = new Account();
 
-            accountDetail.setSurnameUa(surnameUa);
-            accountDetail.setFirstNameUa(request.getParameter(firstNameUa));
-            accountDetail.setPatronymicUa(request.getParameter(patronymicUa));
-            accountDetail.setSurnameEn(request.getParameter(surnameEn));
-            accountDetail.setFirstNameEn(request.getParameter(firstNameEn));
-            accountDetail.setPatronymicEn(request.getParameter(patronymicEn));
+        MyChipher myChipher = new MyChipher();
+        String encryptedPassword = myChipher.encrypt(password);
+        account.setPassword(encryptedPassword);
+        Const.logger.trace("password " + account.getPassword());
 
-            ShoppingCart cart = new ShoppingCart();
-            cart.setLastUpdate(LocalDateTime.now());
+        account.setEmail(email);
+        Const.logger.trace("email "+email+" --> " + account.getEmail());
 
-            int shoppingCartId = shoppingCartDao.createShoppingCart(cart);
-            account.setShoppingCartId(shoppingCartId);
-            account.setCreateTime(LocalDateTime.now());
+        account.setRoleId(Role.USER.getId());
+        Const.logger.trace("role "+Role.USER.getId()+" --> " + account.getRoleId());
 
-            MyChipher myChipher = new MyChipher();
-            String encryptedPassword = myChipher.encrypt(account.getPassword());
-            account.setPassword(encryptedPassword);
+        account.setAccountStatusId(AccountStatus.ENABLED.getId());
+        Const.logger.trace("status id "+AccountStatus.ENABLED.getId()+" --> " + account.getAccountStatusId());
 
-            int accountId = accountDao.createAccount(account);
+        Const.logger.info("account --> " + account);
 
-            accountDetail.setAccountId(accountId);
-            dao.createAccountDetail(accountDetail, null);
+        accountDetail = new AccountDetail();
 
-            Const.logger.info("Created Account --> " + account + " with account details --> " + accountDetail + "\n" +
-                    "with shopping cart --> " + cart);
+        accountDetail.setSurnameUa(surnameUa);
+        Const.logger.trace("surname ua "+surnameUa+" --> " + accountDetail.getSurnameUa());
+        accountDetail.setFirstNameUa(firstNameUa);
+        Const.logger.trace("first name ua "+firstNameUa+" --> " + accountDetail.getFirstNameUa());
+        accountDetail.setPatronymicUa(patronymicUa);
+        Const.logger.trace("patronymic ua "+patronymicUa+" --> " + accountDetail.getPatronymicUa());
 
-            session.setAttribute(SessionAttribute.ACCOUNT, account);
-            session.setAttribute(SessionAttribute.ROLE, Role.USER);
-        }catch (Exception ex){
-            Const.logger.error(ex);
-        }
-        return Const.PAGE_PATH_LOGIN;
+        accountDetail.setSurnameEn(surnameEn);
+        Const.logger.trace("surname en "+surnameEn+" --> " + accountDetail.getSurnameEn());
+        accountDetail.setFirstNameEn(firstNameEn);
+        Const.logger.trace("first name en "+firstNameEn+" --> " + accountDetail.getFirstNameEn());
+        accountDetail.setPatronymicEn(patronymicEn);
+        Const.logger.trace("patronymic en "+patronymicEn+" --> " + accountDetail.getPatronymicEn());
+
+        Const.logger.info("account detail --> " + accountDetail);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.setLastUpdate(LocalDateTime.now());
+
+        Const.logger.info("shopping cart --> " + cart);
+
+        int shoppingCartId = shoppingCartDao.createShoppingCart(cart);
+        Const.logger.info("shopping cart created id --> " + shoppingCartId);
+
+        account.setShoppingCartId(shoppingCartId);
+        Const.logger.info("account detail shopping cart id --> " + account.getShoppingCartId());
+
+        int accountId = accountDao.createAccount(account);
+        Const.logger.info("account created id --> " + accountId);
+
+
+        accountDetail.setAccountId(accountId);
+        int accDetailId = dao.createAccountDetail(accountDetail, null);
+        Const.logger.info("account detail created id --> " + accDetailId);
+
+        Const.logger.info("Created Account --> " + account +
+                "\nwith account details --> " + accountDetail +
+                "\nwith shopping cart --> " + cart);
+
+        session.setAttribute(SessionAttribute.ACCOUNT, account);
+        session.setAttribute(SessionAttribute.ROLE, Role.USER);
+
+        return Const.PAGE_LOGIN;
     }
 }

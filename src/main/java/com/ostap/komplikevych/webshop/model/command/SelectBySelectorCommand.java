@@ -69,6 +69,6 @@ public class SelectBySelectorCommand extends Command {
         }
         request.setAttribute("detailedProducts", detailedProducts);
         session.setAttribute("saveFilterQuery",saveFilterQuery);
-        return Const.PAGE_PATH_HOME;
+        return Const.PAGE_HOME;
     }
 }

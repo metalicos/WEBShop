@@ -18,6 +18,6 @@ public class OpenRegistrationPageCommand extends Command {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        return Const.PAGE_PATH_REGISTRATION;
+        return Const.PAGE_REGISTRATION;
     }
 }

@@ -22,7 +22,7 @@
 <div class="container-fluid px-sm-2 px-md-4 custom-wrapper d-block text-center">
     <div>
         <main class="form-signin py-5">
-            <form id="registration_form" action="controller" method="post">
+            <form id="registration_form" action="controller" method="get">
                 <input type="hidden" name="command" value="register"/>
 
                 <a href="controller?command=open-home-page">

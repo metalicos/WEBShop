@@ -1,11 +1,7 @@
 package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.constant.Const;
-import com.ostap.komplikevych.webshop.dao.ProductDao;
-import com.ostap.komplikevych.webshop.dao.ShoppingCartDao;
 import com.ostap.komplikevych.webshop.entity.DetailedProduct;
-import com.ostap.komplikevych.webshop.entity.Product;
-import com.ostap.komplikevych.webshop.entity.ProductInCart;
 import com.ostap.komplikevych.webshop.localization.Language;
 
 import javax.servlet.ServletException;
@@ -13,8 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AddToCartCommand extends Command {
     /**
@@ -28,29 +29,53 @@ public class AddToCartCommand extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         HttpSession session = request.getSession();
-        List<DetailedProduct> userShoppingCart = (List<DetailedProduct>) session.getAttribute("userShoppingCart");
+        Map<DetailedProduct, Integer> userShoopingCart =
+                (Map<DetailedProduct, Integer>) session.getAttribute("userShoppingCart");
 
         Const.logger.debug("Id ADD to CART command");
         Const.logger.debug("Printing User Shopping Cart");
-        Const.logger.debug(userShoppingCart);
+        Const.logger.debug(userShoopingCart);
 
 
-        if (userShoppingCart == null) {
-            userShoppingCart = new ArrayList<>();
-        }
         String id = request.getParameter("productId");
-       String language = (String) session.getAttribute("language");
+        String language = (String) session.getAttribute("language");
 
-        if(id!=null && id.matches("[0-9]")) {
+        if (id != null && id.matches("[0-9]")) {
             int productId = Integer.parseInt(id);
             DetailedProduct detailedProduct = new DetailedProduct(productId, Language.getLang(language));
-            userShoppingCart.add(detailedProduct);
-        }else{
+            Const.logger.error(detailedProduct);
+            if (userShoopingCart == null) {
+                userShoopingCart = new HashMap<>();
+            }
+            Integer amountProduct = userShoopingCart.get(detailedProduct);
+
+            if (amountProduct == null) {
+                userShoopingCart.put(detailedProduct, 1);
+            } else {
+                userShoopingCart.put(detailedProduct, ++amountProduct);
+            }
+        } else {
             Const.logger.error("Id of product = null OR didn`t match [0-9]");
         }
-        session.setAttribute("userShoppingCart",userShoppingCart);
-        session.setAttribute("productsInCart",userShoppingCart.size());
+
+        List<DetailedProduct> detailedProducts = new ArrayList<>(userShoopingCart.keySet());
+        DetailedProduct product;
+        BigDecimal totalProductSum = new BigDecimal(0);
+        for (int i = 0; i < detailedProducts.size(); i++) {
+            product = detailedProducts.get(i);
+            Const.logger.trace(product);
+            BigDecimal amount = BigDecimal.valueOf(userShoopingCart.get(product));
+            Const.logger.trace(amount);
+            BigDecimal semiSum = product.getPrice().multiply(amount);
+            totalProductSum = totalProductSum.add(semiSum);
+        }
+
+        session.setAttribute("userShoppingCart", userShoopingCart);
+        session.setAttribute("productsInCart", userShoopingCart.size());
+        session.setAttribute("totalProductSum",totalProductSum.doubleValue());
 
         return "/";
     }
+
+
 }

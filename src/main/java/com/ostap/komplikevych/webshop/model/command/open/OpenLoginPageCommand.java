@@ -18,6 +18,6 @@ public class OpenLoginPageCommand extends Command {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        return Const.PAGE_PATH_LOGIN;
+        return Const.PAGE_LOGIN;
     }
 }

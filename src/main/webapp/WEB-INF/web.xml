@@ -8,6 +8,12 @@
     <servlet>
         <servlet-name>Controller</servlet-name>
         <servlet-class>com.ostap.komplikevych.webshop.controller.Controller</servlet-class>
+        <multipart-config>
+            <location>/</location>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
     </servlet>
 
     <servlet-mapping>
@@ -15,36 +21,60 @@
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
 
-<!--    <filter>-->
-<!--        <filter-name>CommandAccessFilter</filter-name>-->
-<!--        <filter-class>com.ostap.komplikevych.webshop.filter.CommandAccessFilter</filter-class>-->
 
-<!--        <init-param>-->
-<!--            <param-name>logged-admin</param-name>-->
-<!--            <param-value>logout open-profile-page open-orders-page</param-value>-->
-<!--        </init-param>-->
+    <filter>
+        <filter-name>CommandAccessFilter</filter-name>
+        <filter-class>com.ostap.komplikevych.webshop.filter.CommandAccessFilter</filter-class>
 
-<!--        <init-param>-->
-<!--            <param-name>logged-user</param-name>-->
-<!--            <param-value>logout open-profile-page open-orders-page</param-value>-->
-<!--        </init-param>-->
+        <init-param>
+            <param-name>logged-admin</param-name>
+            <param-value>open-create-product create-product open-create-category create-category</param-value>
+        </init-param>
 
-<!--        <init-param>-->
-<!--            <param-name>unlogged</param-name>-->
-<!--            <param-value>login register open-login-page open-register-page set-language sort-products add-to-cart delete-from-cart select-by-selector</param-value>-->
-<!--        </init-param>-->
+        <init-param>
+            <param-name>logged-user</param-name>
+            <param-value>logout</param-value>
+        </init-param>
 
-<!--        <init-param>-->
-<!--            <param-name>out-of-control</param-name>-->
-<!--            <param-value>open-cart-page open-home-page</param-value>-->
-<!--        </init-param>-->
-<!--    </filter>-->
+        <init-param>
+            <param-name>logged-common</param-name>
+            <param-value>logout open-profile-page open-orders-page</param-value>
+        </init-param>
 
-<!--    <filter-mapping>-->
-<!--        <filter-name>CommandAccessFilter</filter-name>-->
-<!--        <servlet-name>Controller</servlet-name>-->
-<!--    </filter-mapping>-->
+        <init-param>
+            <param-name>unlogged</param-name>
+            <param-value>login register</param-value>
+        </init-param>
 
+        <init-param>
+            <param-name>out-of-control</param-name>
+            <param-value>open-product-info open-login-page open-register-page open-cart-page open-home-page set-language
+                sort-products add-to-cart delete-from-cart select-by-selector
+            </param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CommandAccessFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.ostap.komplikevych.webshop.filter.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/controller</url-pattern>
+    </filter-mapping>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

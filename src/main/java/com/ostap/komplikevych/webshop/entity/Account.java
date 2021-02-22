@@ -59,4 +59,15 @@ public class Account extends AbstractEntity {
         this.shoppingCartId = shoppingCartId;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", createTime=" + createTime +
+                ", roleId=" + roleId +
+                ", shoppingCartId=" + shoppingCartId +
+                ", accountStatusId=" + accountStatusId +
+                '}';
+    }
 }

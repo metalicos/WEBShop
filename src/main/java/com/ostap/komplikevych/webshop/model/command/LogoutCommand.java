@@ -21,7 +21,7 @@ public class LogoutCommand extends Command {
 			session.invalidate();
 
 		Const.logger.debug("Command finished");
-		return Const.PAGE_PATH_LOGIN;
+		return Const.PAGE_LOGIN;
 	}
 
 }

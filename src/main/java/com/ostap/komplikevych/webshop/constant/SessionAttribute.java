@@ -7,4 +7,5 @@ public class SessionAttribute {
     public static final String LANGUAGE = "language";
     public static final String SHOPPING_CART = "shoppingCart";
     public static final String DETAILED_ACCOUNT = "detailedAccount";
+    public static final String PRODUCT_TO_SHOW = "productToShow";
 }

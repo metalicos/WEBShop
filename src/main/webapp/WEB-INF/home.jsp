@@ -79,7 +79,7 @@
             <h5 class="font-weight-bold">Категорії</h5>
             <ul class="list-group">
                 <a class="text-decoration-none"
-                   href="controller?command=select-by-selector&selector=category&value=all">
+                   href="/">
                     <li class="list-group-item list-group-item-action d-flex
                         justify-content-between align-items-center category">
                         Усі товари
@@ -139,7 +139,7 @@
                 <h5 class="font-weight-bold">Категорії</h5>
                 <ul class="list-group">
                     <a class="text-decoration-none"
-                       href="controller?command=select-by-selector&selector=category&value=all">
+                       href="/">
                         <li class="list-group-item list-group-item-action d-flex
                         justify-content-between align-items-center category">
                             Усі товари
@@ -200,11 +200,11 @@
                         <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start col-5">
                                 <li class="list-group-item me-1">Від</li>
-                                <input class="col-6" type="number" name="from-price">
+                                <input class="col-6" type="number" name="from-price" placeholder="0" min="0" max="1000000" step="1">
                             </div>
                             <div class="d-flex justify-content-start col-5">
                                 <li class="list-group-item me-1">До</li>
-                                <input class="col-6 text-success" type="number" name="to-price">
+                                <input class="col-6 text-success" type="number" name="to-price"  placeholder="0" min="0" max="1000000" step="1">
                             </div>
                             <input type="submit" class="btn btn-primary" value="OK">
                         </div>
@@ -222,7 +222,7 @@
 
                         <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1 my-3">
                             <div class="card h-100">
-                                <a href="controller?command=open-product-window?productId=${product.id}"
+                                <a href="controller?command=open-product-info&productId=${product.id}"
                                    class="text-decoration-none">
 <%--                                    <img class="card-img-top" src="data:image/jpeg;base64,${product.photo1}">--%>
                                     <img class="card-img-top" src="../design/img/camera.png">

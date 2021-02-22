@@ -4,6 +4,7 @@
 
 <!-- Меню для ПК -->
 <div class="px-5 d-none d-lg-block container-fluid bg-light py-2" style="background-color: #86bd57!important;">
+
     <nav class="container-md d-flex justify-content-md-between justify-content-sm-center">
         <!-- Логотип -->
         <%@ include file="mainPanel/logotype.jsp" %>

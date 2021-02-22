@@ -19,11 +19,15 @@ public class CommandContainer {
         commands.put("open-profile-page", new OpenProfilePageCommand());
         commands.put("open-cart-page", new OpenShoppingCartPageCommand());
         commands.put("open-home-page",new OpenHomePageCommand());
-
+        commands.put("open-product-info",new OpenProductInfoCommand());
+        commands.put("open-create-product",new OpenCreateProductWindowCommand());
+        commands.put("open-create-category",new OpenCreateCategoryCommand());
 
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("register", new RegisterCommand());
+        commands.put("create-product", new CreateProductCommand());
+        commands.put("create-category", new CreateCategoryCommand());
 
         commands.put("set-language", new SetLanguageCommand());
         commands.put("sort-products",new SortCommand());
