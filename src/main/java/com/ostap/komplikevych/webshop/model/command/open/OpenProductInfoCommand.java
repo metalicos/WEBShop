@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class OpenProductInfoCommand extends Command {
+public class OpenProductInfoCommand implements Command {
 
     /**
      * Execution method for command.

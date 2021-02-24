@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class OpenLoginPageCommand extends Command {
+public class OpenLoginPageCommand implements Command {
     /**
      * Execution method for command.
      *

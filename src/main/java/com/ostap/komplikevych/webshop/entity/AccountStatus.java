@@ -11,7 +11,7 @@ public enum AccountStatus {
 
     public static AccountStatus getAccountStatus(Account account) {
         for (AccountStatus a : AccountStatus.values()) {
-            if (a.id == account.getRoleId()) {
+            if (a.id == account.getAccountStatusId()) {
                 return a;
             }
         }

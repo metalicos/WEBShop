@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.ValidationEvent;
 import java.io.IOException;
 
-public class SetLanguageCommand extends Command {
+public class SetLanguageCommand implements Command {
     /**
      * Execution method for command.
      *

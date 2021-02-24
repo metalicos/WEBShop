@@ -7,7 +7,7 @@ import com.ostap.komplikevych.webshop.dao.AccountDao;
 import com.ostap.komplikevych.webshop.dao.ProductDao;
 import com.ostap.komplikevych.webshop.dao.ShoppingCartDao;
 import com.ostap.komplikevych.webshop.entity.*;
-import com.ostap.komplikevych.webshop.localization.Language;
+import com.ostap.komplikevych.webshop.model.command.cart.ShoppingCartCommand;
 import com.ostap.komplikevych.webshop.model.security.MyChipher;
 
 import javax.servlet.ServletException;
@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class LoginCommand extends Command {
+public class LoginCommand implements Command {
+    private static final int EMPTY = 0;
 
     @Override
     public String execute(HttpServletRequest request,
@@ -36,13 +36,12 @@ public class LoginCommand extends Command {
         String password = request.getParameter("password");
 
         String errorMessage = null;
-        String forward = Const.PAGE_LOGIN;
 
         if (Validator.checkIfNullOrEmptyReturnTrue(email, password)) {
             errorMessage = "Login/password cannot be empty";
             request.setAttribute("errorMessage", errorMessage);
             Const.logger.error("errorMessage --> " + errorMessage);
-            return forward;
+            return Const.PAGE_LOGIN;
         }
 
         AccountDao accountDao = new AccountDao();
@@ -50,90 +49,108 @@ public class LoginCommand extends Command {
 
         Const.logger.trace("Found in DB: account --> " + account);
 
-        MyChipher chipher = new MyChipher();
-        if (account == null || !password.equals(chipher.decrypt(account.getPassword()))) {
+        MyChipher cipher = new MyChipher();
+        if (account == null || !password.equals(cipher.decrypt(account.getPassword()))) {
             errorMessage = "Cannot find account with such login/password";
             request.setAttribute("errorMessage", errorMessage);
             Const.logger.error("errorMessage --> " + errorMessage);
-            return forward;
+            return Const.PAGE_LOGIN;
+        } else if(AccountStatus.getAccountStatus(account) == AccountStatus.DISABLED){
+            errorMessage = "You are banned by administrator.";
+            request.setAttribute("errorMessage", errorMessage);
+            Const.logger.error("errorMessage --> " + errorMessage);
+            session.invalidate();
+            return Const.PAGE_LOGIN;
         } else {
-            Role accountRole = Role.getRole(account);
-            AccountStatus accountStatus = AccountStatus.getAccountStatus(account);
-            Const.logger.trace("accountRole --> " + accountRole);
-            Const.logger.trace("accountStatus --> " + accountStatus);
-            ShoppingCart cart = (ShoppingCart) session.getAttribute(SessionAttribute.SHOPPING_CART);
-            if (cart != null) {
-                ShoppingCartDao cartDao = new ShoppingCartDao();
-                ShoppingCart accountLoggedShoppingCart =
-                        cartDao.readShoppingCartByShoppingCartId(account.getShoppingCartId());
-                List<ProductInCart> productsInLoggedCart = accountLoggedShoppingCart.getProducts();
-                productsInLoggedCart.addAll(cart.getProducts());
-                accountLoggedShoppingCart.setProducts(productsInLoggedCart);
-                cartDao.updateShoppingCart(accountLoggedShoppingCart);
-            }
 
-            session.setAttribute(SessionAttribute.ACCOUNT, account);
-            request.setAttribute(SessionAttribute.ACCOUNT, account);
-            Const.logger.trace("Set the session attribute: " + SessionAttribute.ACCOUNT + " --> " + account);
-
-
-            DetailedAccount detailedAccount = new DetailedAccount(account.getId());
-            session.setAttribute(SessionAttribute.DETAILED_ACCOUNT, detailedAccount);
-            request.setAttribute(SessionAttribute.DETAILED_ACCOUNT, detailedAccount);
-
-
-            session.setAttribute(SessionAttribute.ROLE, accountRole);
-            request.setAttribute(SessionAttribute.ROLE, accountRole);
-            Const.logger.trace("Set the session attribute: " + SessionAttribute.ROLE + " --> " + accountRole);
-
-            session.setAttribute(SessionAttribute.ACCOUNT_STATUS, accountStatus);
-            request.setAttribute(SessionAttribute.ACCOUNT_STATUS, accountStatus);
-            Const.logger.trace("Set the session attribute: " + SessionAttribute.ACCOUNT_STATUS + " --> " + accountStatus);
-
-            Const.logger.debug("Account " + account + " logged as " + accountRole.name().toLowerCase());
+            setupAccountInformation(request, account);
 
             String language = (String) session.getAttribute(SessionAttribute.LANGUAGE);
+            Map<DetailedProduct, Integer> userShoppingCart =
+                    (Map<DetailedProduct, Integer>) session.getAttribute("userShoppingCart");
+            Const.logger.trace("userShoppingCartWas = " + userShoppingCart);
 
-//            Map<DetailedProduct, Integer> userShoopingCart =
-//                    (Map<DetailedProduct, Integer>) session.getAttribute("userShoppingCart");
-//
-//            userShoopingCart = mergeCarts(userShoopingCart,account.getShoppingCartId(),language);
-//
-//            List<DetailedProduct> detailedProducts = new ArrayList<>(userShoopingCart.keySet());
-//            DetailedProduct product;
-//            BigDecimal totalProductSum = new BigDecimal(0);
-//            for (int i = 0; i < detailedProducts.size(); i++) {
-//                product = detailedProducts.get(i);
-//                Const.logger.trace(product);
-//                BigDecimal amount = BigDecimal.valueOf(userShoopingCart.get(product));
-//                Const.logger.trace(amount);
-//                BigDecimal semiSum = product.getPrice().multiply(amount);
-//                totalProductSum = totalProductSum.add(semiSum);
-//            }
-//
-//            session.setAttribute("userShoppingCart", userShoopingCart);
-//            session.setAttribute("productsInCart", userShoopingCart.size());
-//            session.setAttribute("totalProductSum",totalProductSum.doubleValue());
+            userShoppingCart = mergeCarts(userShoppingCart, account.getShoppingCartId(), language);
+            Const.logger.trace("userShoppingCartBecome = " + userShoppingCart);
 
+            ShoppingCartCommand.createShoppingCartMapFromDB(request);
         }
+
         Const.logger.debug("Command finished");
         return "/";
     }
 
-    private  Map<DetailedProduct, Integer> mergeCarts(Map<DetailedProduct, Integer> userCart ,int shoppingCartId,String lang){
+
+    private Map<DetailedProduct, Integer> mergeCarts(Map<DetailedProduct, Integer> userCart, int shoppingCartId, String lang) {
 
         ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
         ShoppingCart shoppingCart = shoppingCartDao.readShoppingCartByShoppingCartId(shoppingCartId);
+        Const.logger.info("shoppingCartInDB = " + shoppingCart);
         List<ProductInCart> productsList = shoppingCart.getProducts();
+        Const.logger.info("userCart = " + userCart);
 
-        Map<DetailedProduct, Integer> userShoopingCart = new HashMap<>();
-
-        for (int i = 0; i < productsList.size(); i++) {
-            userShoopingCart.put(new DetailedProduct(productsList.get(i).getProduct().getId(),
-                    Language.getLang(lang)),productsList.get(i).getAmount());
+        Map<DetailedProduct, Integer> fullShoppingCart;
+        if (userCart == null) {
+            fullShoppingCart = new HashMap<>();
+        } else {
+            fullShoppingCart = new HashMap<>(userCart);
         }
 
-        userShoopingCart.putAll(userCart);
-        return  userShoopingCart;
+        DetailedProduct detailedProduct;
+        List<DetailedProduct> unlogedUserList = new ArrayList<>(fullShoppingCart.keySet());
+        ProductDao productDao = new ProductDao();
+        for (int i = 0; i < fullShoppingCart.size(); i++) {
+            ProductInCart product = new ProductInCart();
+            detailedProduct = unlogedUserList.get(i);
+            product.setProduct(productDao.readProductByProductId(detailedProduct.getId()));
+            product.setAmount(fullShoppingCart.get(detailedProduct));
+
+            int productId = detailedProduct.getId();
+
+            Integer amountInCart = fullShoppingCart.get(detailedProduct);
+            int amountInDB;
+            if (productsList.contains(product)) {
+                amountInDB = ShoppingCartDao.readProductInCart(shoppingCartId, productId).getAmount();
+                ShoppingCartDao.updateProductInCart(shoppingCartId, productId, (amountInCart + amountInDB));
+                Const.logger.trace("product is in DB shopping cart (updating) ");
+            } else {
+                ShoppingCartDao.createProductInCart(shoppingCartId, productId, amountInCart);
+                Const.logger.trace("product is NOT found in DB shopping cart (creating) ");
+            }
+        }
+        return fullShoppingCart;
     }
+
+
+    private void setupAccountInformation(HttpServletRequest request, Account account) {
+        HttpSession session = request.getSession();
+        Role accountRole = Role.getRole(account);
+        AccountStatus accountStatus = AccountStatus.getAccountStatus(account);
+        Const.logger.trace("accountRole --> " + accountRole);
+        Const.logger.trace("accountStatus --> " + accountStatus);
+
+        session.setAttribute(SessionAttribute.ACCOUNT, account);
+        request.setAttribute(SessionAttribute.ACCOUNT, account);
+        Const.logger.trace("Set the session attribute: " + SessionAttribute.ACCOUNT + " --> " + account);
+
+
+        DetailedAccount detailedAccount = new DetailedAccount(account.getId());
+        session.setAttribute(SessionAttribute.DETAILED_ACCOUNT, detailedAccount);
+        request.setAttribute(SessionAttribute.DETAILED_ACCOUNT, detailedAccount);
+
+
+        session.setAttribute(SessionAttribute.ROLE, accountRole);
+        request.setAttribute(SessionAttribute.ROLE, accountRole);
+        Const.logger.trace("Set the session attribute: " + SessionAttribute.ROLE + " --> " + accountRole);
+
+        session.setAttribute(SessionAttribute.ACCOUNT_STATUS, accountStatus);
+        request.setAttribute(SessionAttribute.ACCOUNT_STATUS, accountStatus);
+        Const.logger.trace("Set the session attribute: " + SessionAttribute.ACCOUNT_STATUS + " --> " + accountStatus);
+
+        Const.logger.debug("Account " + account + " logged as " + accountRole.name().toLowerCase());
+    }
+
+
 }
+
+

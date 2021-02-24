@@ -280,7 +280,7 @@ public class ShoppingCartDao{
             ProductInCart productInCart = null;
             try {
                 productInCart = new ProductInCart();
-                productInCart.setAmount(rs.getInt(Fields.PRODUCT_IN_CART_AMOUNT));
+                productInCart.setAmount(rs.getInt(Fields.PRODUCT_IN_CART_PRODUCT_AMOUNT));
                 ProductDao productDao = new ProductDao();
                 Product product = productDao.readProductByProductId(rs.getInt(Fields.PRODUCT_IN_CART_PRODUCT_ID));
                 productInCart.setProduct(product);

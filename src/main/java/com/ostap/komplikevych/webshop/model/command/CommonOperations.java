@@ -10,6 +10,7 @@ import com.ostap.komplikevych.webshop.model.sort.Selector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,7 @@ public class CommonOperations {
      * @param request
      * @return
      */
-    public static List<DetailedProduct> setupHomePageAndGetAllProducts(HttpServletRequest request){
-
+    public static List<DetailedProduct> setupHomePageAndGetAllProducts(HttpServletRequest request) {
 
 
         HttpSession session = request.getSession();
@@ -37,7 +37,7 @@ public class CommonOperations {
 
 
         String language = (String) session.getAttribute("language");
-        Const.logger.trace("Language="+language);
+        Const.logger.trace("Language=" + language);
 
 
         for (Product p : products) {
@@ -46,11 +46,11 @@ public class CommonOperations {
         //detailedProducts.forEach(Const.logger::trace);
 
 
-        Map<String,Integer> categoryNamesWithProductAmountMap =
+        Map<String, Integer> categoryNamesWithProductAmountMap =
                 Selector.selectProductsAmountWithCategoryNames(detailedProducts);
-        Map<String,Integer> colorNamesWithProductAmountMap =
+        Map<String, Integer> colorNamesWithProductAmountMap =
                 Selector.selectProductsAmountWithColorNames(detailedProducts);
-        Map<String,Integer> sizeNamesWithProductAmountMap =
+        Map<String, Integer> sizeNamesWithProductAmountMap =
                 Selector.selectProductsAmountWithSizeNames(detailedProducts);
 
         session.setAttribute("language", language);
@@ -59,11 +59,11 @@ public class CommonOperations {
         session.setAttribute("detailedProducts", detailedProducts);
         request.setAttribute("detailedProducts", detailedProducts);
 
-        request.setAttribute("categoryNamesWithProductAmountMap",categoryNamesWithProductAmountMap);
+        request.setAttribute("categoryNamesWithProductAmountMap", categoryNamesWithProductAmountMap);
         session.setAttribute("categoryNamesWithProductAmountMap", categoryNamesWithProductAmountMap);
-        request.setAttribute("colorNamesWithProductAmountMap",colorNamesWithProductAmountMap);
+        request.setAttribute("colorNamesWithProductAmountMap", colorNamesWithProductAmountMap);
         session.setAttribute("colorNamesWithProductAmountMap", colorNamesWithProductAmountMap);
-        request.setAttribute("sizeNamesWithProductAmountMap",sizeNamesWithProductAmountMap);
+        request.setAttribute("sizeNamesWithProductAmountMap", sizeNamesWithProductAmountMap);
         session.setAttribute("sizeNamesWithProductAmountMap", sizeNamesWithProductAmountMap);
 
         request.setAttribute("productsFound", detailedProducts.size());
@@ -71,4 +71,7 @@ public class CommonOperations {
         Const.logger.debug("Setting Up Finished");
         return detailedProducts;
     }
+
+
+
 }

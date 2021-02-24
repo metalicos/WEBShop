@@ -47,7 +47,7 @@ public class Fields {
 
     // PRODUCT_IN_CART
     public static final String PRODUCT_IN_CART_PRODUCT_ID = "product_id";
-    public static final String PRODUCT_IN_CART_AMOUNT = "product_pcs_at_cart";
+    public static final String PRODUCT_IN_CART_PRODUCT_AMOUNT = "product_amount";
 
     // PRODUCT_IN_ORDER
     public static final String PRODUCT_IN_ORDER_ACCOUNT_ORDER_ID = "account_order_id";

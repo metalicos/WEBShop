@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class OpenOrdersPageCommand extends Command {
+public class OpenOrdersPageCommand implements Command {
     /**
      * Execution method for command.
      *

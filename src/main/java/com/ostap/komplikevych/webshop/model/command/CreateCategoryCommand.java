@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CreateCategoryCommand extends Command {
+public class CreateCategoryCommand implements Command {
     /**
      * Execution method for command.
      *
@@ -39,10 +39,6 @@ public class CreateCategoryCommand extends Command {
             category.setDescriptionUa(categoryAboutUa);
             category.setDescriptionEn(categoryAboutEn);
             Const.logger.trace("Request Attributes are inputed into Entity Category");
-            Const.logger.trace("categoryNameUa=" + category.getNameUa());
-            Const.logger.trace("categoryNameEn=" + category.getNameEn());
-            Const.logger.trace("categoryAboutUa=" + category.getDescriptionUa());
-            Const.logger.trace("categoryAboutEn=" + category.getDescriptionEn());
             int categoryId = categoryDao.createCategory(category);
             Const.logger.trace("Category ID = " + categoryId);
             if (categoryId == -1) {

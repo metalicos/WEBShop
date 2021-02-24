@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class OpenCreateProductWindowCommand extends Command {
+public class OpenCreateProductWindowCommand implements Command {
 
     /**
      * Execution method for command.

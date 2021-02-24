@@ -48,16 +48,15 @@ public class Controller extends HttpServlet {
         }
 
         String query = request.getQueryString();
-        Const.logger.error("query = "+query);
+        Const.logger.debug("query = "+query);
         String commandName = request.getParameter("command");
-        Const.logger.error("command --> " + commandName);
+        Const.logger.debug("command --> " + commandName);
 
         Command command = CommandContainer.get(commandName);
-        Const.logger.error("Java Class That Run This Command --> " + command);
+        Const.logger.debug("Java Class That Run This Command --> " + command);
 
         String forward = command.execute(request, response);
-        Const.logger.error("Forward address to --> " + forward);
-
+        Const.logger.debug("Forward address to --> " + forward);
 
         if (forward != null) {
             Const.logger.debug("Controller finished, now go to forward address --> " + forward);

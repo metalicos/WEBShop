@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-public class LogoutCommand extends Command {
+public class LogoutCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request,

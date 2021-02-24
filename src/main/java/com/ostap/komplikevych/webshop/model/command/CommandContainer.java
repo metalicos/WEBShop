@@ -1,6 +1,9 @@
 package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.constant.Const;
+import com.ostap.komplikevych.webshop.model.command.cart.AddToCartCommand;
+import com.ostap.komplikevych.webshop.model.command.cart.DeleteFromCartCommand;
+import com.ostap.komplikevych.webshop.model.command.cart.OpenShoppingCartPageCommand;
 import com.ostap.komplikevych.webshop.model.command.open.*;
 
 import java.util.Map;

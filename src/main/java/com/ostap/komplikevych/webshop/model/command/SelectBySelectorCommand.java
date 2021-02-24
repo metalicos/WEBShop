@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-public class SelectBySelectorCommand extends Command {
+public class SelectBySelectorCommand implements Command {
     /**
      * Execution method for command.
      *

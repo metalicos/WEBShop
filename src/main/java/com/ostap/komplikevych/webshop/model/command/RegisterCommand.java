@@ -16,10 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class RegisterCommand extends Command {
-    public static void createAccount(Account account, AccountDetail accountDetail) {
-
-    }
+public class RegisterCommand implements Command {
 
     /**
      * Execution method for command.

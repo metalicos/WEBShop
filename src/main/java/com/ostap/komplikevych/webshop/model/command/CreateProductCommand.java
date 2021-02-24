@@ -9,7 +9,7 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 
-public class CreateProductCommand extends Command {
+public class CreateProductCommand implements Command {
 
     /**
      * Execution method for command.
