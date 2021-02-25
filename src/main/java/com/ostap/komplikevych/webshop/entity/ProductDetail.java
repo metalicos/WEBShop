@@ -27,7 +27,7 @@ public class ProductDetail extends AbstractEntity {
     public ProductDetail(String nameUa, String nameEn, String colorUa,
                          String colorEn, String sizeUa, String sizeEn,
                          String aboutUa, String aboutEn, String photo1,
-                         String photo2, String photo3, int productId) {
+                         String photo2, String photo3) {
         this.nameUa = nameUa;
         this.nameEn = nameEn;
         this.colorUa = colorUa;
@@ -39,7 +39,6 @@ public class ProductDetail extends AbstractEntity {
         this.photo1 = photo1;
         this.photo2 = photo2;
         this.photo3 = photo3;
-        this.productId = productId;
     }
 
     public String getNameUa() {

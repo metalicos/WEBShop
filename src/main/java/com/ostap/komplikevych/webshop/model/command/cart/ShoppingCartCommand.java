@@ -2,6 +2,7 @@ package com.ostap.komplikevych.webshop.model.command.cart;
 
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.constant.SessionAttribute;
+import com.ostap.komplikevych.webshop.constant.Validator;
 import com.ostap.komplikevych.webshop.dao.ShoppingCartDao;
 import com.ostap.komplikevych.webshop.entity.*;
 import com.ostap.komplikevych.webshop.localization.Language;
@@ -38,11 +39,11 @@ public class ShoppingCartCommand {
         String language = (String) session.getAttribute("language");
 
 
-        if (productId != null && productId.matches("[0-9]")) {
+        if (productId != null && productId.matches(Validator.UNSIGNED_INTEGER)){
             DetailedProduct detailedProduct =
                     new DetailedProduct(Integer.parseInt(productId), Language.getLang(language));
 
-            Const.logger.error(detailedProduct);
+            Const.logger.info(detailedProduct);
             if (userShoppingCart == null) {
                 userShoppingCart = new HashMap<>();
             }
@@ -57,7 +58,7 @@ public class ShoppingCartCommand {
             }
 
         } else {
-            Const.logger.error("Id of product = null OR didn`t match [0-9]");
+            Const.logger.error("Id of product = null OR didn`t match [0-9]+");
         }
 
         return userShoppingCart;
@@ -68,7 +69,7 @@ public class ShoppingCartCommand {
 
         String productId = request.getParameter("productId");
 
-        if (productId != null && account != null && productId.matches("[0-9]")) {
+        if (productId != null && account != null && productId.matches(Validator.UNSIGNED_INTEGER)) {
             int cartId = account.getShoppingCartId();
             int pId = Integer.parseInt(productId);
             ProductInCart productInCart = ShoppingCartDao.readProductInCart(cartId, pId);

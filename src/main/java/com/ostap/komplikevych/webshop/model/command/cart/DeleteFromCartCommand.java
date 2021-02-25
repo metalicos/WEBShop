@@ -46,6 +46,6 @@ public class DeleteFromCartCommand extends ShoppingCartCommand implements Comman
             session.setAttribute("productsInCart", userShoppingCart.size());
             session.setAttribute("totalProductSum", totalProductSum.doubleValue());
         }
-        return "controller?command=open-cart-page";
+        return Const.REDIRECT + "controller?command=open-cart-page";
     }
 }

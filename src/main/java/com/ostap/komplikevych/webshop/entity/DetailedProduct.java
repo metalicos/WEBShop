@@ -1,5 +1,6 @@
 package com.ostap.komplikevych.webshop.entity;
 
+import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.dao.CategoryDao;
 import com.ostap.komplikevych.webshop.dao.ProductDao;
 import com.ostap.komplikevych.webshop.dao.ProductDetailDao;
@@ -32,19 +33,20 @@ public class DetailedProduct {
 
         Product product = productDao.readProductByProductId(productId);
         ProductDetail productDetail = productDetailDao.readProductDetailByProductId(product.getId());
+        Const.logger.info("productDetail = " + productDetail);
         Category category = categoryDao.readCategoryByCategoryId(product.getCategoryId());
         this.id = productId;
         this.createDate = product.getCreateDate();
         this.price = product.getPrice();
-        this.availableNumber = (product.getAmount()-product.getOrderedAmount());
+        this.availableNumber = (product.getAmount() - product.getOrderedAmount());
         this.orderedNumber = product.getOrderedAmount();
-        if(language == Language.UA){
+        if (language == Language.UA) {
             this.categoryName = category.getNameUa();
             this.name = productDetail.getNameUa();
             this.color = productDetail.getColorUa();
             this.size = productDetail.getSizeUa();
             this.about = productDetail.getAboutUa();
-        }else{
+        } else {
             this.categoryName = category.getNameEn();
             this.name = productDetail.getNameEn();
             this.color = productDetail.getColorEn();

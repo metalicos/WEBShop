@@ -58,7 +58,7 @@ public class CreateCategoryCommand implements Command {
             return Const.PAGE_CREATE_CATEGORY;
         }
         Const.logger.debug("Create Category Command Ends");
-        return Const.PAGE_HOME;
+        return Const.REDIRECT+"controller?command=open-home-page";
     }
 
     private void saveInputedData(HttpServletRequest request, String categoryNameUa, String categoryNameEn,

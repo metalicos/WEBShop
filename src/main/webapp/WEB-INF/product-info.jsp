@@ -24,16 +24,16 @@
             <div class="carousel slide" data-ride="carousel" id="carousel-1">
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
-                        <img class="img-thumbnail w-100 d-block" src="https://i.imgur.com/U46TQz6.jpg" alt="Slide Image"
-                             loading="lazy">
+                        <img class="img-thumbnail w-100 d-block"src="data:image/jpeg;base64,${productToShow.photo1}"
+                             alt="Slide Image" loading="lazy">
                     </div>
                     <div class="carousel-item">
-                        <img class="img-thumbnail w-100 d-block" src="https://i.imgur.com/YOWv57X.jpg"
-                             alt="Slide Image">
+                        <img class="img-thumbnail w-100 d-block"src="data:image/jpeg;base64,${productToShow.photo2}"
+                             alt="Slide Image" loading="lazy">
                     </div>
                     <div class="carousel-item">
-                        <img class="img-thumbnail w-100 d-block" src="https://i.imgur.com/gLYZpMo.jpg"
-                             alt="Slide Image">
+                        <img class="img-thumbnail w-100 d-block"src="data:image/jpeg;base64,${productToShow.photo3}"
+                             alt="Slide Image" loading="lazy">
                     </div>
                 </div>
                 <div>

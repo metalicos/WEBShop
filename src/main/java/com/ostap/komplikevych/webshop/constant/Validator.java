@@ -1,6 +1,10 @@
 package com.ostap.komplikevych.webshop.constant;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Class that provides data check considering different type rules.
@@ -16,7 +20,14 @@ public class Validator {
     public static final String NAME_SURNAME_PATRONYMIC_UA =
             "(?i)(^[абвгґдеєжзиіїйклмнопрстуфхцчшщьюяыъэё])" +
                     "((?![ .,'-]$)[абвгґдеєжзиіїйклмнопрстуфхцчшщьюяыъэё .,'-]){0,24}$";
+    public static final String UNSIGNED_DOUBLE = "([0-9]+.[0-9]+)|([0-9]+)";
+    public static final String UNSIGNED_INTEGER = "[0-9]+";
 
+    /**
+     * Methode checks sentence for null and empty.
+     * @param var
+     * @return
+     */
     public static boolean checkIfNullOrEmptyReturnTrue(String... var) {
         for (int i = 0; i < var.length; i++) {
             if (var[i] == null || var[i].isEmpty()) {
@@ -26,12 +37,42 @@ public class Validator {
         return false;
     }
 
-    public static boolean checkIfMatchValidator(String validator,@NotNull String... var) {
+    /**
+     * Methode receive validator as RegEx and validates string.
+     * @param validator
+     * @param var
+     * @return
+     */
+    public static boolean checkIfMatchValidator(String validator, @NotNull String... var) {
         for (int i = 0; i < var.length; i++) {
             if (!var[i].matches(validator)) {
                 return false;
+
             }
         }
         return true;
+    }
+
+    /**
+     * Methode check if sentence contains banned words/
+     * @param var
+     * @return
+     */
+    public static boolean checkIfContainsRestrictedWords(@NotNull String... var) {
+        String restricted = Const.getProperty("restricted.words");
+        if (restricted != null) {
+            List<String> wordsRestrictedList =
+                    Arrays.stream(restricted.split(" ")).collect(Collectors.toList());
+            List<String> words;
+            for (String s : var) {
+                words = Arrays.stream(s.split("\\s")).collect(Collectors.toList());
+                for (String word : words) {
+                    if (wordsRestrictedList.contains(word)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

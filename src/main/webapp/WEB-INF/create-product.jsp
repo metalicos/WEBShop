@@ -24,7 +24,7 @@
     <h1 class="h3 text-center">
         <span class="fw-bold text-decoration">Додати товар</span>
     </h1>
-    <h1 class="h5 text-danger">${failErrorMessage}</h1>
+    <h1 class="h4 text-danger fw-bold text-danger text-center">${errorMessage}</h1>
     <div class="form-group">
         <h1 class="h5">Назва товару</h1>
         <div class="d-md-flex d-sm-block align-content-center justify-content-between">
@@ -77,7 +77,7 @@
                 <select name="mSizeWidth" class="form-select rounded-3" style="height: 40px">
                     <option value="mm">mm/мм</option>
                     <option value="cm">cm/см</option>
-                    <option value="m">m/m</option>
+                    <option value="m">m/м</option>
                 </select>
             </div>
             <h1 class="h3 text-start mx-2 text-dark">W:</h1>
@@ -89,7 +89,7 @@
                 <select name="mSizeHeight" class="form-select rounded-3" style="height: 40px">
                     <option value="mm">mm/мм</option>
                     <option value="cm">cm/см</option>
-                    <option value="m">m/m</option>
+                    <option value="m">m/м</option>
                 </select>
             </div>
             <h1 class="h3 text-start mx-2 text-dark">H:</h1>
@@ -101,7 +101,7 @@
                 <select name="mSizeDepth" class="form-select rounded-3" style="height: 40px">
                     <option value="mm">mm/мм</option>
                     <option value="cm">cm/см</option>
-                    <option value="m">m/m</option>
+                    <option value="m">m/м</option>
                 </select>
             </div>
         </div>
@@ -120,6 +120,14 @@
         <a class="btn btn-outline-dark border-2 mx-4"
            href="controller?command=open-create-category"
            target="_blank">Добавити категорію</a>
+    </div>
+
+    <div class="form-group">
+        <h1 class="h5">Ціна товару</h1>
+        <div class="d-md-flex d-sm-block align-content-center justify-content-between">
+            <input type="number" name="productPrice" placeholder="0.0" min="0.0" value="0" step="0.1"
+                   class="form-control input"/>
+        </div>
     </div>
 
     <div class="form-group">

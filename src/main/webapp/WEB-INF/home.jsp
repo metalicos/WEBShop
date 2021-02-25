@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -199,11 +200,13 @@
                         <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start col-5">
                                 <li class="list-group-item me-1">Від</li>
-                                <input class="col-6" type="number" name="from-price" placeholder="0" min="0" max="1000000" step="1">
+                                <input class="col-6" type="number" name="from-price" placeholder="0" min="0"
+                                       max="1000000" step="1">
                             </div>
                             <div class="d-flex justify-content-start col-5">
                                 <li class="list-group-item me-1">До</li>
-                                <input class="col-6 text-success" type="number" name="to-price"  placeholder="0" min="0" max="1000000" step="1">
+                                <input class="col-6 text-success" type="number" name="to-price" placeholder="0" min="0"
+                                       max="1000000" step="1">
                             </div>
                             <input type="submit" class="btn btn-primary" value="OK">
                         </div>
@@ -221,19 +224,30 @@
 
                         <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1 my-3">
                             <div class="card h-100">
-                                <a href="controller?command=open-product-info&productId=${product.id}"
-                                   class="text-decoration-none">
-<%--                                    <img class="card-img-top" src="data:image/jpeg;base64,${product.photo1}">--%>
-                                    <img class="card-img-top" src="../design/img/camera.png">
-                                </a>
+
+                                <div class="card-header bg-transparent border-success" style="border: none;">
+                                    <a href="controller?command=open-product-info&productId=${product.id}"
+                                       class="text-decoration-none">
+                                        <img class="card-img-top" src="data:image/jpeg;base64,${product.photo1}">
+                                    </a>
+                                </div>
+
+                                <div class="card-header bg-transparent border-success" style="height: 45px; border: none;">
+                                    <h6 class="font-weight-bold pt-1">${product.name}</h6>
+                                </div>
+
                                 <div class="card-body">
                                     <input type="hidden" name="command" value="open-product"/>
-                                    <h6 class="font-weight-bold pt-1">${product.name}</h6>
-                                    <div class="text-muted description">${product.about}</div>
+
+                                    <c:set var="aboutProduct" value="${fn:substring(product.about, 0, 120)} ..."/>
+                                    <div class="text-muted description">${aboutProduct}</div>
                                     <div class="d-flex align-items-center product"><span class="fas fa-star"></span>
                                         <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span
                                                 class="fas fa-star"></span> <span class="far fa-star"></span></div>
-                                    <div class="d-flex align-items-center justify-content-between pt-3">
+                                </div>
+
+                                <div class="card-footer bg-transparent border-success" style="height: 50px; border: none;">
+                                    <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex flex-column">
                                             <div class="h6 font-weight-bold">${product.price} Грн.</div>
                                                 <%--<div class="text-muted rebate"><strike>48.56</strike></div>--%>
@@ -243,6 +257,8 @@
                                             <span class="fa fa-shopping-cart"></span></a>
                                     </div>
                                 </div>
+
+
                             </div>
 
                         </div>

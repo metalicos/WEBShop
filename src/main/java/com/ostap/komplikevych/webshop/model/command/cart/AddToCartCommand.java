@@ -46,7 +46,7 @@ public class AddToCartCommand extends ShoppingCartCommand implements Command {
             session.setAttribute("totalProductSum", totalProductSum.doubleValue());
         }
 
-        return "/";
+        return Const.REDIRECT+"controller?command=open-home-page";
     }
 
 }
