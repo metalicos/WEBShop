@@ -25,7 +25,7 @@ public class OpenCreateProductWindowCommand implements Command {
         Const.logger.debug("Setup create product page");
         CategoryDao categoryDao = new CategoryDao();
         List<Category> categories = categoryDao.readAllCategories();
-        request.setAttribute("categories",categories);
+        request.setAttribute("categories", categories);
         Const.logger.debug("Setup finished");
         return Const.PAGE_CREATE_PRODUCT;
     }

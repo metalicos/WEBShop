@@ -1,10 +1,10 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.model.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.Product;
 import com.ostap.komplikevych.webshop.entity.ProductInCart;
 import com.ostap.komplikevych.webshop.entity.ShoppingCart;
+import com.ostap.komplikevych.webshop.model.DBManager;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Ostap Komplikevych
  */
-public class ShoppingCartDao{
+public class ShoppingCartDao {
     private static final String SQL_CREATE_SHOPPING_CART;
     private static final String SQL_READ_SHOPPING_CART;
     private static final String SQL_UPDATE_SHOPPING_CART;
@@ -249,7 +249,6 @@ public class ShoppingCartDao{
         }
         return productInCart;
     }
-
 
 
     static class ShoppingCartMapper implements EntityMapper<ShoppingCart> {

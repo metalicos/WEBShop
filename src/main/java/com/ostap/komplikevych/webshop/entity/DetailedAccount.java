@@ -58,10 +58,10 @@ public class DetailedAccount {
         this.firstNameUa = accountDetail.getFirstNameUa();
         this.patronymicUa = accountDetail.getPatronymicUa();
         this.countryUa = accountDetail.getCountryUa();
-        this.cityEn = accountDetail.getCityUa();
-        this.streetEn = accountDetail.getStreetUa();
-        this.buildingEn = accountDetail.getBuildingUa();
-        this.flatEn = accountDetail.getFlatUa();
+        this.cityUa = accountDetail.getCityUa();
+        this.streetUa = accountDetail.getStreetUa();
+        this.buildingUa = accountDetail.getBuildingUa();
+        this.flatUa = accountDetail.getFlatUa();
 
         this.surnameEn = accountDetail.getSurnameEn();
         this.firstNameEn = accountDetail.getFirstNameEn();

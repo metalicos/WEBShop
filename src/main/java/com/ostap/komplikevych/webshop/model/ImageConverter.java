@@ -55,7 +55,7 @@ public class ImageConverter {
         String image = null;
         InputStream is = null;
         ByteArrayOutputStream baos = null;
-        if(blob!=null) {
+        if (blob != null) {
             try {
                 is = blob.getBinaryStream();
                 baos = new ByteArrayOutputStream();
@@ -109,7 +109,7 @@ public class ImageConverter {
         if (input != null)
             return input;
         try {
-            if(defaultImagePath!=null) {
+            if (defaultImagePath != null) {
                 return convertImageFromFileAsBinaryStream(defaultImagePath);
             }
         } catch (Exception ex) {

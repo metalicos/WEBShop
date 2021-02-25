@@ -17,10 +17,11 @@ public enum SelectorType {
     public String getType() {
         return type;
     }
+
     public static SelectorType getSelectorType(String selector) {
-        if(selector!=null) {
+        if (selector != null) {
             for (SelectorType t : SelectorType.values()) {
-                if(t.type.equals(selector)){
+                if (t.type.equals(selector)) {
                     return t;
                 }
             }

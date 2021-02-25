@@ -35,7 +35,7 @@ public class AddToCartCommand extends ShoppingCartCommand implements Command {
         Account account = (Account) session.getAttribute(SessionAttribute.ACCOUNT);
 
         if (account != null) {
-            operation(request,account, Operation.ADDITION_LOGGED);
+            operation(request, account, Operation.ADDITION_LOGGED);
             ShoppingCartCommand.createShoppingCartMapFromDB(request);
             Const.logger.debug("User logged = " + userShoppingCart);
         } else {
@@ -48,6 +48,5 @@ public class AddToCartCommand extends ShoppingCartCommand implements Command {
 
         return "/";
     }
-
 
 }

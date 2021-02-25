@@ -1,8 +1,11 @@
 package com.ostap.komplikevych.webshop.temp;
 
-import com.ostap.komplikevych.webshop.model.ImageConverter;
 import com.ostap.komplikevych.webshop.dao.*;
-import com.ostap.komplikevych.webshop.entity.*;
+import com.ostap.komplikevych.webshop.entity.Account;
+import com.ostap.komplikevych.webshop.entity.AccountDetail;
+import com.ostap.komplikevych.webshop.entity.Role;
+import com.ostap.komplikevych.webshop.entity.ShoppingCart;
+import com.ostap.komplikevych.webshop.model.ImageConverter;
 import com.ostap.komplikevych.webshop.model.security.MyChipher;
 
 import java.time.LocalDateTime;
@@ -88,10 +91,9 @@ public class DBCreator {
         }
 
         CategoryDao categoryDao = new CategoryDao();
-        ProductDao productDao =new ProductDao();
+        ProductDao productDao = new ProductDao();
         ProductDetailDao productDetailDao = new ProductDetailDao();
         AccountOrderDao accountOrderDao = new AccountOrderDao();
-
 
 
     }

@@ -11,17 +11,17 @@ import java.io.IOException;
 
 public class LogoutCommand implements Command {
 
-	@Override
-	public String execute(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-		Const.logger.debug("Command " + this.getClass().getName().toUpperCase());
-		
-		HttpSession session = request.getSession(false);
-		if (session != null)
-			session.invalidate();
+    @Override
+    public String execute(HttpServletRequest request,
+                          HttpServletResponse response) throws IOException, ServletException {
+        Const.logger.debug("Command " + this.getClass().getName().toUpperCase());
 
-		Const.logger.debug("Command finished");
-		return Const.PAGE_LOGIN;
-	}
+        HttpSession session = request.getSession(false);
+        if (session != null)
+            session.invalidate();
+
+        Const.logger.debug("Command finished");
+        return Const.PAGE_LOGIN;
+    }
 
 }

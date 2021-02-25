@@ -1,6 +1,8 @@
 package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.constant.Const;
+import com.ostap.komplikevych.webshop.model.command.account.ChangeAccountDetailsCommand;
+import com.ostap.komplikevych.webshop.model.command.account.ChangeAccountPasswordCommand;
 import com.ostap.komplikevych.webshop.model.command.cart.AddToCartCommand;
 import com.ostap.komplikevych.webshop.model.command.cart.DeleteFromCartCommand;
 import com.ostap.komplikevych.webshop.model.command.cart.OpenShoppingCartPageCommand;
@@ -21,23 +23,24 @@ public class CommandContainer {
         commands.put("open-orders-page", new OpenOrdersPageCommand());
         commands.put("open-profile-page", new OpenProfilePageCommand());
         commands.put("open-cart-page", new OpenShoppingCartPageCommand());
-        commands.put("open-home-page",new OpenHomePageCommand());
-        commands.put("open-product-info",new OpenProductInfoCommand());
-        commands.put("open-create-product",new OpenCreateProductWindowCommand());
-        commands.put("open-create-category",new OpenCreateCategoryCommand());
+        commands.put("open-home-page", new OpenHomePageCommand());
+        commands.put("open-product-info", new OpenProductInfoCommand());
+        commands.put("open-create-product", new OpenCreateProductWindowCommand());
+        commands.put("open-create-category", new OpenCreateCategoryCommand());
 
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("register", new RegisterCommand());
         commands.put("create-product", new CreateProductCommand());
         commands.put("create-category", new CreateCategoryCommand());
+        commands.put("change-account-details", new ChangeAccountDetailsCommand());
+        commands.put("change-account-password", new ChangeAccountPasswordCommand());
 
         commands.put("set-language", new SetLanguageCommand());
-        commands.put("sort-products",new SortCommand());
-        commands.put("add-to-cart",new AddToCartCommand());
-        commands.put("delete-from-cart",new DeleteFromCartCommand());
-        commands.put("select-by-selector",new SelectBySelectorCommand());
-
+        commands.put("sort-products", new SortCommand());
+        commands.put("add-to-cart", new AddToCartCommand());
+        commands.put("delete-from-cart", new DeleteFromCartCommand());
+        commands.put("select-by-selector", new SelectBySelectorCommand());
 
         Const.logger.debug("Command container (size=" + commands.size() + ") was successfully initialized");
     }

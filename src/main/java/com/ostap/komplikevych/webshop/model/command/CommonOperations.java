@@ -1,7 +1,6 @@
 package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.constant.Const;
-import com.ostap.komplikevych.webshop.constant.Validator;
 import com.ostap.komplikevych.webshop.dao.ProductDao;
 import com.ostap.komplikevych.webshop.entity.DetailedProduct;
 import com.ostap.komplikevych.webshop.entity.Product;
@@ -10,7 +9,6 @@ import com.ostap.komplikevych.webshop.model.sort.Selector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +19,7 @@ public class CommonOperations {
      * If you start this methode you will totally setup Home page. To get filtered products you should.
      * returned List<DetailedProduct> put into selector, and then put into HttpServletRequest request
      * so write request.setAttribute("detailedProducts", detailedProducts);
+     *
      * @param request
      * @return
      */
@@ -71,7 +70,6 @@ public class CommonOperations {
         Const.logger.debug("Setting Up Finished");
         return detailedProducts;
     }
-
 
 
 }

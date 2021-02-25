@@ -29,47 +29,47 @@ public class SortCommand implements Command {
         if (detailedProducts != null) {
             if (SortType.NAME_A_Z.getType().equals(sortType)) {
                 Sorter.setSortDetailedProductByNameAZ(detailedProducts);
-                request.setAttribute("checkedR1","checked");
-                request.setAttribute("checkedR2","");
-                request.setAttribute("checkedR3","");
-                request.setAttribute("checkedR4","");
-                request.setAttribute("checkedR5","");
+                request.setAttribute("checkedR1", "checked");
+                request.setAttribute("checkedR2", "");
+                request.setAttribute("checkedR3", "");
+                request.setAttribute("checkedR4", "");
+                request.setAttribute("checkedR5", "");
             } else if (SortType.NAME_Z_A.getType().equals(sortType)) {
                 Sorter.setSortDetailedProductByNameZA(detailedProducts);
-                request.setAttribute("checkedR1","");
-                request.setAttribute("checkedR2","checked");
-                request.setAttribute("checkedR3","");
-                request.setAttribute("checkedR4","");
-                request.setAttribute("checkedR5","");
+                request.setAttribute("checkedR1", "");
+                request.setAttribute("checkedR2", "checked");
+                request.setAttribute("checkedR3", "");
+                request.setAttribute("checkedR4", "");
+                request.setAttribute("checkedR5", "");
             } else if (SortType.PRICE_UP.getType().equals(sortType)) {
                 Sorter.setSortDetailedProductByPriceFromCheapToExpensive(detailedProducts);
-                request.setAttribute("checkedR1","");
-                request.setAttribute("checkedR2","");
-                request.setAttribute("checkedR3","checked");
-                request.setAttribute("checkedR4","");
-                request.setAttribute("checkedR5","");
+                request.setAttribute("checkedR1", "");
+                request.setAttribute("checkedR2", "");
+                request.setAttribute("checkedR3", "checked");
+                request.setAttribute("checkedR4", "");
+                request.setAttribute("checkedR5", "");
             } else if (SortType.PRICE_DOWN.getType().equals(sortType)) {
                 Sorter.setSortDetailedProductByPriceFromExpensiveToCheap(detailedProducts);
-                request.setAttribute("checkedR1","");
-                request.setAttribute("checkedR2","");
-                request.setAttribute("checkedR3","");
-                request.setAttribute("checkedR4","checked");
-                request.setAttribute("checkedR5","");
+                request.setAttribute("checkedR1", "");
+                request.setAttribute("checkedR2", "");
+                request.setAttribute("checkedR3", "");
+                request.setAttribute("checkedR4", "checked");
+                request.setAttribute("checkedR5", "");
             } else if (SortType.DATE_NEW.getType().equals(sortType)) {
                 Sorter.sortDetailedProductByCreateDateNew(detailedProducts);
                 Sorter.setSortDetailedProductByPriceFromExpensiveToCheap(detailedProducts);
-                request.setAttribute("checkedR1","");
-                request.setAttribute("checkedR2","");
-                request.setAttribute("checkedR3","");
-                request.setAttribute("checkedR4","");
-                request.setAttribute("checkedR5","checked");
+                request.setAttribute("checkedR1", "");
+                request.setAttribute("checkedR2", "");
+                request.setAttribute("checkedR3", "");
+                request.setAttribute("checkedR4", "");
+                request.setAttribute("checkedR5", "checked");
             } else {
                 Sorter.sortDetailedProductByCreateDateOld(detailedProducts);
-                request.setAttribute("checkedR1","");
-                request.setAttribute("checkedR2","");
-                request.setAttribute("checkedR3","");
-                request.setAttribute("checkedR4","");
-                request.setAttribute("checkedR5","checked");
+                request.setAttribute("checkedR1", "");
+                request.setAttribute("checkedR2", "");
+                request.setAttribute("checkedR3", "");
+                request.setAttribute("checkedR4", "");
+                request.setAttribute("checkedR5", "checked");
             }
         }
 

@@ -8,66 +8,7 @@
         <jsp:param name="pageName" value="EShop | Shopping Cart"/>
         <jsp:param name="description" value=""/>
     </jsp:include>
-    <%--    <link rel="stylesheet" href="../design/css/shoppingCart.css">--%>
-
-    <style>
-        .table > tbody > tr > td, .table > tfoot > tr > td {
-            vertical-align: middle;
-        }
-
-        @media screen and (max-width: 600px) {
-            table#cart tbody td .form-control {
-                width: 20%;
-                display: inline !important;
-            }
-
-            .actions .btn {
-                width: 36%;
-                margin: 1.5em 0;
-            }
-
-            .actions .btn-info {
-                float: left;
-            }
-
-            .actions .btn-danger {
-                float: right;
-            }
-
-            table#cart thead {
-                display: none;
-            }
-
-            table#cart tbody td {
-                display: block;
-                padding: .6rem;
-                min-width: 320px;
-            }
-
-            table#cart tbody tr td:first-child {
-                background: #333;
-                color: #fff;
-            }
-
-            table#cart tbody td:before {
-                content: attr(data-th);
-                font-weight: bold;
-                display: inline-block;
-                width: 8rem;
-            }
-
-
-            table#cart tfoot td {
-                display: block;
-            }
-
-            table#cart tfoot td .btn {
-                display: block;
-            }
-
-        }
-    </style>
-
+    <link rel="stylesheet" href="../design/css/shoppingCart.css">
 </head>
 
 <body>
@@ -88,35 +29,53 @@
         </tr>
         </thead>
 
-        <c:forEach items="${userShoppingCart}" var="entry">
-            <tbody>
-            <tr>
-                <td data-th="Товар">
-                    <div class="row">
-                        <div class="col-sm-2 hidden-xs">
-                            <img src="http://placehold.it/100x100" alt="..." class="img-responsive "/>
-                        </div>
-                        <div class="col-sm-10">
-                            <h4 class="nomargin">${entry.key.name}</h4>
-                            <p>${entry.key.about}</p>
-                        </div>
-                    </div>
-                </td>
-                <td data-th="Ціна">${entry.key.price} Грн.</td>
-                <td data-th="Кількість">
-                        ${entry.value}
-                </td>
-                <td data-th="Підсумок" class="text-center fw-bold"> Грн.
-                </td>
-                <td data-th="Видалити" class="align-content-start">
-                    <a class="btn btn-danger" href="controller?command=delete-from-cart&productId=${entry.key.id}">
-                        <i class="fa fa-trash"></i>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
+        <c:choose>
+            <c:when test="${userShoppingCart.size() == 0 || userShoppingCart == null}">
+                <tbody>
+                <tr>
+                    <td colspan="5" class="justify-content-center">
+                        <h1 class="h3 text-center">Здається корзина порожня</h1>
+                        <img class="align-self-center card-img" src="/design/img/cartIsEmpty.svg" width="200" height="200">
+                    </td>
+                </tr>
+                </tbody>
+            </c:when>
 
-        </c:forEach>
+            <c:otherwise>
+                <c:forEach items="${userShoppingCart}" var="entry">
+                    <tbody>
+                    <tr>
+                        <td data-th="Товар">
+                            <div class="row">
+                                <div class="col-sm-2 hidden-xs">
+                                    <img src="http://placehold.it/100x100" alt="..." class="img-responsive "/>
+                                </div>
+                                <div class="col-sm-10">
+                                    <h4 class="nomargin">${entry.key.name}</h4>
+                                    <p>${entry.key.about}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-th="Ціна">${entry.key.price} Грн.</td>
+                        <td data-th="Кількість">
+                                ${entry.value}
+                        </td>
+                        <td data-th="Підсумок" class="text-center fw-bold"> Грн.
+                        </td>
+                        <td data-th="Видалити" class="align-content-start">
+                            <a class="btn btn-danger"
+                               href="controller?command=delete-from-cart&productId=${entry.key.id}">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
+
+
         <%--        userShoopingCart--%>
 
         <tfoot>

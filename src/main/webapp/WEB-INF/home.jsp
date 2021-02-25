@@ -18,7 +18,6 @@
 <%-- Навігаційне меню --%>
 <%@ include file="/WEB-INF/parts/navigation.jsp" %>
 
-
 <!-- Наповнення сторінки -->
 <div class="wrapper">
 
@@ -252,11 +251,23 @@
                 </div>
             </div>
             <div class="wrapper d-flex justify-content-center">
-                <a class="btn page-link" href="#">&#8882</a>
-                <a class="btn page-link" href="#">1</a>
-                <a class="btn page-link" href="#">2</a>
-                <a class="btn page-link" href="#">3</a>
-                <a class="btn page-link" href="#">&#8883</a>
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="btn page-link" href="#">&#8882</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="btn page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="btn page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="btn page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="btn page-link" href="#">&#8883</a>
+                    </li>
+                </ul>
             </div>
         </section>
     </div>

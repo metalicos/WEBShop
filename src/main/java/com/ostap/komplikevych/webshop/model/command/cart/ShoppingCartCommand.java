@@ -84,7 +84,6 @@ public class ShoppingCartCommand {
             if (operation == Operation.SUBTRACTION_LOGGED) {
                 subLogged(amount, cartId, pId);
             }
-
         }
     }
 

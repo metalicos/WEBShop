@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +54,7 @@ public class LoginCommand implements Command {
             request.setAttribute("errorMessage", errorMessage);
             Const.logger.error("errorMessage --> " + errorMessage);
             return Const.PAGE_LOGIN;
-        } else if(AccountStatus.getAccountStatus(account) == AccountStatus.DISABLED){
+        } else if (AccountStatus.getAccountStatus(account) == AccountStatus.DISABLED) {
             errorMessage = "You are banned by administrator.";
             request.setAttribute("errorMessage", errorMessage);
             Const.logger.error("errorMessage --> " + errorMessage);
@@ -150,7 +149,4 @@ public class LoginCommand implements Command {
         Const.logger.debug("Account " + account + " logged as " + accountRole.name().toLowerCase());
     }
 
-
 }
-
-

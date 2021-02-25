@@ -106,31 +106,31 @@ public class RegisterCommand implements Command {
         Const.logger.trace("password " + account.getPassword());
 
         account.setEmail(email);
-        Const.logger.trace("email "+email+" --> " + account.getEmail());
+        Const.logger.trace("email " + email + " --> " + account.getEmail());
 
         account.setRoleId(Role.USER.getId());
-        Const.logger.trace("role "+Role.USER.getId()+" --> " + account.getRoleId());
+        Const.logger.trace("role " + Role.USER.getId() + " --> " + account.getRoleId());
 
         account.setAccountStatusId(AccountStatus.ENABLED.getId());
-        Const.logger.trace("status id "+AccountStatus.ENABLED.getId()+" --> " + account.getAccountStatusId());
+        Const.logger.trace("status id " + AccountStatus.ENABLED.getId() + " --> " + account.getAccountStatusId());
 
         Const.logger.info("account --> " + account);
 
         accountDetail = new AccountDetail();
 
         accountDetail.setSurnameUa(surnameUa);
-        Const.logger.trace("surname ua "+surnameUa+" --> " + accountDetail.getSurnameUa());
+        Const.logger.trace("surname ua " + surnameUa + " --> " + accountDetail.getSurnameUa());
         accountDetail.setFirstNameUa(firstNameUa);
-        Const.logger.trace("first name ua "+firstNameUa+" --> " + accountDetail.getFirstNameUa());
+        Const.logger.trace("first name ua " + firstNameUa + " --> " + accountDetail.getFirstNameUa());
         accountDetail.setPatronymicUa(patronymicUa);
-        Const.logger.trace("patronymic ua "+patronymicUa+" --> " + accountDetail.getPatronymicUa());
+        Const.logger.trace("patronymic ua " + patronymicUa + " --> " + accountDetail.getPatronymicUa());
 
         accountDetail.setSurnameEn(surnameEn);
-        Const.logger.trace("surname en "+surnameEn+" --> " + accountDetail.getSurnameEn());
+        Const.logger.trace("surname en " + surnameEn + " --> " + accountDetail.getSurnameEn());
         accountDetail.setFirstNameEn(firstNameEn);
-        Const.logger.trace("first name en "+firstNameEn+" --> " + accountDetail.getFirstNameEn());
+        Const.logger.trace("first name en " + firstNameEn + " --> " + accountDetail.getFirstNameEn());
         accountDetail.setPatronymicEn(patronymicEn);
-        Const.logger.trace("patronymic en "+patronymicEn+" --> " + accountDetail.getPatronymicEn());
+        Const.logger.trace("patronymic en " + patronymicEn + " --> " + accountDetail.getPatronymicEn());
 
         Const.logger.info("account detail --> " + accountDetail);
 

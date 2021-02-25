@@ -129,8 +129,6 @@ public class Selector {
     }
 
 
-
-
     public static void main(String[] args) {
         List<DetailedProduct> in = new ArrayList<>();
         ProductDao productDao = new ProductDao();

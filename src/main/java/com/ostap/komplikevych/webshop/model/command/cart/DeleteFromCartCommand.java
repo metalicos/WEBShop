@@ -37,7 +37,7 @@ public class DeleteFromCartCommand extends ShoppingCartCommand implements Comman
 
         if (account != null) {
             Const.logger.trace("account not null");
-            operation(request,account, Operation.SUBTRACTION_LOGGED);
+            operation(request, account, Operation.SUBTRACTION_LOGGED);
             ShoppingCartCommand.createShoppingCartMapFromDB(request);
         } else {
             userShoppingCart = operation(request, userShoppingCart, Operation.SUBTRACTION);

@@ -107,7 +107,7 @@ public class AccountDetailDao {
         return accountDetail;
     }
 
-    public void updateAccountDetail(AccountDetail entity, InputStream accountPhoto) {
+    public void updateAccountDetail(AccountDetail entity) {
         Connection con = null;
         PreparedStatement pstmt = null;
 
@@ -121,7 +121,7 @@ public class AccountDetailDao {
             * */
             pstmt.setString(1, entity.getPhone());
             pstmt.setInt(2, entity.getZipCode());
-            pstmt.setTimestamp(3, Timestamp.valueOf(entity.getLastUpdate()));
+            pstmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.setString(4, entity.getSurnameUa());
             pstmt.setString(5, entity.getFirstNameUa());
             pstmt.setString(6, entity.getPatronymicUa());
@@ -139,13 +139,13 @@ public class AccountDetailDao {
             pstmt.setString(18, entity.getBuildingEn());
             pstmt.setString(19, entity.getFlatEn());
 
-            String defaultPhotoPath = Const.RESOURCE_IMAGE_PATH + "account.png";
+//            String defaultPhotoPath = Const.RESOURCE_IMAGE_PATH + "account.png";
+//
+//            pstmt.setBlob(20, ImageConverter.setDefaultImageBytesIfStreamNull(
+//                    accountPhoto, defaultPhotoPath));
 
-            pstmt.setBlob(20, ImageConverter.setDefaultImageBytesIfStreamNull(
-                    accountPhoto, defaultPhotoPath));
-
-            pstmt.setInt(21, entity.getAccountId());
-            pstmt.setInt(22, entity.getId());
+            pstmt.setInt(20, entity.getAccountId());
+            pstmt.setInt(21, entity.getId());
 
             pstmt.executeUpdate();
 

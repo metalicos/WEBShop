@@ -1,42 +1,55 @@
-body {
-    font-family: 'Manrope', sans-serif;
+.table > tbody > tr > td, .table > tfoot > tr > td {
+    vertical-align: middle;
 }
 
-.size span {
-    font-size: 11px
-}
+@media screen and (max-width: 600px) {
+    table#cart tbody td .form-control {
+        width: 20%;
+        display: inline !important;
+    }
 
-.color span {
-    font-size: 11px
-}
+    .actions .btn {
+        width: 36%;
+        margin: 1.5em 0;
+    }
 
-.product-deta {
-    margin-right: 70px
-}
+    .actions .btn-info {
+        float: left;
+    }
 
-.gift-card:focus {
-    box-shadow: none
-}
+    .actions .btn-danger {
+        float: right;
+    }
 
-.pay-button {
-    color: #fff
-}
+    table#cart thead {
+        display: none;
+    }
 
-.pay-button:hover {
-    color: #fff
-}
+    table#cart tbody td {
+        display: block;
+        padding: .6rem;
+        min-width: 320px;
+    }
 
-.pay-button:focus {
-    color: #fff;
-    box-shadow: none
-}
+    table#cart tbody tr td:first-child {
+        background: #333;
+        color: #fff;
+    }
 
-.text-grey {
-    color: #a39f9f;
-    font-weight: bold;
-}
+    table#cart tbody td:before {
+        content: attr(data-th);
+        font-weight: bold;
+        display: inline-block;
+        width: 8rem;
+    }
 
-.qty i {
-    font-size: 11px
-}
 
+    table#cart tfoot td {
+        display: block;
+    }
+
+    table#cart tfoot td .btn {
+        display: block;
+    }
+
+}

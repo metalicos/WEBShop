@@ -9,7 +9,8 @@ import java.io.Serializable;
 public interface Command extends Serializable {
     /**
      * Execution method for command.
-     * @return Address to go once the command is executed.
+     *
+     * @return Returns address to go or redirect to place (return Const.REDIRECT+{placeToRedirect};).
      */
     String execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException;

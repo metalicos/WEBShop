@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @MultipartConfig
 public class Controller extends HttpServlet {
@@ -30,7 +32,7 @@ public class Controller extends HttpServlet {
         run(request, response);
     }
 
-    private void run(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
+    private void run(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Const.logger.debug("Controller starts");
         Locale locale = request.getLocale();
         HttpSession session = request.getSession();
@@ -41,14 +43,14 @@ public class Controller extends HttpServlet {
         if (language == null) {
             language = Language.getLang(locale.getLanguage()).getName();
             Const.logger.trace("Language saved as (" + language + ")");
-            request.setAttribute(SessionAttribute.LANGUAGE,language);
-            session.setAttribute(SessionAttribute.LANGUAGE,language);
-        }else {
+            request.setAttribute(SessionAttribute.LANGUAGE, language);
+            session.setAttribute(SessionAttribute.LANGUAGE, language);
+        } else {
             Const.logger.trace("Language was found in Session = (" + language + ")");
         }
 
         String query = request.getQueryString();
-        Const.logger.debug("query = "+query);
+        Const.logger.debug("query = " + query);
         String commandName = request.getParameter("command");
         Const.logger.debug("command --> " + commandName);
 
@@ -58,7 +60,12 @@ public class Controller extends HttpServlet {
         String forward = command.execute(request, response);
         Const.logger.debug("Forward address to --> " + forward);
 
-        if (forward != null) {
+        if (forward != null && forward.contains(Const.REDIRECT)) {
+            String redirectTo = Arrays.stream(forward.split(Const.REDIRECT_SPLITTER))
+                    .collect(Collectors.toList()).get(1);
+            Const.logger.debug("Redirect to --> " + redirectTo);
+            response.sendRedirect(redirectTo);
+        } else {
             Const.logger.debug("Controller finished, now go to forward address --> " + forward);
             RequestDispatcher disp = request.getRequestDispatcher(forward);
             disp.forward(request, response);

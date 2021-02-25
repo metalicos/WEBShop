@@ -8,13 +8,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Class contains constants.
+ *
+ * @author Ostap Komplikevych
+ */
 public class Const {
 
 
     private static final String PROPERTIES = "application.properties";
     public static final Logger logger = LogManager.getLogger(Const.class.getName());
     public static final String JSP_PAGE_LOCATION = "/WEB-INF/";
-
+    public static final String REDIRECT_SPLITTER = "!~!";
+    public static final String REDIRECT = "redirect:" + REDIRECT_SPLITTER;
 
 
     public static final String PAGE_LOGIN = JSP_PAGE_LOCATION + "login.jsp";
@@ -26,16 +32,10 @@ public class Const {
     public static final String PAGE_ORDERS = JSP_PAGE_LOCATION + "orders.jsp";
     public static final String PAGE_CREATE_CATEGORY = JSP_PAGE_LOCATION + "create-category.jsp";
 
+    public static final String PAGE_HOME = JSP_PAGE_LOCATION + "home.jsp";
+    public static final String PAGE_ERROR_PERMISSION_DENIED = "error-permission-denied.jsp";
     public static final String PAGE_ERROR = "error.jsp";
-    public static final String PAGE_HOME = JSP_PAGE_LOCATION +"home.jsp";
-    public static final String PAGE_ERROR_PERMITION_DENIED = "error-permition-denied.jsp";
 
-    public static final String COMMAND_OPEN_LOGIN_PAGE = "open-login-page";
-
-    public static final String COMMAND_OPEN_REGISTER_PAGE = "open-register-page";
-
-    public static final String COMMAND_LOGOUT = "logout";
-    public static final String COMMAND_MY_CART = "my-cart";
     public static final String COMMAND_MY_ORDERS = "my-orders";
 
     public static final String RESOURCE_IMAGE_PATH = "/design/img/";
@@ -47,7 +47,7 @@ public class Const {
             Properties properties = new Properties();
             properties.load(input);
             String property = properties.getProperty(key);
-           // logger.trace("Property GET: " + property);
+            // logger.trace("Property GET: " + property);
             return property;
         } catch (IOException ex) {
             logger.fatal(ex);

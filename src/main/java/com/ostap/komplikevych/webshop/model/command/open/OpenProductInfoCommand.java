@@ -28,20 +28,20 @@ public class OpenProductInfoCommand implements Command {
         Const.logger.debug("Command Show Product Info Starts");
         HttpSession session = request.getSession();
         String language = (String) session.getAttribute("language");
-        Const.logger.trace("Language="+language);
+        Const.logger.trace("Language=" + language);
         String productId = request.getParameter("productId");
-        Const.logger.trace("ProductID="+productId);
+        Const.logger.trace("ProductID=" + productId);
 
-        if(!Validator.checkIfNullOrEmptyReturnTrue(language,productId)){
+        if (!Validator.checkIfNullOrEmptyReturnTrue(language, productId)) {
             Const.logger.trace("ProductID not nul and not empty");
-            if(productId.matches("[0-9]")){
+            if (productId.matches("[0-9]+")) {
                 Const.logger.trace("ProductID is Numeric");
                 DetailedProduct detailedProduct =
                         new DetailedProduct(Integer.parseInt(productId), Language.getLang(language));
-                Const.logger.trace("DetailedProduct to show = "+detailedProduct);
+                Const.logger.trace("DetailedProduct to show = " + detailedProduct);
                 Const.logger.trace("Put product to session and request");
-                session.setAttribute(SessionAttribute.PRODUCT_TO_SHOW,detailedProduct);
-                request.setAttribute(SessionAttribute.PRODUCT_TO_SHOW,detailedProduct);
+                session.setAttribute(SessionAttribute.PRODUCT_TO_SHOW, detailedProduct);
+                request.setAttribute(SessionAttribute.PRODUCT_TO_SHOW, detailedProduct);
                 Const.logger.debug("Command Show Product Info End");
                 return Const.PAGE_PRODUCT_INFO;
             }

@@ -27,7 +27,7 @@ public class CommandAccessFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             Const.logger.debug("Filter finished");
-            request.getRequestDispatcher(Const.PAGE_ERROR_PERMITION_DENIED)
+            request.getRequestDispatcher(Const.PAGE_ERROR_PERMISSION_DENIED)
                     .forward(request, response);
         }
     }

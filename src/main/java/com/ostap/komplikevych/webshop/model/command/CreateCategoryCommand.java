@@ -44,7 +44,7 @@ public class CreateCategoryCommand implements Command {
             if (categoryId == -1) {
                 errorMessage = "Category creation failed, please check all field and try again";
                 Const.logger.error(errorMessage);
-                saveInputedData(request,categoryNameUa,categoryNameEn,categoryAboutUa,categoryAboutEn);
+                saveInputedData(request, categoryNameUa, categoryNameEn, categoryAboutUa, categoryAboutEn);
                 request.setAttribute("failErrorMessage", "Category creation failed, please check all fields and try again.");
                 Const.logger.debug("Create Category Command Ends");
                 return Const.PAGE_CREATE_CATEGORY;
@@ -53,7 +53,7 @@ public class CreateCategoryCommand implements Command {
             errorMessage = "Input mistakes, input fields are null or empty";
             Const.logger.trace("Request Attributes Are Null Or Empty");
             request.setAttribute("failErrorMessage", errorMessage);
-            saveInputedData(request,categoryNameUa,categoryNameEn,categoryAboutUa,categoryAboutEn);
+            saveInputedData(request, categoryNameUa, categoryNameEn, categoryAboutUa, categoryAboutEn);
             Const.logger.debug("Create Category Command Ends");
             return Const.PAGE_CREATE_CATEGORY;
         }
@@ -61,8 +61,8 @@ public class CreateCategoryCommand implements Command {
         return Const.PAGE_HOME;
     }
 
-    private void saveInputedData(HttpServletRequest request,String categoryNameUa,String categoryNameEn,
-                                 String categoryAboutUa, String categoryAboutEn){
+    private void saveInputedData(HttpServletRequest request, String categoryNameUa, String categoryNameEn,
+                                 String categoryAboutUa, String categoryAboutEn) {
         request.setAttribute("сNameUa", categoryNameUa);
         request.setAttribute("сNameEn", categoryNameEn);
         request.setAttribute("cAboutUa", categoryAboutUa);
