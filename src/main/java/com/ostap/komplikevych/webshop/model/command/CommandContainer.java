@@ -1,12 +1,12 @@
 package com.ostap.komplikevych.webshop.model.command;
 
 import com.ostap.komplikevych.webshop.constant.Const;
-import com.ostap.komplikevych.webshop.model.command.account.ChangeAccountDetailsCommand;
-import com.ostap.komplikevych.webshop.model.command.account.ChangeAccountPasswordCommand;
+import com.ostap.komplikevych.webshop.model.command.account.*;
 import com.ostap.komplikevych.webshop.model.command.cart.AddToCartCommand;
 import com.ostap.komplikevych.webshop.model.command.cart.DeleteFromCartCommand;
 import com.ostap.komplikevych.webshop.model.command.cart.OpenShoppingCartPageCommand;
 import com.ostap.komplikevych.webshop.model.command.open.*;
+import com.ostap.komplikevych.webshop.model.command.order.*;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -27,10 +27,20 @@ public class CommandContainer {
         commands.put("open-product-info", new OpenProductInfoCommand());
         commands.put("open-create-product", new OpenCreateProductWindowCommand());
         commands.put("open-create-category", new OpenCreateCategoryCommand());
+        commands.put("open-users-page", new OpenUsersPageCommand());
+        commands.put("open-user-orders-page", new OpenUserOrdersPageCommand());
+        commands.put("change-account-photo", new ChangeAccountPhotoCommand());
+        commands.put("choose-delivery", new ChooseDeliveryCommand());
+        commands.put("change-order-status", new ChangeOrderStatusCommand());
+        commands.put("change-account-status",new ChangeAccountStatusCommand());
+        commands.put("change-account-role",new ChangeAccountRoleCommand());
 
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("register", new RegisterCommand());
+        commands.put("make-order", new MakeOrderCommand());
+        commands.put("open-make-order-page", new OpenMakeOrderPageCommand());
+
         commands.put("create-product", new CreateProductCommand());
         commands.put("create-category", new CreateCategoryCommand());
         commands.put("change-account-details", new ChangeAccountDetailsCommand());

@@ -79,6 +79,13 @@ public class Fields {
     public static final String ACCOUNT_ORDER_ACCOUNT_ID = "account_id";
     public static final String ACCOUNT_ORDER_STATUS_ID = "status_id";
     public static final String ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID = "droped_by_account_id";
+    public static final String ACCOUNT_ORDER_TOTAL_ORDER_PRICE = "total_order_price";
+    public static final String ACCOUNT_ORDER_DELIVERY_ID = "delivery_id";
+
+    public static final String DELIVERY_NAME_UA = "name_ua";
+    public static final String DELIVERY_NAME_EN = "name_en";
+    public static final String DELIVERY_AVERAGE_DELIVERY_TIME = "average_delivery_time";
+    public static final String DELIVERY_DELIVERY_PRICE = "delivery_price";
 
 
 }

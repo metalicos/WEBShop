@@ -11,6 +11,14 @@ public class Account extends AbstractEntity {
     private int shoppingCartId;
     private int accountStatusId;
 
+    public String getAccountStatus(){
+        return AccountStatus.getAccountStatus(accountStatusId).name();
+    }
+
+    public String getRole(){
+        return Role.getRole(roleId).name();
+    }
+
     public int getAccountStatusId() {
         return accountStatusId;
     }

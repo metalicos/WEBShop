@@ -24,6 +24,7 @@
     <div class="form-group">
         <h1 class="h5">Назва категорії</h1>
         <h1 class="h5 text-danger">${failErrorMessage}</h1>
+        <c:set var="failErrorMessage" scope="session" value="${''}"/>
         <div class="d-md-flex d-sm-block align-content-center justify-content-between">
             <div class="col-md-5 py-2 py-sm-2 py-md-1">
                 <input type="text" name="сNameUa" placeholder="Назва категорії українською" value="${categoryNameUa}"

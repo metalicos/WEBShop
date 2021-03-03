@@ -17,6 +17,14 @@ public enum AccountStatus {
         }
         return AccountStatus.ENABLED;
     }
+    public static AccountStatus getAccountStatus(int statusId) {
+        for (AccountStatus a : AccountStatus.values()) {
+            if (a.id == statusId) {
+                return a;
+            }
+        }
+        return AccountStatus.ENABLED;
+    }
 
     public int getId() {
         return id;

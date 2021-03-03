@@ -20,11 +20,13 @@ public class AccountDetailDao {
     private static final String SQL_READ_ACCOUNT_DETAILS_BY_ID;
     private static final String SQL_UPDATE_ACCOUNT_DETAILS;
     private static final String SQL_DELETE_ACCOUNT_DETAILS;
+    private static final String SQL_UPDATE_ACCOUNT_PHOTO;
 
     static {
         SQL_CREATE_ACCOUNT_DETAILS = Const.getProperty("sql.create_account_details");
         SQL_READ_ACCOUNT_DETAILS_BY_ID = Const.getProperty("sql.read_account_details_by_id");
         SQL_UPDATE_ACCOUNT_DETAILS = Const.getProperty("sql.update_account_details");
+        SQL_UPDATE_ACCOUNT_PHOTO = Const.getProperty("sql.update_account_photo");
         SQL_DELETE_ACCOUNT_DETAILS = Const.getProperty("sql.delete_account_details");
     }
 
@@ -147,6 +149,27 @@ public class AccountDetailDao {
             pstmt.setInt(20, entity.getAccountId());
             pstmt.setInt(21, entity.getId());
 
+            pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            Const.logger.error(ex);
+        } finally {
+            DBManager.getInstance().commit(con);
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+        }
+    }
+
+    public void updateAccountPhoto(int accountDetailId,InputStream photo) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_UPDATE_ACCOUNT_PHOTO);
+            pstmt.setBlob(1, photo);
+            pstmt.setInt(2, accountDetailId);
             pstmt.executeUpdate();
 
         } catch (SQLException ex) {

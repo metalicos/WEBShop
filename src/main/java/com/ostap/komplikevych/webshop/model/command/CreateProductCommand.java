@@ -163,22 +163,24 @@ public class CreateProductCommand implements Command {
         return str.toString();
     }
 
-    private String getPrefix(Measurement m1, Language lang) {
-        if (Measurement.M == m1) {
+    private String getPrefix(Measurement measurement, Language lang) {
+        if (Measurement.MM == measurement) {
             if (Language.EN == lang) {
                 return "mm";
             }
             if (Language.UA == lang) {
                 return "мм";
             }
-        } else if (m1 == Measurement.CM) {
+        }
+        if (Measurement.CM == measurement) {
             if (Language.EN == lang) {
                 return "сm";
             }
             if (Language.UA == lang) {
                 return "см";
             }
-        } else {
+        }
+        if (Measurement.M == measurement){
             if (Language.EN == lang) {
                 return "m";
             }

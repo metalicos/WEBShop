@@ -47,13 +47,13 @@ public class SelectBySelectorCommand implements Command {
             }
         } else if (selector == SelectorType.SIZE) {
             if (!Validator.checkIfNullOrEmptyReturnTrue(value)) {
-                detailedProducts = Selector.selectDetailedProductsThatContainStringValue(detailedProducts, value);
+                detailedProducts = Selector.selectDetailedProductsThatContainSize(detailedProducts, value);
                 request.setAttribute("categoryLabel", "Фільтровані за розміром: " + value);
                 saveFilterQuery = "controller?" + request.getQueryString();
             }
         } else if (selector == SelectorType.PRICE) {
             if (!Validator.checkIfNullOrEmptyReturnTrue(fromPrice, toPrice)
-                    && fromPrice.matches("[0-9]") && toPrice.matches("[0-9]")) {
+                    && fromPrice.matches(Validator.UNSIGNED_DOUBLE) && toPrice.matches(Validator.UNSIGNED_DOUBLE)) {
 
                 detailedProducts = Selector.selectDetailedProductsThatMatchPrice(detailedProducts,
                         Integer.parseInt(fromPrice), Integer.parseInt(toPrice));
@@ -62,7 +62,7 @@ public class SelectBySelectorCommand implements Command {
             }
         } else if (selector == SelectorType.SEARCH_BAR) {
             if (value != null) {
-                detailedProducts = Selector.selectDetailedProductsThatContainStringValue(detailedProducts, value);
+                detailedProducts = Selector.selectDetailedProductsThatContainName(detailedProducts, value);
                 request.setAttribute("categoryLabel", "Пошук за: " + value);
                 saveFilterQuery = "controller?" + request.getQueryString();
             }

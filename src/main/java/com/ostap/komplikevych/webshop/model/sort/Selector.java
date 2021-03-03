@@ -37,12 +37,21 @@ public class Selector {
                 .collect(Collectors.toList());
     }
 
-    public static List<DetailedProduct> selectDetailedProductsThatContainStringValue(
-            List<DetailedProduct> products, String searchString) {
+    public static List<DetailedProduct> selectDetailedProductsThatContainName(
+            List<DetailedProduct> products, String name) {
         return products.stream()
                 .filter(detailedProduct -> (detailedProduct.getName()
                         .toLowerCase()
-                        .contains(searchString.toLowerCase())))
+                        .contains(name.toLowerCase())))
+                .collect(Collectors.toList());
+    }
+
+    public static List<DetailedProduct> selectDetailedProductsThatContainSize(
+            List<DetailedProduct> products, String size) {
+        return products.stream()
+                .filter(detailedProduct -> (detailedProduct.getSize()
+                        .toLowerCase()
+                        .contains(size.toLowerCase())))
                 .collect(Collectors.toList());
     }
 
@@ -157,7 +166,7 @@ public class Selector {
 
         Const.logger.debug("------------CONTAIN STRING----------------");
         in.forEach(Const.logger::trace);
-        out = selectDetailedProductsThatContainStringValue(in, "fl");
+        out = selectDetailedProductsThatContainName(in, "fl");
         Const.logger.debug("----------------------------");
         out.forEach(Const.logger::trace);
 

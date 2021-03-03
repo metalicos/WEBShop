@@ -28,17 +28,17 @@
 
         <init-param>
             <param-name>logged-admin</param-name>
-            <param-value>open-create-product create-product open-create-category create-category</param-value>
+            <param-value>change-account-role change-account-status change-order-status open-create-product create-product open-create-category create-category open-users-page open-users-page open-user-orders-page</param-value>
         </init-param>
 
         <init-param>
             <param-name>logged-user</param-name>
-            <param-value>logout</param-value>
+            <param-value> </param-value>
         </init-param>
 
         <init-param>
             <param-name>logged-common</param-name>
-            <param-value>logout open-profile-page open-orders-page change-account-details change-account-password</param-value>
+            <param-value>choose-delivery change-account-photo logout open-profile-page open-orders-page change-account-details change-account-password open-make-order-page make-order</param-value>
         </init-param>
 
         <init-param>
@@ -48,8 +48,7 @@
 
         <init-param>
             <param-name>out-of-control</param-name>
-            <param-value>open-product-info open-login-page open-register-page open-cart-page open-home-page set-language
-                sort-products add-to-cart delete-from-cart select-by-selector
+            <param-value>open-product-info open-login-page open-register-page open-cart-page open-home-page set-language sort-products add-to-cart delete-from-cart select-by-selector
             </param-value>
         </init-param>
     </filter>
@@ -71,6 +70,7 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
+
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
         <url-pattern>/controller</url-pattern>

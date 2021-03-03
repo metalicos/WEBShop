@@ -1,4 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,6 +29,7 @@
 
                 <c:if test="${errorMessage!=null}">
                     <h1 class="h5 my-2 fw-normal text-center" style="color: #9b1512;!important;">${errorMessage}</h1>
+                    <c:set var="errorMessage" scope="session" value="${''}"/>
                 </c:if>
 
                 <label for="inputEmail" class="visually-hidden">Email address</label>

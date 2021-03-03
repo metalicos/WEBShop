@@ -216,7 +216,7 @@ public class AccountDetail extends AbstractEntity {
                 ", streetEn='" + streetEn + '\'' +
                 ", buildingEn='" + buildingEn + '\'' +
                 ", flatEn='" + flatEn + '\'' +
-                ", accountPhoto=" + accountPhoto +
+                //  ", accountPhoto=" + accountPhoto +
                 ", accountId=" + accountId +
                 '}';
     }

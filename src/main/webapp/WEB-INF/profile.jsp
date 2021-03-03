@@ -31,10 +31,45 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="../design/img/accont.jpg" alt="Admin" class="rounded-circle" width="150">
-                            <a href="#" class="align-self-end text-decoration-none text-dark">
-                                <span class="fa fa-2x fa-edit"></span>
-                            </a>
+                            <button type="button" class="mb-0 btn text-dark w-auto"
+                                    data-toggle="modal" data-target="#form-change-profile-photo">
+                                <c:choose>
+                                    <c:when test="${detailedAccount.accountPhoto!=null}">
+                                        <img src="data:image/jpeg;base64,${detailedAccount.accountPhoto}"
+                                             class="rounded-circle" style="width: 150px;">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="../../design/img/account.png" alt=""
+                                             class="align-self-center rounded-circle user-cabinet" style="width: 150px;">
+                                    </c:otherwise>
+                                </c:choose>
+                            </button>
+                            <div class="modal fade" id="form-change-profile-photo" tabindex="-1" role="dialog"
+                                 aria-labelledby="labelEdit" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom-0">
+                                            <h5 class="modal-title" id="labelEdit">Зміна фотографії</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="post" action="controller" enctype="multipart/form-data">
+                                            <input type="hidden" name="command" value="change-account-photo">
+                                            <div class="modal-body">
+                                                <div class="card border-4 mb-3">
+                                                    <div class="card-body">
+                                                        <input type="file" name="photo">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer border-top-0 d-flex justify-content-center">
+                                                    <button type="submit" class="btn btn-outline-success border-2">Зберегти</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mt-3">
                                 <h4 class="text-dark  h3">
                                     <c:if test="${language == 'ua'}">

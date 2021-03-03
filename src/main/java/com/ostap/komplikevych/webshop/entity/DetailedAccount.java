@@ -77,6 +77,14 @@ public class DetailedAccount {
         this.accountPhoto = accountDetail.getAccountPhoto();
     }
 
+    public String getFullNameUa() {
+        return surnameUa + " " + firstNameUa + " " + patronymicUa;
+    }
+
+    public String getFullNameEn() {
+        return surnameEn + " " + firstNameEn + " " + patronymicEn;
+    }
+
     public int getId() {
         return id;
     }
@@ -313,7 +321,7 @@ public class DetailedAccount {
                 ", streetEn='" + streetEn + '\'' +
                 ", buildingEn='" + buildingEn + '\'' +
                 ", flatEn='" + flatEn + '\'' +
-                ", accountPhoto='" + accountPhoto + '\'' +
+                //", accountPhoto='" + accountPhoto + '\'' +
                 '}';
     }
 }

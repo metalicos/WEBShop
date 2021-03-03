@@ -5,15 +5,23 @@
 <!-- Логувальне меню -->
 <div class="nav-item dropstart d-flex">
     <a href="#" data-toggle="dropdown"
-       class="nav-link dropdown-toggle mr-4 text-decoration-none text-dark ">
+       class="nav-link dropdown-toggle pr-4 text-decoration-none text-dark ">
         <c:if test="${language == 'ua'}">
             ${detailedAccount.firstNameUa}
         </c:if>
         <c:if test="${language == 'en'}">
             ${detailedAccount.firstNameEn}
         </c:if>
-        <img src="../../design/img/account.png" alt="" width="30" height="30"
-             class="align-self-center rounded-circle user-cabinet">
+        <c:choose>
+            <c:when test="${detailedAccount.accountPhoto!=null}">
+                <img src="data:image/jpeg;base64,${detailedAccount.accountPhoto}"
+                     class="rounded-circle" style="width: 30px; height: 30px;">
+            </c:when>
+            <c:otherwise>
+                <img src="../../design/img/account.png" alt=""
+                     class="align-self-center rounded-circle user-cabinet" style="width: 30px; height: 30px;">
+            </c:otherwise>
+        </c:choose>
     </a>
     <div class="dropdown-menu" style="margin-left:-150%; width: 200px;">
         <c:if test="${account == null}">
@@ -45,12 +53,12 @@
                 <span class="col-10">Your orders</span>
             </a>
             <c:if test="${accountRole.id == 1}">
-                <a href="controller?command=open-orders-page"
+                <a href="controller?command=open-users-page"
                    class="btn btn-outline-dark col-11 mx-2 my-2 d-flex">
                     <span class="col-2 align-self-center fa fa-list"></span>
                     <span class="col-10">Users</span>
                 </a>
-                <a href="controller?command=open-orders-page"
+                <a href="controller?command=open-user-orders-page"
                    class="btn btn-outline-dark col-11 mx-2 my-2 d-flex">
                     <span class="col-2 align-self-center fa fa-list"></span>
                     <span class="col-10">User orders</span>

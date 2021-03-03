@@ -20,8 +20,8 @@ public class ShoppingCartCommand {
         List<DetailedProduct> detailedProducts = new ArrayList<>(userShoppingCart.keySet());
         DetailedProduct product;
         BigDecimal totalProductSum = new BigDecimal(0);
-        for (int i = 0; i < detailedProducts.size(); i++) {
-            product = detailedProducts.get(i);
+        for (DetailedProduct detailedProduct : detailedProducts) {
+            product = detailedProduct;
             Const.logger.trace(product);
             BigDecimal amount = BigDecimal.valueOf(userShoppingCart.get(product));
             Const.logger.trace(amount);
@@ -146,11 +146,11 @@ public class ShoppingCartCommand {
             }
 
             BigDecimal totalProductSum = getTotalPriceOfUserShoppingCart(userShoppingCart);
-            session.setAttribute("productsInCart", userShoppingCart.size());
-            session.setAttribute("totalProductSum", totalProductSum.doubleValue());
+            session.setAttribute(SessionAttribute.PRODUCTS_IN_CART, userShoppingCart.size());
+            session.setAttribute(SessionAttribute.TOTAL_PRODUCT_SUM, totalProductSum.doubleValue());
 
-            session.setAttribute("userShoppingCart", userShoppingCart);
-            request.setAttribute("userShoppingCart", userShoppingCart);
+            session.setAttribute(SessionAttribute.USER_SHOPPING_CART, userShoppingCart);
+            request.setAttribute(SessionAttribute.USER_SHOPPING_CART, userShoppingCart);
             Const.logger.debug("UserShoppingCart=" + userShoppingCart);
         }
         return userShoppingCart;

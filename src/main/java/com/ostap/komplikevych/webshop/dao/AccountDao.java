@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The type AccountDao.
@@ -20,6 +22,8 @@ public class AccountDao {
 
     public static final String SQL_READ_ACCOUNT_BY_ID;
 
+    public static final String SQL_READ_ALL_ACCOUNTS;
+
     public static final String SQL_UPDATE_ACCOUNT;
 
     public static final String SQL_CREATE_ACCOUNT;
@@ -30,6 +34,7 @@ public class AccountDao {
         SQL_CREATE_ACCOUNT = Const.getProperty("sql.create_account");
         SQL_READ_ACCOUNT_BY_ID = Const.getProperty("sql.read_account_by_id");
         SQL_READ_ACCOUNT_BY_EMAIL = Const.getProperty("sql.read_account_by_email");
+        SQL_READ_ALL_ACCOUNTS = Const.getProperty("sql.read_all_accounts");
         SQL_UPDATE_ACCOUNT = Const.getProperty("sql.update_account");
         SQL_DELETE_ACCOUNT = Const.getProperty("sql.delete_account");
     }
@@ -71,7 +76,9 @@ public class AccountDao {
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_ID);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
-            account = mapper.mapRow(rs);
+            if (rs.next()) {
+                account = mapper.mapRow(rs);
+            }
         } catch (SQLException ex) {
             Const.logger.error(ex);
         } finally {
@@ -93,7 +100,9 @@ public class AccountDao {
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_BY_EMAIL);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
-            account = mapper.mapRow(rs);
+            if (rs.next()) {
+                account = mapper.mapRow(rs);
+            }
         } catch (SQLException ex) {
             Const.logger.error(ex);
         } finally {
@@ -102,6 +111,30 @@ public class AccountDao {
             DBManager.getInstance().close(pstmt);
         }
         return account;
+    }
+
+    public List<Account> readAllAccounts() {
+        List<Account> accounts = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            AccountMapper mapper = new AccountMapper();
+            pstmt = con.prepareStatement(SQL_READ_ALL_ACCOUNTS);
+            rs = pstmt.executeQuery();
+            accounts = new ArrayList<>();
+            while (rs.next()) {
+                accounts.add(mapper.mapRow(rs));
+            }
+        } catch (SQLException ex) {
+            Const.logger.error(ex);
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(rs);
+            DBManager.getInstance().close(pstmt);
+        }
+        return accounts;
     }
 
     public void updateAccount(Account entity) {
@@ -155,21 +188,17 @@ public class AccountDao {
         public Account mapRow(ResultSet rs) {
             Account account = null;
             try {
-                if (rs.next()) {
-                    account = new Account();
-                    account.setId(rs.getInt(Fields.ID));
-                    account.setEmail(rs.getString(Fields.ACCOUNT_EMAIL));
-                    account.setPassword(rs.getString(Fields.ACCOUNT_PASSWORD));
-                    account.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
-                    account.setRoleId(rs.getInt(Fields.ACCOUNT_ROLE_ID));
-                    account.setShoppingCartId(rs.getInt(Fields.ACCOUNT_SHOPPING_CART_ID));
-                    account.setAccountStatusId(rs.getInt(Fields.ACCOUNT_STATUS_ID));
-                }
+                account = new Account();
+                account.setId(rs.getInt(Fields.ID));
+                account.setEmail(rs.getString(Fields.ACCOUNT_EMAIL));
+                account.setPassword(rs.getString(Fields.ACCOUNT_PASSWORD));
+                account.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
+                account.setRoleId(rs.getInt(Fields.ACCOUNT_ROLE_ID));
+                account.setShoppingCartId(rs.getInt(Fields.ACCOUNT_SHOPPING_CART_ID));
+                account.setAccountStatusId(rs.getInt(Fields.ACCOUNT_STATUS_ID));
             } catch (SQLException ex) {
                 Const.logger.error(ex);
                 throw new IllegalStateException(ex);
-            } finally {
-                DBManager.getInstance().close(rs);
             }
             return account;
         }

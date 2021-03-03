@@ -1,5 +1,7 @@
 package com.ostap.komplikevych.webshop.entity;
 
+import com.ostap.komplikevych.webshop.dao.ProductDetailDao;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -18,6 +20,12 @@ public class Product extends AbstractEntity {
         this.amount = amount;
         this.orderedAmount = orderedAmount;
         this.categoryId = categoryId;
+    }
+
+    public String getName(){
+        ProductDetailDao dao = new ProductDetailDao();
+        ProductDetail detail = dao.readProductDetailByProductId(getId());
+        return detail.getNameUa();
     }
 
     public BigDecimal getPrice() {

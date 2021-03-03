@@ -200,9 +200,9 @@ public class DetailedProduct {
                 ", color='" + color + '\'' +
                 ", size='" + size + '\'' +
                 ", about='" + about + '\'' +
-                ", photo1='" + photo1 + '\'' +
-                ", photo2='" + photo2 + '\'' +
-                ", photo3='" + photo3 + '\'' +
+                //", photo1='" + photo1 + '\'' +
+                //", photo2='" + photo2 + '\'' +
+               // ", photo3='" + photo3 + '\'' +
                 '}';
     }
 }

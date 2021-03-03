@@ -59,20 +59,24 @@ public class Validator {
      * @return
      */
     public static boolean checkIfContainsRestrictedWords(@NotNull String... var) {
+        Const.logger.debug("Checking RESTRICTED Words");
         String restricted = Const.getProperty("restricted.words");
+        Const.logger.debug("Restricted words: "+restricted);
         if (restricted != null) {
             List<String> wordsRestrictedList =
-                    Arrays.stream(restricted.split(" ")).collect(Collectors.toList());
+                    Arrays.stream(restricted.toLowerCase().split(" ")).collect(Collectors.toList());
             List<String> words;
             for (String s : var) {
-                words = Arrays.stream(s.split("\\s")).collect(Collectors.toList());
+                words = Arrays.stream(s.toLowerCase().split("\\s")).collect(Collectors.toList());
                 for (String word : words) {
                     if (wordsRestrictedList.contains(word)) {
+                        Const.logger.debug("Found restricted: "+word);
                         return true;
                     }
                 }
             }
         }
+        Const.logger.debug("Nothing found.");
         return false;
     }
 }

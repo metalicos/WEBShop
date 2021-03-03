@@ -22,5 +22,13 @@ public enum Role {
         }
         return Role.USER;
     }
+    public static Role getRole(int roleId){
+        for(Role r:Role.values()){
+            if(r.id==roleId){
+                return r;
+            }
+        }
+        return Role.USER;
+    }
 
 }

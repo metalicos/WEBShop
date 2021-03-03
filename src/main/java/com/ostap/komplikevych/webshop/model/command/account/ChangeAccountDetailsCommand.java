@@ -73,10 +73,11 @@ public class ChangeAccountDetailsCommand implements Command {
         AccountDetailDao detailDao = new AccountDetailDao();
         Account account = (Account) session.getAttribute(SessionAttribute.ACCOUNT);
         AccountDetail accountDetail;
+
         if (account != null) {
             accountDetail = detailDao.readAccountDetailByAccountId(account.getId());
-            updateAccountDetailByNewData(accountDetail, newDetails);
-            updateAccountByNewEmail(account,email);
+            updateAccountDetailWithNewData(accountDetail, newDetails);
+            updateAccountWithNewEmail(account,email);
             detailDao.updateAccountDetail(accountDetail);
 
             DetailedAccount detailedAccount = new DetailedAccount(account.getId());
@@ -86,12 +87,10 @@ public class ChangeAccountDetailsCommand implements Command {
             Const.logger.info("Update finished redirect to page Profile ");
         }
 
-
-
         return Const.REDIRECT + "controller?command=open-profile-page";
     }
 
-    private void updateAccountDetailByNewData(AccountDetail oldDetails, AccountDetail newDetails) {
+    private void updateAccountDetailWithNewData(AccountDetail oldDetails, AccountDetail newDetails) {
 
         Const.logger.debug("Was details = " + oldDetails);
 
@@ -225,7 +224,7 @@ public class ChangeAccountDetailsCommand implements Command {
         Const.logger.debug("Now details = " + oldDetails);
     }
 
-    private void updateAccountByNewEmail(Account account,String email){
+    private void updateAccountWithNewEmail(Account account, String email){
         AccountDao accountDao = new AccountDao();
         account.setEmail(email);
         accountDao.updateAccount(account);

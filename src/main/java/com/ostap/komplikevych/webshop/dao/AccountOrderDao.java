@@ -1,10 +1,10 @@
 package com.ostap.komplikevych.webshop.dao;
 
-import com.ostap.komplikevych.webshop.model.DBManager;
 import com.ostap.komplikevych.webshop.constant.Const;
 import com.ostap.komplikevych.webshop.entity.AccountOrder;
 import com.ostap.komplikevych.webshop.entity.Product;
 import com.ostap.komplikevych.webshop.entity.ProductInOrder;
+import com.ostap.komplikevych.webshop.model.DBManager;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Ostap Komplikevych
  */
-public class AccountOrderDao{
+public class AccountOrderDao {
 
     private static final String SQL_CREATE_ACCOUNT_ORDER;
     private static final String SQL_READ_ACCOUNT_ORDER;
@@ -30,10 +30,14 @@ public class AccountOrderDao{
     public static final String SQL_UPDATE_PRODUCT_IN_ACCOUNT_ORDER;
     public static final String SQL_DELETE_ALL_PRODUCTS_IN_ACCOUNT_ORDER;
     public static final String SQL_DELETE_PRODUCT_IN_ACCOUNT_ORDER;
+    private static final String SQL_READ_ALL_ACCOUNT_ORDERS_BY_ACCOUNT_ID;
+    private static final String SQL_READ_ALL_ACCOUNT_ORDERS;
 
     static {
         SQL_CREATE_ACCOUNT_ORDER = Const.getProperty("sql.create_account_order");
         SQL_READ_ACCOUNT_ORDER = Const.getProperty("sql.read_account_order");
+        SQL_READ_ALL_ACCOUNT_ORDERS_BY_ACCOUNT_ID = Const.getProperty("sql.read_all_account_orders_by_account_id");
+        SQL_READ_ALL_ACCOUNT_ORDERS = Const.getProperty("sql.read_all_account_orders");
         SQL_UPDATE_ACCOUNT_ORDER = Const.getProperty("sql.update_account_order");
         SQL_DELETE_ACCOUNT_ORDER = Const.getProperty("sql.delete_account_order");
 
@@ -54,10 +58,12 @@ public class AccountOrderDao{
             pstmt = con.prepareStatement(SQL_CREATE_ACCOUNT_ORDER);
 
             pstmt.setInt(1, entity.getAccountId());
-            pstmt.setInt(2, entity.getStatusId());
-
+            pstmt.setBigDecimal(2, entity.getTotalOrderPrice());
+            pstmt.setInt(3, entity.getDeliveryId());
+            pstmt.setInt(4, entity.getStatusId());
             pstmt.executeUpdate();
             insertedWithId = DBManager.getInstance().getLastInsertedId(pstmt);
+
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             Const.logger.error(ex);
@@ -73,19 +79,73 @@ public class AccountOrderDao{
         Connection con = null;
         PreparedStatement pstmt = null;
         AccountOrder accountOrder = null;
+        ResultSet rs = null;
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_READ_ACCOUNT_ORDER);
             pstmt.setInt(1, id);
             EntityMapper<AccountOrder> mapper = new AccountOrderMapper();
-            accountOrder = mapper.mapRow(pstmt.executeQuery());
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                accountOrder = mapper.mapRow(rs);
+            }
         } catch (SQLException ex) {
             Const.logger.error(ex);
         } finally {
             DBManager.getInstance().close(con);
             DBManager.getInstance().close(pstmt);
+            DBManager.getInstance().close(rs);
         }
         return accountOrder;
+    }
+
+    public List<AccountOrder> readAllAccountOrdersByAccountId(Integer accountId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        List<AccountOrder> orders = null;
+        ResultSet rs = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_READ_ALL_ACCOUNT_ORDERS_BY_ACCOUNT_ID);
+            pstmt.setInt(1, accountId);
+            EntityMapper<AccountOrder> mapper = new AccountOrderMapper();
+            rs = pstmt.executeQuery();
+            orders = new ArrayList<>();
+            while (rs.next()) {
+                orders.add(mapper.mapRow(rs));
+            }
+        } catch (SQLException ex) {
+            Const.logger.error(ex);
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+            DBManager.getInstance().close(rs);
+        }
+        return orders;
+    }
+
+    public List<AccountOrder> readAllAccountOrders() {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        List<AccountOrder> orders = null;
+        ResultSet rs = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_READ_ALL_ACCOUNT_ORDERS);
+            EntityMapper<AccountOrder> mapper = new AccountOrderMapper();
+            rs = pstmt.executeQuery();
+            orders = new ArrayList<>();
+            while (rs.next()) {
+                orders.add(mapper.mapRow(rs));
+            }
+        } catch (SQLException ex) {
+            Const.logger.error(ex);
+        } finally {
+            DBManager.getInstance().close(con);
+            DBManager.getInstance().close(pstmt);
+            DBManager.getInstance().close(rs);
+        }
+        return orders;
     }
 
     public void updateAccountOrder(AccountOrder entity) {
@@ -94,11 +154,25 @@ public class AccountOrderDao{
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_UPDATE_ACCOUNT_ORDER);
+/*
+            sql.create_account_order=INSERT INTO `webshop`.`account_order`
+
+            (`account_id`, `total_order_price`, `delivery_id`, `status_id`) VALUES (?,?,?,?);
+
+            sql.read_account_order=SELECT * FROM `webshop`.`account_order` WHERE id = ?;
+            sql.update_account_order=UPDATE `webshop`.`account_order` SET
+
+            `account_id`= ?, `total_order_price`, `delivery_id`, `status_id`=?, `droped_by_account_id`=?  WHERE id = ?;
+
+            sql.delete_account_order=DELETE FROM `webshop`.`account_order` WHERE id = ?;
+             */
 
             pstmt.setInt(1, entity.getAccountId());
-            pstmt.setInt(2, entity.getStatusId());
-            pstmt.setInt(3, entity.getDroppedByAccountId());
-            pstmt.setInt(4, entity.getId());
+            pstmt.setBigDecimal(2, entity.getTotalOrderPrice());
+            pstmt.setInt(3, entity.getDeliveryId());
+            pstmt.setInt(4, entity.getStatusId());
+            pstmt.setInt(5, entity.getDroppedByAccountId());
+            pstmt.setInt(6, entity.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException ex) {
@@ -277,27 +351,24 @@ public class AccountOrderDao{
     }
 
 
-
     static class AccountOrderMapper implements EntityMapper<AccountOrder> {
 
         @Override
         public AccountOrder mapRow(ResultSet rs) {
             AccountOrder order = null;
             try {
-                if (rs.next()) {
-                    order = new AccountOrder();
-                    order.setId(rs.getInt(Fields.ID));
-                    order.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
-                    order.setAccountId(rs.getInt(Fields.ACCOUNT_ORDER_ACCOUNT_ID));
-                    order.setStatusId(rs.getInt(Fields.ACCOUNT_ORDER_STATUS_ID));
-                    order.setDroppedByAccountId(rs.getInt(Fields.ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID));
-                    order.setProducts(readProductsInOrder(order.getId()));
-                }
+                order = new AccountOrder();
+                order.setId(rs.getInt(Fields.ID));
+                order.setCreateTime(rs.getTimestamp(Fields.CREATE_TIME).toLocalDateTime());
+                order.setAccountId(rs.getInt(Fields.ACCOUNT_ORDER_ACCOUNT_ID));
+                order.setStatusId(rs.getInt(Fields.ACCOUNT_ORDER_STATUS_ID));
+                order.setTotalOrderPrice(rs.getBigDecimal(Fields.ACCOUNT_ORDER_TOTAL_ORDER_PRICE));
+                order.setDeliveryId(rs.getInt(Fields.ACCOUNT_ORDER_DELIVERY_ID));
+                order.setDroppedByAccountId(rs.getInt(Fields.ACCOUNT_ORDER_DROPPED_BY_ACCOUNT_ID));
+                order.setProducts(readProductsInOrder(order.getId()));
             } catch (SQLException ex) {
                 Const.logger.error(ex);
                 throw new IllegalStateException(ex.getMessage());
-            } finally {
-                DBManager.getInstance().close(rs);
             }
             return order;
         }

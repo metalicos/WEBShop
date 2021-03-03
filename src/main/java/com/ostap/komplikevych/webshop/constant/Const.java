@@ -31,6 +31,9 @@ public class Const {
     public static final String PAGE_SHOPPING_CART = JSP_PAGE_LOCATION + "shopping-cart.jsp";
     public static final String PAGE_ORDERS = JSP_PAGE_LOCATION + "orders.jsp";
     public static final String PAGE_CREATE_CATEGORY = JSP_PAGE_LOCATION + "create-category.jsp";
+    public static final String PAGE_MAKE_ORDER = JSP_PAGE_LOCATION + "make-order.jsp";
+    public static final String PAGE_USER_ORDERS = JSP_PAGE_LOCATION + "users-orders.jsp";
+    public static final String PAGE_USERS = JSP_PAGE_LOCATION + "users.jsp";
 
     public static final String PAGE_HOME = JSP_PAGE_LOCATION + "home.jsp";
     public static final String PAGE_ERROR_PERMISSION_DENIED = "error-permission-denied.jsp";
